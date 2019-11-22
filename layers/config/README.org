@@ -1,0 +1,89 @@
+#+TITLE: Config Layer
+
+* Description
+
+This layer houses configuration updates typically clumped into
+~dotspacemacs/user-config~.
+
+1. Declares all layers, like ~git~ and ~python~.
+2. Declares all non-display packages.
+3. Redos bindings, see next section.
+
+* Redone Spacemacs Bindings
+
+~redo-spacemacs~ wraps Spacemacs leader re/un-bindings to warn when their
+definitions change, to not get caught by surprise by changes to Spacemacs.
+
+I undo *many* core spacemacs leader-key prefixes and keybindings that I either
+use via other bindings/means or have not made the cut into my workflow.
+Un-binding is useful to: keep which key options smaller and facilitate changes
+to muscle memory.
+
+Redone bindings are disabled by default. Turn on with ~redo-bindings?~ in
+~init.el~.
+
+* Package Bindings
+
+  The following tables identify bindings /not/ tied to the ~redo-spacemacs~
+  package.
+
+** Evil and Core
+
+| Key Binding | Function             |
+|-------------+----------------------|
+| ~Q~         | evil-execute-q-macro |
+| ~H~         | evil-first-non-blank |
+| ~L~         | evil-end-of-line     |
+| ~0~         | evil-jump-item       |
+| ~s~         | avy-goto-char-timer  |
+| ~_~         | ranger               |
+
+** Navigation and Windows
+
+| Key Binding | Function                   |
+|-------------+----------------------------|
+| ~C-h~       | avy-pop-mark               |
+| ~C-l~       | evil-avy-goto-line         |
+| ~C-e~       | eshell-pop-eshell          |
+
+** Outlines
+
+| Key Binding | Function                         |
+|-------------+----------------------------------|
+| ~g h~       | outline-up-heading               |
+| ~g j~       | outline-forward-same-level       |
+| ~g k~       | outline-backward-same-level      |
+| ~g l~       | outline-next-visible-heading     |
+| ~g u~       | outline-previous-visible-heading |
+| ~SPC n j~   | outline-move-subtree-down        |
+| ~SPC n k~   | outline-move-subtree-up          |
+| ~SPC n h~   | outline-promote                  |
+| ~SPC n l~   | outline-demote                   |
+| ~SPC n n~   | outshine-narrow-to-subtree       |
+| ~SPC n w~   | widen                            |
+| ~<backtab>~ | outshine-cycle-buffer            |
+| ~<M-RET>~   | outshine-insert-heading          |
+| ~<M-S-RET>~ | outshine-insert-subheading       |
+
+** Ivy
+
+| Key Binding | Function                |
+|-------------+-------------------------|
+| ~SPC a i~   | ivy-resume              |
+| ~C-l~       | ivy-avy                 |
+| ~C-u~       | ivy-scroll-down-command |
+| ~C-d~       | ivy-scroll-up-command   |
+| ~C-n~       | ivy-restrict-to-matches |
+| ~C-y~       | ivy-yank-word           |
+| ~C-RET~     | ivy-call                |
+| ~C-SPC~     | ivy-dispatching-done    |
+| ~C-S-SPC~   | ivy-dispatching-call    |
+
+** Ranger
+
+| Key Binding | Function                     |
+|-------------+------------------------------|
+| ~n~         | dired-create-directory       |
+| ~E~         | wdired-change-to-wdired-mode |
+| ~C-j~       | ranger-travel                |
+| ~C-e~       | ranger-pop-eshell            |

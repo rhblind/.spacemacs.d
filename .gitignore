@@ -1,0 +1,9 @@
+# Person-person files
+.spacemacs.env
+.custom-settings.el
+
+# Transitory
+.#*
+
+# Personal
+elisp/
