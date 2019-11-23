@@ -37,6 +37,9 @@
            ranger-ignored-extensions '("mkv" "iso" "mp4" "flv"))
    (ibuffer :variables
             ibuffer-group-buffers-by 'projects)
+   (osx :variables
+        osx-option-as 'meta
+        osx-right-option-as 'none)
 
    ;; Markups
    csv

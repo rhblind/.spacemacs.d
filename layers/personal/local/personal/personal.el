@@ -1,9 +1,23 @@
 ;;; personal.el --- The random config dumping ground -*- lexical-binding: t; -*-
 
 ;; (require 'mu4e)
-
 (provide 'personal)
 
+;;; Globals
+(advice-add 'message :before 'ad-timestamp-message)    ;; Add timestamp to *Messages* buffer
+(display-time-mode 1)                                     ;; Display time in the powerline bar
+(global-company-mode)                                     ;; Enable company-mode globally
+(global-unset-key [down-mouse-1])                         ;; No dragging nonsense
+(global-set-key [down-mouse-1] 'mouse-select-window)      ;; Select window with mouse click
+(treemacs-resize-icons 16)                                ;; Treemacs icon size
+(global-set-key (kbd "<C-return>") 'newline-below)
+(global-set-key (kbd "<S-return>") 'newline-above)
+(global-set-key (kbd "<C-backspace>") 'aborn/backward-kill-word)
+(evil-ex-define-cmd "q[uit]" 'evil-delete-buffer)         ;; Redefine :q to delete buffer instead of exiting emacs
+
+
+
+;;; Variables
 (setq display-time-24hr-format t                          ;; Use 24h clock
       layouts-enable-autosave t                           ;; Automatically save layouts
       lsp-ui-doc-enable nil                               ;; Disable ui-doc popup. Toggle help with ,hh
@@ -29,7 +43,7 @@
                                                 ))
 ;;;; Hooks
 
-(add-hook 'prog-mode-hook 'fira-code-mode)           ;; Enable fira-code ligatures in programming modes
+;; (add-hook 'prog-mode-hook 'fira-code-mode)           ;; Enable fira-code ligatures in programming modes
 
 ;;;; Keybindings
 (global-set-key (kbd "<C-return>") 'newline-below)
