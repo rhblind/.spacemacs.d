@@ -4,9 +4,12 @@
       '(;; Unowned Packages
         aggressive-indent
         avy
+        dtrt-indent
+        drag-stuff
         eshell
         evil
         ivy
+        lsp
         magit
         ob org org-bullets
         ranger
@@ -22,9 +25,10 @@
 ;;;; Aggressive indent
 
 (defun config/pre-init-aggressive-indent ()
+  (add-hook 'elixir-mode-hook     #'aggressive-indent-mode)
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-  ;; (add-hook 'clojure-mode-hook    #'aggressive-indent-mode)
-  ;; (add-hook 'hy-mode-hook         #'aggressive-indent-mode)
+  (add-hook 'js2-mode-hook        #'aggressive-indent-mode)
+  (add-hook 'python-mode-hook     #'aggressive-indent-mode)
   )
 
 ;;;; Avy
@@ -35,6 +39,16 @@
   (evil-global-set-key 'normal "s" 'avy-goto-char-timer)
   (bind-keys ("C-l" . evil-avy-goto-line)
              ("C-h" . avy-pop-mark)))
+
+;;;; Dtrt-indent
+(defun config/init-dtrt-indent ()
+  (use-package dtrt-indent))
+
+(defun config/init-drag-stuff ()
+  (use-package drag-stuff
+    :config
+    (drag-stuff-global-mode t)
+    (drag-stuff-define-keys)))
 
 ;;;; Eshell
 
@@ -78,6 +92,46 @@
              ("C-<return>" . ivy-call)
              ("C-SPC"      . ivy-dispatching-done)
              ("C-S-SPC"    . ivy-dispatching-call)))
+
+;;;; Lsp
+(defun config/post-init-lsp ()
+  (require 'lsp-python-ms)
+  (require 'quelpa-use-package)
+  (use-package lsp-mode
+    :config
+    :hook (elixir-mode . lsp-deferred)
+    :hook (python-mode . lsp-deferred)
+    :hook (python-mode . (lambda ()
+                           (when (spacemacs/system-is-mac)
+                             (setq lsp-python-ms-executable
+                                   "~/.local/opt/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
+                           (when (spacemacs/system-is-linux)
+                             (setq lsp-python-ms-executable
+                                   "~/.local/opt/python-language-server/output/bin/Release/linux-64/publish/Microsoft.Python.LanguageServer"))
+
+                           ))
+    :commands (lsp lsp-deferred))
+  (use-package company-lsp :commands company-lsp)
+  (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+  (use-package lsp-pwsh
+    :quelpa (lsp-pwsh :fetcher github :repo "kiennq/lsp-powershell")
+    :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp-deferred)))
+    :defer t)
+  (use-package lsp-treemacs
+    :config
+    (setq treemacs-follow-after-init t)
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (lsp-treemacs-sync-mode 1))
+  (use-package lsp-ui :commands lsp-ui-mode)
+  (use-package dap-mode
+    :ensure t
+    :config
+    (dap-mode 1)
+    (dap-ui-mode 1)
+    (require 'dap-elixir)
+    (require 'dap-python))
+  )
 
 ;;;; Magit
 

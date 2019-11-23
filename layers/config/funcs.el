@@ -108,9 +108,9 @@ subheading level already exists within the buffer."
             (if space-pos
                 (kill-region cp space-pos)
               (backward-kill-word 1))))
-      (kill-region cp (- cp 1)))         ;; word is non-english word
+      ;; word is non-english word
+      (kill-region cp (- cp 1)))
     ))
-;; (provide 'aborn/backward-kill-word)
 
 (defun newline-above()
   "Inserts a new line above the current line"
@@ -119,7 +119,6 @@ subheading level already exists within the buffer."
     (beginning-of-line)
     (open-line 1)
     (indent-according-to-mode)))
-;; (provide 'newline-above)
 
 (defun newline-below ()
   "Insert an empty line below the current line."
@@ -127,7 +126,6 @@ subheading level already exists within the buffer."
   (let ((oldpos (point)))
     (end-of-line)
     (newline-and-indent)))
-;; (provide 'newline-below)
 
 ;;;; Timestamp to *Messages* buffer
 (defun current-time-microseconds ()

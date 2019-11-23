@@ -15,8 +15,7 @@
         which-key
 
         ;; Personal display-related packages
-        (pretty-code     :location local)
-        ;; (fira-code-mode  :location local)
+        ;; (pretty-code     :location local)
         (pretty-eshell   :location local)
         (pretty-fonts    :location local)
         (pretty-magit    :location local)
@@ -209,10 +208,10 @@
     :config
     ;; !! This is required to avoid segfault when using emacs as daemon !!
     (spacemacs|do-after-display-system-init
-     ;; (pretty-fonts-add-hook 'prog-mode-hook pretty-fonts-fira-code-alist)
-     ;; (pretty-fonts-add-hook 'org-mode-hook  pretty-fonts-fira-code-alist)
+     (pretty-fonts-add-hook 'prog-mode-hook pretty-fonts-fira-code-alist)
+     (pretty-fonts-add-hook 'org-mode-hook  pretty-fonts-fira-code-alist)
 
-     ;; (pretty-fonts-set-fontsets-for-fira-code)
+     (pretty-fonts-set-fontsets-for-fira-code)
      (pretty-fonts-set-fontsets
       '(;; All-the-icons fontsets
         ("fontawesome"

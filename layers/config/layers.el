@@ -15,7 +15,6 @@
    (org :variables
         org-projectile-file "TODO.org"
         org-want-todo-bindings t)
-   semantic
    (shell :variables
           shell-default-shell 'eshell)
    (spell-checking :variables
@@ -49,13 +48,16 @@
 
    ;; Languages
    lsp
+   dap-mode
    (elixir :variables
            elixir-backend 'lsp
            elixir-ls-path "~/.local/opt/elixir-ls/release")
+   exunit
    emacs-lisp
    erlang
-   (javascript :variables
-               javascript-disable-tern-port-files nil)
+   ;; javascript or js2
+   ;; (javascript :variables
+   ;;             javascript-disable-tern-port-files nil)
    django
    (python :variables
            python-backend 'lsp
