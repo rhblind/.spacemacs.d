@@ -46,15 +46,26 @@ They are all defined in `~/.emacs.d/core/core-dotspacemacs.el'.
 Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   (setq-default
    ;; Display
-   dotspacemacs-default-font `(,(if (x-list-fonts "Operator Mono")
-                                    "operator mono medium"
-                                  "Source Code Pro")
-                               :size ,(if (= 1440 (display-pixel-height)) 20 18))
+   ;; dotspacemacs-default-font `(,(if (x-list-fonts "Operator Mono")
+   ;;                                  "operator mono medium"
+   ;;                                "Source Code Pro")
+   ;;                             :size ,(if (= 1440 (display-pixel-height)) 20 18))
+
+   dotspacemacs-default-font '(("Fira Code"
+                                :size 14
+                                :weight medium
+                                :width normal
+                                :powerline-scale 1.1)
+                               ("Fira Code Symbol"
+                                :size 14
+                                :weight normal
+                                :width normal
+                                :powerline-scale 1.1))
    dotspacemacs-themes       '(solarized-light
                                doom-gruvbox)
 
    ;; General
-   dotspacemacs-auto-generate-layout-names t
+   dotspacemacs-auto-generate-layout-names nil
    dotspacemacs-editing-style              '(vim :variables
                                                  vim-style-visual-feedback t
    dotspacemacs-elpa-https                 t
@@ -138,45 +149,5 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 (defun dotspacemacs/user-config ()
   "Configuration that cannot be delegated to layers."
   (dotspacemacs/user-config/post-layer-load-config)
-
-  ;; (when (spacemacs/system-is-mac)
-  ;;   (setq lsp-python-ms-executable
-  ;;         "~/.local/opt/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
-  ;; (when (spacemacs/system-is-linux)
-  ;;   (setq lsp-python-ms-executable
-  ;;         "~/.local/opt/python-language-server/output/bin/Release/linux-64/publish/Microsoft.Python.LanguageServer"))
-
-  ;; (setq display-time-24hr-format t                          ;; Use 24h clock
-  ;;       layouts-enable-autosave t                           ;; Automatically save layouts
-  ;;       lsp-ui-doc-enable nil                               ;; Disable ui-doc popup. Toggle help with ,hh
-  ;;       mouse-wheel-follow-mouse t                          ;; Scroll window under mouse
-  ;;       mouse-wheel-progressive-speed nil                   ;; Don't accelerate scrolling
-  ;;       mouse-wheel-scroll-amount '(2 ((shift) . 1))        ;; Scroll 2 lines at a time
-  ;;       user-full-name "Rolf Håvard Blindheim"
-  ;;       user-email-address "rhblind@gmail.com"
-  ;;       vc-follow-symlinks nil                              ;; Don't follow symlinks, edit them directly
-  ;;       ws-butler-global-mode t                             ;; Enable ws-butler globally
-  ;;       projectile-enable-caching t                         ;; Let projectile cache files
-  ;;       projectile-project-search-path '("~/Documents/workspace")
-  ;;       ;; projectile-globally-ignored-files '()
-  ;;       ;; projectile-globally-ignored-file-suffixes '()
-  ;;       projectile-globally-ignored-directories '(
-  ;;                                                 ".git"
-  ;;                                                 ".idea"
-  ;;                                                 ".elixir_ls"
-  ;;                                                 ".htmlcov"
-  ;;                                                 ".node_modules"
-  ;;                                                 ".pytest_cache"
-  ;;                                                 "_build"
-  ;;                                                 ))
-  ;; ;;;; Hooks
-
-  ;; (add-hook 'prog-mode-hook 'fira-code-mode)           ;; Enable fira-code ligatures in programming modes
-
-;;;; Keybindings
-  (global-set-key (kbd "<C-return>") 'newline-below)
-  (global-set-key (kbd "<S-return>") 'newline-above)
-  (global-set-key (kbd "<C-backspace>") 'aborn/backward-kill-word)
-  (evil-ex-define-cmd "q[uit]" 'evil-delete-buffer)    ;; Redefine :q to delete buffer instead of exiting emacs
   )
 )

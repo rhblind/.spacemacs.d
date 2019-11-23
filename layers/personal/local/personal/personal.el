@@ -31,6 +31,13 @@
 
 (add-hook 'prog-mode-hook 'fira-code-mode)           ;; Enable fira-code ligatures in programming modes
 
+;;;; Keybindings
+(global-set-key (kbd "<C-return>") 'newline-below)
+(global-set-key (kbd "<S-return>") 'newline-above)
+(global-set-key (kbd "<C-backspace>") 'backward-kill-word)
+(evil-ex-define-cmd "q[uit]" 'evil-delete-buffer)    ;; Redefine :q to delete buffer instead of exiting emacs
+
+
 ;; (with-eval-after-load 'magit-mode
 ;;   (spacemacs/set-leader-keys-for-major-mode 'magit-mode
 ;;     "gF" 'magit-gitflow-popup))
