@@ -1,18 +1,10 @@
 ;;; Setup -*- lexical-binding: t; -*-
 ;;;; Commentary
 
-;; -- Eric Kaschalk's Spacemacs Configuration --
-;; -- Contact: ekaschalk@gmail.com --
-;; -- MIT License --
-;; -- Emacs 26.1 ~ Spacemacs Dev Branch 0.300.0.x ~ pkgs updated: 1/21/19 --
-;; -- http://modernemacs.com --
-;;
-;; Personal layers host most of my configuration - see README.
 ;; Ligatures and icons require installation - see README.
 ;;
 ;; Layers are declared in `layers/config/layers.el'.
 ;;
-;; Set `redo-bindings?' to true if you - want my aggressive rebindings.
 ;; Set `server?'        to true if you - use emacs as a daemon.
 ;;
 ;; `init.el' sets spacemacs up, defining required `dotspacemacs/..' funcs & vars.
@@ -71,7 +63,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                                        :size-limit-kb 1000)
    dotspacemacs-persistent-server          server?
    dotspacemacs-pretty-docs                t
-   dotspacemacs-search-tools               '("rg" "ag" "pt" "ack" "grep")
+   dotspacemacs-search-tools               '("ag" "rg" "pt" "ack" "grep")
    dotspacemacs-remap-Y-to-y$              nil
    dotspacemacs-scratch-mode               'org-mode
    dotspacemacs-startup-banner             nil

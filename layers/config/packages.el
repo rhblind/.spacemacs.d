@@ -44,7 +44,8 @@
 (defun config/init-dtrt-indent ()
   (use-package dtrt-indent))
 
-(defun config/init-drag-stuff ()
+;;;; Drag-stuff
+(defun config/post-init-drag-stuff ()
   (use-package drag-stuff
     :config
     (drag-stuff-global-mode t)
