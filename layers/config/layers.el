@@ -48,11 +48,9 @@
 
    ;; Languages
    lsp
-   dap-mode
    (elixir :variables
            elixir-backend 'lsp
            elixir-ls-path "~/.local/opt/elixir-ls/release")
-   exunit
    emacs-lisp
    erlang
    ;; javascript or js2

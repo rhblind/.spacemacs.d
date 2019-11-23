@@ -6,6 +6,7 @@
         avy
         dtrt-indent
         drag-stuff
+        elixir
         eshell
         evil
         ivy
@@ -50,6 +51,20 @@
     :config
     (drag-stuff-global-mode t)
     (drag-stuff-define-keys)))
+
+;;;; Elixir
+(defun config/init-elixir ()
+  (with-eval-after-load 'elixir-mode
+    (spacemacs/declare-prefix-for-mode 'elixir-mode
+      "mt" "tests" "testing related functionality")
+    (spacemacs/set-leader-keys-for-major-mode 'elixir-mode
+      "tb" 'exunit-verify-all
+      "ta" 'exunit-verify
+      "tk" 'exunit-rerun
+      "tt" 'exunit-verify-single
+      "tu" 'exunit-verify-all-in-umbrella
+      ))
+  )
 
 ;;;; Eshell
 
@@ -246,7 +261,7 @@
     :hook ((prog-mode          . outline-minor-mode)
            (outline-minor-mode . outshine-mode))
 
-    :bind (("<backtab>"     . outshine-cycle-buffer)
+    :bind (("<backtab>"           . outshine-cycle-buffer)
            ([(meta return)]       . outshine-insert-heading)
            ([(meta shift return)] . outshine-insert-subheading)
            :map outline-minor-mode-map)

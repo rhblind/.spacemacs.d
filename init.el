@@ -87,8 +87,10 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            (personal :location local))
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
    dotspacemacs-additional-packages      '(buttercup
+                                           dap-mode
                                            drag-stuff
                                            dtrt-indent
+                                           exunit
                                            quelpa
                                            quelpa-use-package)
    dotspacemacs-frozen-packages          '()
