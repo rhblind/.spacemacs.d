@@ -26,9 +26,7 @@
 ;;;; Aggressive indent
 
 (defun config/pre-init-aggressive-indent ()
-  (add-hook 'elixir-mode-hook     #'aggressive-indent-mode)
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-  (add-hook 'js2-mode-hook        #'aggressive-indent-mode)
   (add-hook 'python-mode-hook     #'aggressive-indent-mode)
   )
 
@@ -46,7 +44,7 @@
   (use-package dtrt-indent))
 
 ;;;; Drag-stuff
-(defun config/post-init-drag-stuff ()
+(defun config/init-drag-stuff ()
   (use-package drag-stuff
     :config
     (drag-stuff-global-mode t)

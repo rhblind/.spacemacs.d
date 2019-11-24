@@ -1,4 +1,5 @@
 # Person-person files
+.DS_Store
 .spacemacs.env
 .custom-settings.el
 

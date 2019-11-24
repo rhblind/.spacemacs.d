@@ -253,6 +253,7 @@
   (use-package pretty-outlines
     :hook ((outline-mode       . pretty-outlines-set-display-table)
            (outline-minor-mode . pretty-outlines-set-display-table)
+           (elixir-mod      . pretty-outlines-add-bullets)
            (emacs-lisp-mode . pretty-outlines-add-bullets)
            (hy-mode         . pretty-outlines-add-bullets)
            (python-mode     . pretty-outlines-add-bullets))))

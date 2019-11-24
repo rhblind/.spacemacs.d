@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 
-;; Display mofidications for `solarized-light' and `zenburn' applied here.
+;; Display mofidications for `solarized-light', `doom-gruvbox' and `zenburn' applied here.
 
 ;; Try out changes with `spacemacs/update-theme' to see theme updates
 ;; or alternatively run `spacemacs/cycle-spacemacs-theme' with 'SPC T n'.
@@ -64,6 +64,18 @@
         (org-level-3
          ,@display/headers/common
          :height 1.15)))
+(setq display/headers/doom-gruvbox
+      `((org-level-1
+         ,@display/headers/common
+         :height 1.35
+         :foreground "#fe8019")
+        (org-level-2
+         ,@display/headers/common
+         :height 1.25
+         :foreground "#fabd2f")
+        (org-level-3
+         ,@display/headers/common
+         :height 1.15)))
 
 ;;;;; Org-blocks
 
@@ -117,7 +129,7 @@
         (fringe :background nil)))
 
 ;;;; Themes
-
+;;;;; Solarized-Light
 (setq display/solarized-light-theming
       `(;; Overwrites
         (mode-line-inactive :background "#eee8d5"
@@ -138,6 +150,7 @@
         ;; ... Experiments ...
         ))
 
+;;;;; Zenburn
 (setq display/zenburn-theming
       `(;; Overwrites
         (font-lock-comment-face :foreground "gray50"
@@ -156,6 +169,25 @@
         ;; ... Experiments ...
         ))
 
+;;;;; Doom-Gruvbox
+(setq display/doom-gruvbox-theming
+      `(;; Overwrites
+        ;; (font-lock-comment-face :foreground "gray50"
+        ;;                         ,@(alist-get 'font-lock-comment-face
+        ;;                                      display/font-locks))
+        ;; (font-lock-doc-face :foreground "gray65"
+        ;;                     ,@(alist-get 'font-lock-doc-face
+        ;;                                  display/font-locks))
+
+        ;; ;; Extra
+        ;; (font-lock-comment-delimiter-face :foreground "gray35")
+        ;; (font-lock-function-name-face     :foreground "CadetBlue2")
+        ;; (font-lock-type-face              :foreground "LightCoral")
+        ;; (auto-dim-other-buffers-face      :background "gray22")
+
+        ;; ;; ... Experiments ...
+        ))
+
 ;;;; Set Modifications
 
 ;; This variable is the only `theming' layer requirement to enable our theming
@@ -166,4 +198,7 @@
                          ,@display/zenburn-theming)
         (solarized-light ,@display/common-theming
                          ,@display/headers/solarized-light
-                         ,@display/solarized-light-theming)))
+                         ,@display/solarized-light-theming)
+        (doom-gruvbox    ,@display/common-theming
+                         ,@display/headers/doom-gruvbox
+                         ,@display/doom-gruvbox-theming)))

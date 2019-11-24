@@ -9,7 +9,8 @@
 (global-company-mode)                                     ;; Enable company-mode globally
 (global-unset-key [down-mouse-1])                         ;; No dragging nonsense
 (global-set-key [down-mouse-1] 'mouse-select-window)      ;; Select window with mouse click
-(treemacs-resize-icons 16)                                ;; Treemacs icon size
+(rainbow-mode)                                            ;; Display color in buffer for color identifiers
+(treemacs-resize-icons 14)                                ;; Treemacs icon size
 
 ;;;; Keybindings
 (global-set-key (kbd "<C-return>") 'newline-below)
