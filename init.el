@@ -47,6 +47,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 
    ;; General
    dotspacemacs-auto-generate-layout-names t
+   dotspacemacs-auto-resume-layouts        t
    dotspacemacs-editing-style              '(vim :variables
                                                  vim-style-visual-feedback t)
    dotspacemacs-elpa-https                 t
@@ -54,6 +55,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-enable-server              server?
    dotspacemacs-fullscreen-at-startup      nil
    dotspacemacs-large-file-size            5
+   dotspacemacs-helm-use-fuzzy             'always
    dotspacemacs-line-numbers               '(:relative t
                                                        :disabled-for-modes dired-mode
                                                        doc-view-mode
@@ -63,7 +65,9 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                                        :size-limit-kb 1000)
    dotspacemacs-persistent-server          server?
    dotspacemacs-pretty-docs                t
-   dotspacemacs-search-tools               '("ag" "rg" "pt" "ack" "grep")
+   dotspacemacs-search-tools               '("rg ""ag" "pt" "ack" "grep")
+   dotspacemacs-smartparens-strict-mode    t
+   dotspacemacs-smart-closing-parenthesis  nil
    dotspacemacs-remap-Y-to-y$              nil
    dotspacemacs-scratch-mode               'org-mode
    dotspacemacs-startup-banner             nil

@@ -114,6 +114,8 @@
   (use-package lsp-mode
     :config
     :hook (elixir-mode . lsp-deferred)
+    :hook (elixir-mode . (lambda ()
+                           (add-hook 'before-save-hook #'lsp-format-buffer nil)))
     :hook (python-mode . lsp-deferred)
     :hook (python-mode . (lambda ()
                            (when (spacemacs/system-is-mac)
