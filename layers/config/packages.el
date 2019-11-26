@@ -52,6 +52,7 @@
 
 ;;;; Elixir
 (defun config/init-elixir ()
+  ;; TODO Add projectile ignored directories here
   (with-eval-after-load 'elixir-mode
     (spacemacs/declare-prefix-for-mode 'elixir-mode
       "mt" "tests" "testing related functionality")

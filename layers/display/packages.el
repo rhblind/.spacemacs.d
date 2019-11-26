@@ -134,7 +134,7 @@
   ;; Misc Segments
   (spaceline-toggle-all-the-icons-eyebrowse-workspace-off)
   (spaceline-toggle-all-the-icons-flycheck-status-off)
-  (spaceline-toggle-all-the-icons-time-off))
+  (spaceline-toggle-all-the-icons-time-on))
 
 ;;; Pretty Packages
 ;;;; Pretty-code
