@@ -9,6 +9,7 @@
                     auto-completion-enable-help-tooltip t
                     auto-completion-enable-sort-by-usage t)
    better-defaults
+   docker
    git
    (ivy :variables
         ivy-extra-directories nil)
@@ -53,9 +54,8 @@
            elixir-ls-path "~/.local/opt/elixir-ls/release")
    emacs-lisp
    erlang
-   ;; javascript or js2
-   ;; (javascript :variables
-   ;;             javascript-disable-tern-port-files nil)
+   (javascript :variables
+               javascript-disable-tern-port-files nil)
    django
    (python :variables
            python-backend 'lsp

@@ -33,11 +33,11 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   (setq-default
    ;; Display
    dotspacemacs-default-font '(("Fira Code"
-                                :size 14
+                                :size 13
                                 :weight medium
                                 :width normal)
                                ("Fira Code Symbol"
-                                :size 14
+                                :size 13
                                 :weight normal
                                 :width normal
                                 ))
@@ -94,6 +94,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            dap-mode
                                            drag-stuff
                                            dtrt-indent
+                                           exec-path-from-shell
                                            exunit
                                            rainbow-mode
                                            quelpa

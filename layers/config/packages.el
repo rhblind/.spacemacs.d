@@ -9,6 +9,7 @@
         elixir
         eshell
         evil
+        exec-path-from-shell
         ivy
         lsp
         magit
@@ -87,8 +88,16 @@
   (advice-add 'evil-ex-search-next     :after 'evil-scroll-to-center-advice)
   (advice-add 'evil-ex-search-previous :after 'evil-scroll-to-center-advice))
 
-;;;; Ivy
+;;;; Exec-path-from-shell
+(defun config/post-init-exec-path-from-shell ()
+  (when (not (spacemacs/system-is-mswindows))
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-env "SSH_AGENT_PID")
+    (exec-path-from-shell-copy-env "PATH")
+    (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
+  )
 
+;;;; Ivy
 (defun config/pre-init-ivy ()
   (setq ivy-format-function 'ivy-format-function-arrow)
   (setq completion-in-region-function 'ivy-completion-in-region))
