@@ -41,8 +41,8 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                 :weight normal
                                 :width normal
                                 ))
-   dotspacemacs-themes       '(solarized-light
-                               doom-gruvbox
+   dotspacemacs-themes       '(doom-gruvbox
+                               solarized-light
                                zenburn)
 
    ;; General
