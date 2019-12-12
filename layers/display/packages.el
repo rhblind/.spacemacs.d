@@ -125,6 +125,7 @@
   ;; Buffer Segments
   (spaceline-toggle-all-the-icons-buffer-size-off)
   (spaceline-toggle-all-the-icons-buffer-position-off)
+  (spaceline-toggle-all-the-icons-buffer-id-on)
 
   ;; Git Segments
   (spaceline-toggle-all-the-icons-git-status-off)
