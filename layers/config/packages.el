@@ -89,11 +89,11 @@
   (advice-add 'evil-ex-search-previous :after 'evil-scroll-to-center-advice))
 
 ;;;; Exec-path-from-shell
-(defun config/post-init-exec-path-from-shell ()
+(defun config/init-exec-path-from-shell ()
   (when (not (spacemacs/system-is-mswindows))
     (exec-path-from-shell-initialize)
-    (exec-path-from-shell-copy-env "SSH_AGENT_PID")
     (exec-path-from-shell-copy-env "PATH")
+    (exec-path-from-shell-copy-env "SSH_AGENT_PID")
     (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
   )
 
