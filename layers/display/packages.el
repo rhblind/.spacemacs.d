@@ -128,9 +128,9 @@
   (spaceline-toggle-all-the-icons-buffer-id-on)
 
   ;; Git Segments
-  (spaceline-toggle-all-the-icons-git-status-off)
+  (spaceline-toggle-all-the-icons-git-status-on)
   (spaceline-toggle-all-the-icons-vc-icon-off)
-  (spaceline-toggle-all-the-icons-vc-status-off)
+  (spaceline-toggle-all-the-icons-vc-status-on)
 
   ;; Misc Segments
   (spaceline-toggle-all-the-icons-eyebrowse-workspace-off)

@@ -143,12 +143,12 @@
     :quelpa (lsp-pwsh :fetcher github :repo "kiennq/lsp-powershell")
     :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp-deferred)))
     :defer t)
-  (use-package lsp-treemacs
-    :config
-    (setq treemacs-follow-after-init t)
-    (treemacs-follow-mode t)
-    (treemacs-filewatch-mode t)
-    (lsp-treemacs-sync-mode 1))
+  ;; (use-package lsp-treemacs
+  ;;   :config
+  ;;   (setq treemacs-follow-after-init t)
+  ;;   (treemacs-follow-mode t)
+  ;;   (treemacs-filewatch-mode t)
+  ;;   (lsp-treemacs-sync-mode 1))
   (use-package lsp-ui :commands lsp-ui-mode)
   (use-package dap-mode
     :ensure t
@@ -242,6 +242,11 @@
                ("M-3" . winum-select-window-3)
                ("M-4" . winum-select-window-4)
                ("M-5" . winum-select-window-5))))
+
+;;;; Treemacs
+(defun config/init-treemacs ()
+
+  )
 
 ;;; Owned Packages
 ;;;; Auto Dim Other Buffers
