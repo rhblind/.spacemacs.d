@@ -41,7 +41,9 @@
                                                 ".pytest_cache"
                                                 "_build"
                                                 "deps"
-                                                ))
+                                                )
+      x-mouse-click-focus-ignore-position t               ;; Makes switching windows with mouse work on X-Window system
+      )
 
 ;; Don't enable this package as this config is not generally applicable
 
