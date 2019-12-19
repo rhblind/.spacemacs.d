@@ -37,10 +37,10 @@
                                                 ".idea"
                                                 ".elixir_ls"
                                                 ".htmlcov"
-                                                ".node_modules"
                                                 ".pytest_cache"
                                                 "_build"
                                                 "deps"
+                                                "node_modules"
                                                 ))
 
 ;; Don't enable this package as this config is not generally applicable
