@@ -41,7 +41,9 @@
                                                 "_build"
                                                 "deps"
                                                 "node_modules"
-                                                ))
+                                                )
+      x-mouse-click-focus-ignore-position t               ;; Makes switching windows with mouse work on X-Window system
+      )
 
 ;; Don't enable this package as this config is not generally applicable
 
