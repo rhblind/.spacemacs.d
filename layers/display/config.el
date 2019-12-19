@@ -68,14 +68,15 @@
       `((org-level-1
          ,@display/headers/common
          :height 1.35
-         :foreground "#fe8019")
+         :foreground "#fabd2f")
         (org-level-2
          ,@display/headers/common
          :height 1.25
-         :foreground "#fabd2f")
+         :foreground "#b8bb26")
         (org-level-3
          ,@display/headers/common
-         :height 1.15)))
+         :height 1.15
+         :foreground "#d3869b")))
 
 ;;;;; Org-blocks
 
