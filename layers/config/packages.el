@@ -76,9 +76,11 @@
 ;;;; Evil
 
 (defun config/post-init-evil ()
+  (require 'evil-mc)
   (setq evil-escape-key-sequence "jk")
   (setq evil-escape-unordered-key-sequence "true")
 
+  (global-evil-mc-mode t)
   (evil-global-set-key 'normal "Q" 'evil-execute-q-macro)
   (evil-define-key '(normal visual motion) 'global
     "H" 'evil-first-non-blank
@@ -125,9 +127,15 @@
     :config
     :hook (elixir-mode . lsp-deferred)
     :hook (elixir-mode . (lambda ()
+                           (require 'dap-elixir)
+                           (dap-mode t)
+                           (dap-ui-mode t)
                            (add-hook 'before-save-hook #'lsp-format-buffer nil)))
     :hook (python-mode . lsp-deferred)
     :hook (python-mode . (lambda ()
+                           (require 'dap-python)
+                           (dap-mode t)
+                           (dap-ui-mode t)
                            (when (spacemacs/system-is-mac)
                              (setq lsp-python-ms-executable
                                    "~/.local/opt/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
@@ -139,24 +147,33 @@
     :commands (lsp lsp-deferred))
   (use-package company-lsp :commands company-lsp)
   (use-package helm-lsp :commands helm-lsp-workspace-symbol)
-  (use-package lsp-pwsh
-    :quelpa (lsp-pwsh :fetcher github :repo "kiennq/lsp-powershell")
-    :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp-deferred)))
-    :defer t)
-  ;; (use-package lsp-treemacs
-  ;;   :config
-  ;;   (setq treemacs-follow-after-init t)
-  ;;   (treemacs-follow-mode t)
-  ;;   (treemacs-filewatch-mode t)
-  ;;   (lsp-treemacs-sync-mode 1))
-  (use-package lsp-ui :commands lsp-ui-mode)
-  (use-package dap-mode
-    :ensure t
+  ;; (use-package lsp-pwsh
+  ;;   :quelpa (lsp-pwsh :fetcher github :repo "kiennq/lsp-powershell")
+  ;;   :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp-deferred)))
+  ;;   :defer t)
+  (use-package lsp-treemacs
     :config
-    (dap-mode 1)
-    (dap-ui-mode 1)
-    (require 'dap-elixir)
-    (require 'dap-python))
+    (setq treemacs-follow-after-init t)
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (lsp-treemacs-sync-mode t))
+  (use-package lsp-ui :commands lsp-ui-mode)
+  ;; (use-package dap-mode
+  ;;   :ensure t
+  ;;   :config
+  ;;   :hook (elixir-mode . (lambda ()
+  ;;                          (require 'dap-elixir)
+  ;;                          (dap-mode t)
+  ;;                          (dap-ui-mode t)
+  ;;                          ))
+  ;;   :hook (python-mode . (lambda ()
+  ;;                          (require 'dap-python)
+  ;;                          (dap-mode t)
+  ;;                          (dap-ui-mode t)
+  ;;                          ))
+  ;;   ;; (dap-mode t)
+  ;;   ;; (dap-ui-mode t)
+  ;;   )
   )
 
 ;;;; Magit
