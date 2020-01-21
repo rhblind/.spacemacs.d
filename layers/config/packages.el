@@ -5,7 +5,6 @@
         aggressive-indent
         avy
         dtrt-indent
-        drag-stuff
         elixir
         eshell
         evil
@@ -23,7 +22,7 @@
         outshine  ; also configures `outline-mode'
         s))
 
-;;; Unowned Packages
+
 ;;;; Aggressive indent
 
 (defun config/pre-init-aggressive-indent ()
@@ -43,13 +42,6 @@
 ;;;; Dtrt-indent
 (defun config/init-dtrt-indent ()
   (use-package dtrt-indent))
-
-;;;; Drag-stuff
-(defun config/init-drag-stuff ()
-  (use-package drag-stuff
-    :config
-    (drag-stuff-global-mode t)
-    (drag-stuff-define-keys)))
 
 ;;;; Elixir
 (defun config/init-elixir ()
@@ -76,11 +68,9 @@
 ;;;; Evil
 
 (defun config/post-init-evil ()
-  (require 'evil-mc)
   (setq evil-escape-key-sequence "jk")
   (setq evil-escape-unordered-key-sequence "true")
 
-  (global-evil-mc-mode t)
   (evil-global-set-key 'normal "Q" 'evil-execute-q-macro)
   (evil-define-key '(normal visual motion) 'global
     "H" 'evil-first-non-blank

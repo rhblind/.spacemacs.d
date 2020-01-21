@@ -92,7 +92,6 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
    dotspacemacs-additional-packages      '(buttercup
                                            dap-mode
-                                           drag-stuff
                                            dtrt-indent
                                            evil-mc
                                            exec-path-from-shell

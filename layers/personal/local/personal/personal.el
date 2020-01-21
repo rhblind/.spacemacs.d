@@ -47,13 +47,13 @@
 
 ;; Don't enable this package as this config is not generally applicable
 
-;; ;;; Emacs Anywhere
+;;; Emacs Anywhere
 
 ;; ;; Emacs-anywhere defaults to org-mode with maximized window
 ;; (add-hook 'ea-popup-hook
 ;;           (lambda (&rest args) (org-mode) (spacemacs/toggle-maximize-buffer)))
 
-;; ;;; Hy-mode
+;;; Hy-mode
 
 ;; ;; Hy-mode development
 ;; ;; (load-file "~/dev/hy-mode/hy-mode.el")
@@ -61,7 +61,7 @@
 ;; ;; (require 'hy-mode)
 ;; ;; (require 'hy-personal)
 
-;; ;;; Mail
+;;; Mail
 
 ;; ;; message.el
 ;; (setq message-directory "~/mail")
@@ -101,7 +101,7 @@
 ;; ;; (setq mu4e-index-lazy-check t)    ;; don't consider up-to-date dir
 ;; ;; w3m -dump -T text/html
 
-;; ;;; Notate Development
+;;; Notate Development
 
 ;; (add-to-list 'load-path "~/dev/virtual-indent/")
 ;; (with-eval-after-load 'hl-todo
@@ -110,7 +110,7 @@
 ;; (require 'nt-dev)
 ;; (load-file "~/dev/virtual-indent/nt-test.el")
 
-;; ;;; Hy-mode Development
+;;; Hy-mode Development
 
 ;; (add-to-list 'load-path "~/dev/hy-mode/")
 ;; (load-file "~/dev/hy-mode/hy-mode.el")

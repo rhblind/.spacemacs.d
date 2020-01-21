@@ -136,14 +136,14 @@ subheading level already exists within the buffer."
 
 (defun ad-timestamp-message (FORMAT-STRING &rest args)
   "Advice to run before `message' that prepends a timestamp to each message.
-
 Activate this advice with:
 (advice-add 'message :before 'sh/ad-timestamp-message)"
-   (unless (string-equal FORMAT-STRING "%s%s")
-     (let ((deactivate-mark nil)
-           (inhibit-read-only t))
-       (with-current-buffer "*Messages*"
-         (goto-char (point-max))
-         (if (not (bolp))
-             (newline))
-         (insert (current-time-microseconds) " ")))))
+
+  (unless (string-equal FORMAT-STRING "%s%s")
+    (let ((deactivate-mark nil)
+          (inhibit-read-only t))
+      (with-current-buffer "*Messages*"
+        (goto-char (point-max))
+        (if (not (bolp))
+            (newline))
+        (insert (current-time-microseconds) " ")))))
