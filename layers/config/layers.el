@@ -15,6 +15,8 @@
         ivy-extra-directories nil)
    (org :variables
         org-projectile-file "TODO.org"
+        org-enable-github-support t
+        org-enable-reveal-js-support t
         org-want-todo-bindings t)
    (shell :variables
           shell-default-shell 'eshell)

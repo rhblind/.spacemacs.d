@@ -208,6 +208,8 @@
   (add-hook 'org-mode-hook (lambda () (auto-fill-mode 1)))
   (add-hook 'org-mode-hook 'flyspell-mode)
 
+  (setq org-re-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0")
+
   ;; Experimenting with the following indentation vars:
   (setq org-startup-indented nil)
   (setq org-hide-leading-stars t)
