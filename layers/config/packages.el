@@ -45,7 +45,6 @@
 
 ;;;; Elixir
 (defun config/init-elixir ()
-  ;; TODO Add projectile ignored directories here
   (with-eval-after-load 'elixir-mode
     (spacemacs/declare-prefix-for-mode 'elixir-mode
       "mt" "tests" "testing related functionality")
@@ -202,7 +201,8 @@
           ("h" "#+HTML: ")
           ("q" "#+BEGIN_QUOTE\n\n#+END_QUOTE")
           ("s" "#+BEGIN_SRC ?\n\n#+END_SRC")
-          ("se" "#+BEGIN_SRC emacs-lisp\n\n#+END_SRC")
+          ("se" "#+BEGIN_SRC elixir\n\n#+END_SRC")
+          ("sj" "#+BEGIN_SRC javascript\n\n#+END_SRC")
           ("sp" "#+BEGIN_SRC python\n\n#+END_SRC")))
 
   (add-hook 'org-mode-hook (lambda () (auto-fill-mode 1)))

@@ -45,6 +45,15 @@
       x-mouse-click-focus-ignore-position t               ;; Makes switching windows with mouse work on X-Window system
       )
 
+;;; Org-mode
+(setq org-directory "~/Dropbox/org"
+      org-default-notes-file (concat org-directory "/todo.org")
+      org-agenda-files
+      (quote
+       ((concat org-directory "/todo.org")
+        (concat org-directory "/notes.org")
+        (concat org-directory "/ideas.org"))))
+
 ;; Don't enable this package as this config is not generally applicable
 
 ;;; Emacs Anywhere
