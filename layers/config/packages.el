@@ -80,13 +80,13 @@
   (advice-add 'evil-ex-search-previous :after 'evil-scroll-to-center-advice))
 
 ;;;; Exec-path-from-shell
-(defun config/init-exec-path-from-shell ()
-  (when (not (spacemacs/system-is-mswindows))
-    (exec-path-from-shell-initialize)
-    (exec-path-from-shell-copy-env "PATH")
-    (exec-path-from-shell-copy-env "SSH_AGENT_PID")
-    (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
-  )
+;; (defun config/init-exec-path-from-shell ()
+;;   (when (not (spacemacs/system-is-mswindows))
+;;     (exec-path-from-shell-initialize)
+;;     (exec-path-from-shell-copy-env "PATH")
+;;     (exec-path-from-shell-copy-env "SSH_AGENT_PID")
+;;     (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
+;;   )
 
 ;;;; Ivy
 (defun config/pre-init-ivy ()
@@ -168,6 +168,8 @@
 ;;;; Magit
 
 (defun config/post-init-magit ()
+  (spacemacs|use-package-add-hook forge
+    :after magit)
   (bind-keys :map magit-mode-map
              ("M-1" . winum-select-window-1)
              ("M-2" . winum-select-window-2)

@@ -10,6 +10,7 @@
 (global-set-key [down-mouse-1] 'mouse-select-window)      ;; Select window with mouse click
 (rainbow-mode)                                            ;; Display color in buffer for color identifiers
 (treemacs-resize-icons 14)                                ;; Treemacs icon size
+(keychain-refresh-environment)                            ;; Refresh keychain information on start
 
 ;;;; Keybindings
 (global-set-key (kbd "<C-return>") 'newline-below)
@@ -47,12 +48,8 @@
 
 ;;; Org-mode
 (setq org-directory "~/Dropbox/org"
-      org-default-notes-file (concat org-directory "/todo.org")
-      org-agenda-files
-      (quote
-       ((concat org-directory "/todo.org")
-        (concat org-directory "/notes.org")
-        (concat org-directory "/ideas.org"))))
+      org-default-notes-file "~/Dropbox/org/todo.org"
+      org-agenda-files (file-expand-wildcards "~/Dropbox/org/*.org"))
 
 ;; Don't enable this package as this config is not generally applicable
 

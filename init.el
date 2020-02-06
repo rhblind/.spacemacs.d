@@ -96,6 +96,8 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            evil-mc
                                            exec-path-from-shell
                                            exunit
+                                           forge
+                                           keychain-environment
                                            rainbow-mode
                                            quelpa
                                            quelpa-use-package)
