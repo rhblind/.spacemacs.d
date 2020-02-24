@@ -5,10 +5,8 @@
         aggressive-indent
         avy
         dtrt-indent
-        elixir
         eshell
         evil
-        exec-path-from-shell
         ivy
         lsp
         magit
@@ -24,14 +22,12 @@
 
 
 ;;;; Aggressive indent
-
 (defun config/pre-init-aggressive-indent ()
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'python-mode-hook     #'aggressive-indent-mode)
   )
 
 ;;;; Avy
-
 (defun config/pre-init-avy ()
   (setq avy-timeout-seconds 0.35)
 
@@ -58,14 +54,12 @@
   )
 
 ;;;; Eshell
-
 (defun config/pre-init-eshell ()
   (spacemacs|use-package-add-hook eshell
     :post-init
     (evil-define-key '(normal insert) 'global (kbd "C-e") 'eshell-pop-eshell)))
 
 ;;;; Evil
-
 (defun config/post-init-evil ()
   (setq evil-escape-key-sequence "jk")
   (setq evil-escape-unordered-key-sequence "true")
@@ -78,15 +72,6 @@
 
   (advice-add 'evil-ex-search-next     :after 'evil-scroll-to-center-advice)
   (advice-add 'evil-ex-search-previous :after 'evil-scroll-to-center-advice))
-
-;;;; Exec-path-from-shell
-;; (defun config/init-exec-path-from-shell ()
-;;   (when (not (spacemacs/system-is-mswindows))
-;;     (exec-path-from-shell-initialize)
-;;     (exec-path-from-shell-copy-env "PATH")
-;;     (exec-path-from-shell-copy-env "SSH_AGENT_PID")
-;;     (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
-;;   )
 
 ;;;; Ivy
 (defun config/pre-init-ivy ()
@@ -166,7 +151,6 @@
   )
 
 ;;;; Magit
-
 (defun config/post-init-magit ()
   (spacemacs|use-package-add-hook forge
     :after magit)
@@ -177,7 +161,6 @@
              ("M-4" . winum-select-window-4)))
 
 ;;;; Org
-
 (defun config/pre-init-org-bullets ()
   (setq org-bullets-bullet-list '("" "" "" "")))
 
@@ -234,7 +217,6 @@
     "s p" 'org-sort-entries-priorities))
 
 ;;;; Ranger
-
 (defun config/pre-init-ranger ()
   (setq ranger-deer-show-details nil)
 
@@ -261,27 +243,23 @@
 
 ;;; Owned Packages
 ;;;; Auto Dim Other Buffers
-
 (defun config/init-auto-dim-other-buffers ()
   (use-package auto-dim-other-buffers
     :config
     (auto-dim-other-buffers-mode)))
 
 ;;;; Dash functional
-
 (defun config/init-dash-functional ()
   ;; The spacemacs core file `core-documentation' requires dash.
   ;; So we only have to use-pkg dash-functional to have all of dash around.
   (use-package dash-functional))
 
 ;;;; Faceup
-
 (defun config/init-faceup ()
   (use-package faceup
     :defer t))
 
 ;;;; Outshine
-
 (defun config/init-outshine ()
   (use-package outshine
     :hook ((prog-mode          . outline-minor-mode)
@@ -328,13 +306,11 @@
           (advice-add 'org-insert-subheading :after 'evil-insert-advice))))))
 
 ;;;; Strings
-
 (defun config/init-s ()
   (use-package s))
 
 ;;; Local Packages
 ;;;; Redo-spacemacs
-
 ;; `redo-spacemacs-bindings' is executed in user-config in `init.el'
 ;; with the `dotspacemacs/user-config/post-layer-load-config' function
 

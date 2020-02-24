@@ -94,7 +94,6 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            dap-mode
                                            dtrt-indent
                                            evil-mc
-                                           exec-path-from-shell
                                            exunit
                                            forge
                                            keychain-environment
