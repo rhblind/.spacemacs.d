@@ -24,7 +24,7 @@
 ;;; Owned Packages
 ;;;; All-the-icons
 
-(defun display/init-all-the-icons ()
+(defun display/post-init-all-the-icons ()
   (use-package all-the-icons
     :config
     (let ((hy-icon '(all-the-icons-fileicon "hy" :face all-the-icons-orange))

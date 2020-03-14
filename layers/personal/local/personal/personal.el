@@ -13,6 +13,8 @@
 (keychain-refresh-environment)                            ;; Refresh keychain information on start
 
 ;;;; Keybindings
+;; (drag-stuff-global-mode t)
+;; (drag-stuff-define-keys)
 (global-set-key (kbd "<C-return>") 'newline-below)
 (global-set-key (kbd "<S-return>") 'newline-above)
 (global-set-key (kbd "<C-backspace>") 'backward-kill-word)

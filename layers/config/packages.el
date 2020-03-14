@@ -4,9 +4,13 @@
       '(;; Unowned Packages
         aggressive-indent
         avy
+        drag-stuff
         dtrt-indent
+        elixir
         eshell
         evil
+        evil-mc
+        flycheck
         ivy
         lsp
         magit
@@ -25,7 +29,7 @@
 (defun config/pre-init-aggressive-indent ()
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'python-mode-hook     #'aggressive-indent-mode)
-  )
+  (add-hook 'elixir-mode-hook     #'aggressive-indent-mode))
 
 ;;;; Avy
 (defun config/pre-init-avy ()
@@ -34,6 +38,12 @@
   (evil-global-set-key 'normal "s" 'avy-goto-char-timer)
   (bind-keys ("C-l" . evil-avy-goto-line)
              ("C-h" . avy-pop-mark)))
+
+;;;; Drag-stuff
+(defun config/init-drag-stuff ()
+  (drag-stuff-global-mode t)
+  (global-set-key (kbd "<C-up>") 'drag-stuff-up)
+  (global-set-key (kbd "<C-down>") 'drag-stuff-down))
 
 ;;;; Dtrt-indent
 (defun config/init-dtrt-indent ()
@@ -73,6 +83,18 @@
   (advice-add 'evil-ex-search-next     :after 'evil-scroll-to-center-advice)
   (advice-add 'evil-ex-search-previous :after 'evil-scroll-to-center-advice))
 
+;;;; Evil-mc
+(defun config/post-init-evil-mc ()
+  (global-evil-mc-mode t))
+
+;;;; Flycheck
+(defun config/post-init-flycheck ()
+  (use-package flycheck-credo
+    :config
+    (flycheck-credo-setup)
+    (with-eval-after-load 'lsp-ui
+      (flycheck-add-next-checker 'lsp-ui 'elixir-credo))))
+
 ;;;; Ivy
 (defun config/pre-init-ivy ()
   (setq ivy-format-function 'ivy-format-function-arrow)
@@ -104,12 +126,14 @@
                            (require 'dap-elixir)
                            (dap-mode t)
                            (dap-ui-mode t)
-                           (add-hook 'before-save-hook #'lsp-format-buffer nil)))
+                           (dap-tooltip-mode t)
+                           (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
     :hook (python-mode . lsp-deferred)
     :hook (python-mode . (lambda ()
                            (require 'dap-python)
                            (dap-mode t)
                            (dap-ui-mode t)
+                           (dap-tooltip-mode t)
                            (when (spacemacs/system-is-mac)
                              (setq lsp-python-ms-executable
                                    "~/.local/opt/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
@@ -119,6 +143,8 @@
 
                            ))
     :commands (lsp lsp-deferred))
+  (add-hook 'dap-stopped-hook
+            (lambda (arg) (call-interactively #'dap-hydra)))
   (use-package company-lsp :commands company-lsp)
   (use-package helm-lsp :commands helm-lsp-workspace-symbol)
   ;; (use-package lsp-pwsh
@@ -131,24 +157,8 @@
     (treemacs-follow-mode t)
     (treemacs-filewatch-mode t)
     (lsp-treemacs-sync-mode t))
-  (use-package lsp-ui :commands lsp-ui-mode)
-  ;; (use-package dap-mode
-  ;;   :ensure t
-  ;;   :config
-  ;;   :hook (elixir-mode . (lambda ()
-  ;;                          (require 'dap-elixir)
-  ;;                          (dap-mode t)
-  ;;                          (dap-ui-mode t)
-  ;;                          ))
-  ;;   :hook (python-mode . (lambda ()
-  ;;                          (require 'dap-python)
-  ;;                          (dap-mode t)
-  ;;                          (dap-ui-mode t)
-  ;;                          ))
-  ;;   ;; (dap-mode t)
-  ;;   ;; (dap-ui-mode t)
-  ;;   )
-  )
+  (use-package lsp-ui
+    :commands lsp-ui-mode))
 
 ;;;; Magit
 (defun config/post-init-magit ()
@@ -235,11 +245,6 @@
                ("M-3" . winum-select-window-3)
                ("M-4" . winum-select-window-4)
                ("M-5" . winum-select-window-5))))
-
-;;;; Treemacs
-(defun config/init-treemacs ()
-
-  )
 
 ;;; Owned Packages
 ;;;; Auto Dim Other Buffers

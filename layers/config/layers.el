@@ -10,6 +10,8 @@
                     auto-completion-enable-sort-by-usage t)
    better-defaults
    docker
+   (multiple-cursors :variables
+                     multiple-cursors-backend 'evil-mc)
    git
    (ivy :variables
         ivy-extra-directories nil)

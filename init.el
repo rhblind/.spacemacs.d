@@ -92,12 +92,14 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
    dotspacemacs-additional-packages      '(buttercup
                                            dap-mode
+                                           drag-stuff
                                            dtrt-indent
                                            evil-mc
                                            exunit
                                            forge
                                            keychain-environment
                                            rainbow-mode
+                                           posframe
                                            quelpa
                                            quelpa-use-package)
    dotspacemacs-frozen-packages          '()
@@ -107,9 +109,9 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 
      ;; Packages I don't use (non-exhaustive)
      anzu centered-cursor-mode column-enforce-mode company-statistics
-     doom-modeline eshell-prompt-extras evil-anzu evil-mc evil-tutor
+     doom-modeline eshell-prompt-extras evil-anzu evil-tutor
      fancy-battery fill-column-indicator gnuplot golden-ratio indent-guide
-     live-py-mode multi-term multiple-cursors mwim neotree paradox py-isort
+     live-py-mode multi-term mwim neotree paradox py-isort
      yapfify
 
      ;; Packages that is installed as a dependency of others, but I don't want installed
