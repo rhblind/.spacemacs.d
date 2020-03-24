@@ -98,7 +98,7 @@
     :config
     (flycheck-credo-setup)
     (with-eval-after-load 'lsp-ui
-      (flycheck-add-next-checker 'lsp-ui 'elixir-credo))))
+      (lambda () (flycheck-add-next-checker 'lsp-ui 'elixir-credo)))))
 
 ;;;; Ivy
 (defun config/pre-init-ivy ()
