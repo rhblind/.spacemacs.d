@@ -29,7 +29,7 @@
 (defun config/pre-init-aggressive-indent ()
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'python-mode-hook     #'aggressive-indent-mode)
-  (add-hook 'elixir-mode-hook     #'aggressive-indent-mode))
+  )
 
 ;;;; Avy
 (defun config/pre-init-avy ()
@@ -83,9 +83,14 @@
   (advice-add 'evil-ex-search-next     :after 'evil-scroll-to-center-advice)
   (advice-add 'evil-ex-search-previous :after 'evil-scroll-to-center-advice))
 
-;;;; Evil-mc
+;;;; Evil-MC
 (defun config/post-init-evil-mc ()
-  (global-evil-mc-mode t))
+  (add-hook 'prog-mode-hook 'turn-on-evil-mc-mode)
+  (add-hook 'text-mode-hook 'turn-on-evil-mc-mode)
+  ;; This doesn't work for some reason?
+  ;; (spacemacs/declare-prefix-for-mode 'evil-mc-mode
+  ;;   "gr" "evil-mc" "multiple cursors")
+  )
 
 ;;;; Flycheck
 (defun config/post-init-flycheck ()

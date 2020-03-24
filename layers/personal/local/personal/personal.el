@@ -24,9 +24,13 @@
 (setq display-time-24hr-format t                          ;; Use 24h clock
       layouts-enable-autosave t                           ;; Automatically save layouts
       lsp-ui-doc-enable nil                               ;; Disable ui-doc popup. Toggle help with ,hh
+      pixel-scroll-mode t                                 ;; Enable pixel scrolling
       mouse-wheel-follow-mouse t                          ;; Scroll window under mouse
       mouse-wheel-progressive-speed nil                   ;; Don't accelerate scrolling
-      mouse-wheel-scroll-amount '(2 ((shift) . 1))        ;; Scroll 2 lines at a time
+      mouse-wheel-scroll-amount '(1 ((shift) . 1))        ;; Mouse scroll 1 line at a time
+      scroll-step 1                                       ;; Keyboard scroll 1 line at the time
+      scroll-preserve-screen-position t
+      scroll-conservatively 100
       user-full-name "Rolf Håvard Blindheim"
       user-email-address "rhblind@gmail.com"
       vc-follow-symlinks nil                              ;; Don't follow symlinks, edit them directly

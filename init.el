@@ -41,8 +41,8 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                 :weight normal
                                 :width normal
                                 ))
-   dotspacemacs-themes       '(doom-gruvbox
-                               solarized-light
+   dotspacemacs-themes       '(solarized-light
+                               doom-gruvbox
                                zenburn)
 
    ;; General
@@ -111,7 +111,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
      anzu centered-cursor-mode column-enforce-mode company-statistics
      doom-modeline eshell-prompt-extras evil-anzu evil-tutor
      fancy-battery fill-column-indicator gnuplot golden-ratio indent-guide
-     live-py-mode multi-term mwim neotree paradox py-isort
+     iedit live-py-mode multi-term mwim neotree paradox py-isort
      yapfify
 
      ;; Packages that is installed as a dependency of others, but I don't want installed
