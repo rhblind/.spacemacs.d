@@ -95,6 +95,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            drag-stuff
                                            dtrt-indent
                                            evil-mc
+                                           evil-string-inflection
                                            exunit
                                            forge
                                            keychain-environment

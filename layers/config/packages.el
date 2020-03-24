@@ -6,10 +6,11 @@
         avy
         drag-stuff
         dtrt-indent
-        elixir
+        elixir-mode
         eshell
         evil
         evil-mc
+        evil-string-inflection
         flycheck
         ivy
         lsp
@@ -50,7 +51,7 @@
   (use-package dtrt-indent))
 
 ;;;; Elixir
-(defun config/init-elixir ()
+(defun config/post-init-elixir-mode ()
   (with-eval-after-load 'elixir-mode
     (spacemacs/declare-prefix-for-mode 'elixir-mode
       "mt" "tests" "testing related functionality")
@@ -76,9 +77,9 @@
 
   (evil-global-set-key 'normal "Q" 'evil-execute-q-macro)
   (evil-define-key '(normal visual motion) 'global
-    "H" 'evil-first-non-blank
-    "L" 'evil-end-of-line-interactive
-    "0" 'evil-jump-item)
+    "H"  'evil-first-non-blank
+    "L"  'evil-end-of-line-interactive
+    "0"  'evil-jump-item)
 
   (advice-add 'evil-ex-search-next     :after 'evil-scroll-to-center-advice)
   (advice-add 'evil-ex-search-previous :after 'evil-scroll-to-center-advice))
@@ -86,11 +87,12 @@
 ;;;; Evil-MC
 (defun config/post-init-evil-mc ()
   (add-hook 'prog-mode-hook 'turn-on-evil-mc-mode)
-  (add-hook 'text-mode-hook 'turn-on-evil-mc-mode)
-  ;; This doesn't work for some reason?
-  ;; (spacemacs/declare-prefix-for-mode 'evil-mc-mode
-  ;;   "gr" "evil-mc" "multiple cursors")
-  )
+  (add-hook 'text-mode-hook 'turn-on-evil-mc-mode))
+
+;;;; Evil-String-Inflection
+(defun config/init-evil-string-inflection ()
+  (use-package evil-string-inflection :ensure t)
+  (define-key evil-normal-state-map "gC" 'evil-operator-string-inflection))
 
 ;;;; Flycheck
 (defun config/post-init-flycheck ()
@@ -125,7 +127,9 @@
   (require 'lsp-python-ms)
   (require 'quelpa-use-package)
   (use-package lsp-mode
+    :ensure t
     :config
+    ;; Elixir
     :hook (elixir-mode . lsp-deferred)
     :hook (elixir-mode . (lambda ()
                            (require 'dap-elixir)
@@ -133,6 +137,8 @@
                            (dap-ui-mode t)
                            (dap-tooltip-mode t)
                            (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
+
+    ;; Python
     :hook (python-mode . lsp-deferred)
     :hook (python-mode . (lambda ()
                            (require 'dap-python)
@@ -148,10 +154,14 @@
 
                            ))
     :commands (lsp lsp-deferred))
+
   (add-hook 'dap-stopped-hook
             (lambda (arg) (call-interactively #'dap-hydra)))
-  (use-package company-lsp :commands company-lsp)
-  (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+
+  (use-package company-lsp
+    :commands company-lsp)
+  (use-package helm-lsp
+    :commands helm-lsp-workspace-symbol)
   ;; (use-package lsp-pwsh
   ;;   :quelpa (lsp-pwsh :fetcher github :repo "kiennq/lsp-powershell")
   ;;   :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp-deferred)))
