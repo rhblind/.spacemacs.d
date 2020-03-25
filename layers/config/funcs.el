@@ -30,6 +30,16 @@
   "Tack on after eg. heading insertion for `evil-insert' mode."
   (evil-insert 1))
 
+(defun evil-scroll-other-window-interactive ()
+  "Wrap `scroll-other-window' in interactive."
+  (interactive)
+  (scroll-other-window))
+
+(defun evil-scroll-other-window-down-interactive ()
+  "Wrap `scroll-other-window-down' in interactive."
+  (interactive)
+  (scroll-other-window-down))
+
 ;;;; Org
 
 (defun org-sort-entries-priorities ()

@@ -76,6 +76,8 @@
   (setq evil-escape-unordered-key-sequence "true")
 
   (evil-global-set-key 'normal "Q" 'evil-execute-q-macro)
+  (define-key evil-normal-state-map (kbd "C-S-u") 'evil-scroll-other-window-interactive)
+  (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-other-window-down-interactive)
   (evil-define-key '(normal visual motion) 'global
     "H"  'evil-first-non-blank
     "L"  'evil-end-of-line-interactive
