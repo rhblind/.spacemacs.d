@@ -21,6 +21,7 @@
 ;;;; Variables
 (setq display-time-24hr-format t                          ;; Use 24h clock
       layouts-enable-autosave t                           ;; Automatically save layouts
+      layouts-autosave-delay 300
       lsp-ui-doc-enable nil                               ;; Disable ui-doc popup. Toggle help with ,hh
       pixel-scroll-mode t                                 ;; Enable pixel scrolling
       mouse-wheel-follow-mouse t                          ;; Scroll window under mouse
