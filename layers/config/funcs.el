@@ -33,12 +33,12 @@
 (defun evil-scroll-other-window-interactive ()
   "Wrap `scroll-other-window' in interactive."
   (interactive)
-  (scroll-other-window))
+  (scroll-other-window '-))
 
 (defun evil-scroll-other-window-down-interactive ()
   "Wrap `scroll-other-window-down' in interactive."
   (interactive)
-  (scroll-other-window-down))
+  (scroll-other-window))
 
 ;;;; Org
 
