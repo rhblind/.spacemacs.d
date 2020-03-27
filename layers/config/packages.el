@@ -229,6 +229,10 @@
   (setq org-indent-indentation-per-level 1))
 
 (defun config/post-init-org ()
+  ;; (with-eval-after-load 'org-agenda
+  ;;   (require 'org-projectile)
+  ;;   (push (org-projectile:todo-files) org-agenda-files))
+
   (evil-define-key '(normal visual motion) org-mode-map
     "gh" 'outline-up-heading
     "gj" 'outline-forward-same-level
