@@ -9,6 +9,8 @@
                     auto-completion-enable-help-tooltip t
                     auto-completion-enable-sort-by-usage t)
    better-defaults
+   (dash :variables
+         dash-docs-docset-newpath: "~/.local/share/Zeal/Zeal/docsets") ;; FIXME: fix MacOS compatibility
    docker
    (multiple-cursors :variables
                      multiple-cursors-backend 'evil-mc)
@@ -16,7 +18,7 @@
    (ivy :variables
         ivy-extra-directories nil)
    (org :variables
-        org-projectile-file "TODO.org"
+        org-projectile-file "project.org"
         org-enable-github-support t
         org-enable-reveal-js-support t
         org-want-todo-bindings t)

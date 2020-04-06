@@ -162,8 +162,8 @@
 
   (use-package company-lsp
     :commands company-lsp)
-  (use-package helm-lsp
-    :commands helm-lsp-workspace-symbol)
+  ;; (use-package helm-lsp
+  ;;   :commands helm-lsp-workspace-symbol)
   ;; (use-package lsp-pwsh
   ;;   :quelpa (lsp-pwsh :fetcher github :repo "kiennq/lsp-powershell")
   ;;   :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp-deferred)))
@@ -229,9 +229,14 @@
   (setq org-indent-indentation-per-level 1))
 
 (defun config/post-init-org ()
-  ;; (with-eval-after-load 'org-agenda
-  ;;   (require 'org-projectile)
-  ;;   (push (org-projectile:todo-files) org-agenda-files))
+  (with-eval-after-load 'org-agenda
+    (require 'org-projectile)
+    (push (org-projectile-project-todo-entry) org-capture-templates)
+    (mapcar '(lambda (file)
+               (when (file-exists-p file)
+                 (push file org-agenda-files)))
+            (org-projectile-todo-files))
+    (global-set-key (kbd "C-c t") 'org-projectile-project-todo-completing-read))
 
   (evil-define-key '(normal visual motion) org-mode-map
     "gh" 'outline-up-heading
