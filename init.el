@@ -56,13 +56,10 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-fullscreen-at-startup      nil
    dotspacemacs-large-file-size            5
    dotspacemacs-helm-use-fuzzy             'always
-   dotspacemacs-line-numbers               '(:relative t
-                                                       :disabled-for-modes dired-mode
-                                                       doc-view-mode
-                                                       markdown-mode
-                                                       org-mode
-                                                       pdf-view-mode
-                                                       :size-limit-kb 1000)
+   dotspacemacs-line-numbers               '(
+                                             :relative t
+                                             :disabled-for-modes dired-mode doc-view-mode markdown-mode org-mode pdf-view-mode
+                                             :size-limit-kb 5000)
    dotspacemacs-persistent-server          server?
    dotspacemacs-pretty-docs                t
    dotspacemacs-search-tools               '("rg ""ag" "pt" "ack" "grep")

@@ -118,6 +118,13 @@
          :italic t
          :weight normal)))
 
+;;;;; Git-gutter+
+(setq display/git-gutter+
+      `((set-face-attribute 'git-gutter+-added :background nil :foreground "green")
+        (set-face-attribute 'git-gutter+-deleted :background nil :foreground "red")
+        (set-face-attribute 'git-gutter+-modified :background nil :foreground "blue"))
+      (setq git-gutter+-modified-sign "!"))
+
 ;;; Theming
 ;;;; Common
 
@@ -125,6 +132,7 @@
       `(,@display/company
         ,@display/mode-line
         ,@display/org-blocks
+        ,@display/git-gutter+
 
         (avy-background-face :italic nil)
         (fringe :background nil)))
