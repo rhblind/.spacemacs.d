@@ -232,9 +232,9 @@
   (with-eval-after-load 'org-agenda
     (require 'org-projectile)
     (push (org-projectile-project-todo-entry) org-capture-templates)
-    (mapcar '(lambda (file)
-               (when (file-exists-p file)
-                 (push file org-agenda-files)))
+    (mapcar #'(lambda (file)
+                (when (file-exists-p file)
+                  (push file org-agenda-files)))
             (org-projectile-todo-files))
     (global-set-key (kbd "C-c t") 'org-projectile-project-todo-completing-read))
 
