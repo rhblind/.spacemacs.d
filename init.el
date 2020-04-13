@@ -97,6 +97,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            exunit
                                            forge
                                            keychain-environment
+                                           org-superstar
                                            rainbow-mode
                                            posframe
                                            quelpa

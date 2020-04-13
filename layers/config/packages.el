@@ -15,7 +15,7 @@
         ivy
         lsp
         magit
-        ob org org-bullets
+        ob org org-superstar
         ranger
 
         ;; Owned Packages
@@ -188,8 +188,11 @@
              ("M-4" . winum-select-window-4)))
 
 ;;;; Org
-(defun config/pre-init-org-bullets ()
-  (setq org-bullets-bullet-list '("" "" "" "")))
+(defun config/init-org-superstar ()
+  (require 'org-superstar)
+  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+  (setq org-superstar-headline-bullets-list '("" "" "" "")
+        org-superstar-prettify-item-bullets t))
 
 (defun config/pre-init-ob ()
   (setq org-confirm-babel-evaluate   nil)
