@@ -40,6 +40,16 @@
   (interactive)
   (scroll-other-window))
 
+;;;; Ispell
+
+(defun cycle-ispell-languages ()
+  "Cycle between languages"
+  (interactive)
+  (let ((lang (ring-ref lang-ring -1)))
+    (ring-insert lang-ring lang)
+    (ispell-change-dictionary lang)))
+
+
 ;;;; Org
 
 (defun org-sort-entries-priorities ()

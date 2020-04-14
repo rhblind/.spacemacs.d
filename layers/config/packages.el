@@ -13,6 +13,7 @@
         evil-mc
         evil-string-inflection
         flycheck
+        flyspell
         ivy
         magit
         ob org
@@ -147,7 +148,7 @@
 ;;;; Evil
 (defun config/post-init-evil ()
   (setq evil-escape-key-sequence "jk")
-  (setq evil-escape-unordered-key-sequence "true")
+  (setq evil-escape-unordered-key-sequence nil)
 
   (evil-global-set-key 'normal "Q" 'evil-execute-q-macro)
   (define-key evil-normal-state-map (kbd "C-S-u") 'evil-scroll-other-window-interactive)
@@ -177,6 +178,15 @@
     (flycheck-credo-setup)
     (with-eval-after-load 'lsp-ui
       (lambda () (flycheck-add-next-checker 'lsp-ui 'elixir-credo)))))
+
+;;;; Flyspell
+(defun config/post-init-flyspell ()
+  (let ((langs '("english" "norsk")))
+    (setq lang-ring (make-ring (length langs)))
+    (dolist (elem langs) (ring-insert lang-ring elem)))
+
+  (global-set-key (kbd "<f8>") 'cycle-ispell-languages)
+  )
 
 ;;;; Ivy
 (defun config/pre-init-ivy ()
@@ -282,13 +292,17 @@
   (setq org-ellipsis ""
         org-catch-invisible-edits t
         org-export-in-background t
+        org-fontify-whole-heading-line t
+        org-fontify-done-headline nil
+        org-fontify-quote-and-verse-blocks t
         org-hide-emphasis-markers t
         org-hide-leading-stars t
         org-indent-indentation-per-level 1
         org-log-state-notes-into-drawer t
         org-log-done-with-time t
         org-re-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0"
-        org-startup-indented nil
+        org-startup-indented t
+        org-pretty-entities t
         org-priority-faces '((65 :inherit org-priority :foreground "red")
                              (66 :inherit org-priority :foreground "brown")
                              (67 :inherit org-priority :foreground "blue"))
@@ -302,9 +316,20 @@
                                        ("sp" "#+BEGIN_SRC python\n\n#+END_SRC"))
         org-time-stamp-custom-formats '("<%a %d.%m.%Y>" . "<%a %d.%m.%Y %H:%M>"))
 
-  (add-hook 'org-mode-hook (lambda () (auto-fill-mode 1)))
+  (add-hook 'org-mode-hook 'turn-on-auto-fill)
+  (add-hook 'org-mode-hook 'visual-line-mode)
   (add-hook 'org-mode-hook 'org-indent-mode)
-  (add-hook 'org-mode-hook 'flyspell-mode))
+  (add-hook 'org-mode-hook 'flyspell-mode)
+  (add-hook 'org-mode-hook (lambda () (progn
+                                        (setq line-spacing 0.2
+                                              header-line-format " "
+                                              left-margin-width 2
+                                              right-margin-width 2))))
+  ;; TODO consider
+  ;; (add-hook 'org-mode-hook (lambda () (progn
+  ;;                                       (setq left-margin-width 4
+  ;;                                             right-margin-width 4))))
+  )
 
 (defun config/post-init-org ()
   (evil-define-key '(normal visual motion) org-mode-map

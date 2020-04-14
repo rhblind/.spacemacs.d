@@ -87,11 +87,12 @@
                                :template ("* TODO %? %^G"
                                           "%i"))
                               (,(format "%s\tCapture point task" (all-the-icons-octicon "checklist" :face 'all-the-icons-green :v-adjust 0.01))
-                               :keys "t"
+                               :keys "c"
                                :template ("* TODO %? %^G"
                                           "%i %a"))
                               (,(format "%s\tPersonal note" (all-the-icons-faicon "sticky-note-o" :face 'all-the-icons-green :v-adjust 0.01))
                                :keys "n"
+                               :headline "Notes"
                                :template ("* %? :personal:"
                                           "%i"))
                               (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))
@@ -111,9 +112,14 @@
                    :prepend t
                    :type entry
                    :file org-work-file
-                   :children ((,(format "%s\tMiscellaneous task" (all-the-icons-faicon "random" :face 'all-the-icons-yellow :v-adjust 0.01))
-                               :keys "m"
+                   :children ((,(format "%s\tMiscellaneous task" (all-the-icons-octicon "checklist" :face 'all-the-icons-yellow :v-adjust 0.01))
+                               :keys "k"
                                :template ("* TODO [#C] %? %^G:work:"
+                                          "%i"))
+                              (,(format "%s\tWork note" (all-the-icons-faicon "sticky-note-o" :face 'all-the-icons-green :v-adjust 0.01))
+                               :keys "n"
+                               :headline "Notes"
+                               :template ("* %? :work:"
                                           "%i"))
                               (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))
                                :keys "d"
@@ -261,15 +267,12 @@
                                      :order 6)
                               (:name "Due Today"
                                      :deadline today
-                                     :priority "A"
                                      :order 2)
                               (:name "Due Soon"
                                      :deadline future
-                                     :priority "B"
                                      :order 8)
                               (:name "Overdue"
                                      :deadline past
-                                     :priority "A"
                                      :face error
                                      :order 7)
                               (:name "Work"
