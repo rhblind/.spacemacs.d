@@ -53,8 +53,22 @@
 ;;; Org-mode
 (setq org-directory "~/Dropbox/org"
       org-default-notes-file "~/Dropbox/org/todo.org"
+      org-default-projects-file "~/Dropbox/org/project.org"
       org-download-image-dir "~/Dropbox/org/pics"
-      org-agenda-files (file-expand-wildcards "~/Dropbox/org/*.org"))
+      org-agenda-files (file-expand-wildcards "~/Dropbox/org/*.org")
+      org-use-property-inheritance t
+      org-log-done-with-time t
+      org-export-in-background t
+      org-catch-invisible-edits 'smart
+      org-babel-default-header-args '((:session . "none")
+                                      (:results . "replace")
+                                      (:exports . "code")
+                                      (:cache . "no")
+                                      (:noweb . "no")
+                                      (:hlines . "no")
+                                      (:tangle . "no")
+                                      (:comment . "link")))
+
 
 ;; Don't enable this package as this config is not generally applicable
 

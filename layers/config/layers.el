@@ -18,7 +18,6 @@
    (ivy :variables
         ivy-extra-directories nil)
    (org :variables
-        org-projectile-file "project.org"
         org-enable-github-support t
         org-enable-reveal-js-support t
         org-want-todo-bindings t)
@@ -46,6 +45,7 @@
    (osx :variables
         osx-option-as 'meta
         osx-right-option-as 'none)
+   (unicode-fonts :variables unicode-fonts-force-multi-color-on-mac t)
 
    ;; Markups
    csv

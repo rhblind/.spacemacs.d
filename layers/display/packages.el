@@ -139,10 +139,11 @@
   (spaceline-toggle-all-the-icons-time-on))
 
 ;;; Pretty Packages
+
 ;;;; Pretty-org
+
 (defun display/init-pretty-org ()
-  (use-package pretty-org
-    :after (org)))
+  (use-package pretty-org :after (org)))
 
 ;;;; Pretty-code
 

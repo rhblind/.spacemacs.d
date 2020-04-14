@@ -15,7 +15,7 @@
         ivy
         lsp
         magit
-        ob org org-superstar
+        ob org
         ranger
 
         ;; Owned Packages
@@ -188,11 +188,8 @@
              ("M-4" . winum-select-window-4)))
 
 ;;;; Org
-(defun config/init-org-superstar ()
-  (require 'org-superstar)
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-  (setq org-superstar-headline-bullets-list '("" "" "" "")
-        org-superstar-prettify-item-bullets t))
+
+;; NOTE Moving org-mode visibility stuff to local/pretty-org package
 
 (defun config/pre-init-ob ()
   (setq org-confirm-babel-evaluate   nil)
@@ -205,11 +202,11 @@
     :post-config (add-to-list 'org-babel-load-languages '(dot . t))))
 
 (defun config/pre-init-org ()
-  (setq org-ellipsis "")
-  (setq org-priority-faces
-        '((65 :inherit org-priority :foreground "red")
-          (66 :inherit org-priority :foreground "brown")
-          (67 :inherit org-priority :foreground "blue")))
+  ;; (setq org-ellipsis "")
+  ;; (setq org-priority-faces
+  ;;       '((65 :inherit org-priority :foreground "red")
+  ;;         (66 :inherit org-priority :foreground "brown")
+  ;;         (67 :inherit org-priority :foreground "blue")))
   (setq org-structure-template-alist
         '(("n" "#+NAME: ?")
           ("L" "#+LaTeX: ")
@@ -223,24 +220,9 @@
   (add-hook 'org-mode-hook (lambda () (auto-fill-mode 1)))
   (add-hook 'org-mode-hook 'flyspell-mode)
 
-  (setq org-re-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0")
-
-  ;; Experimenting with the following indentation vars:
-  (setq org-startup-indented nil)
-  (setq org-hide-leading-stars t)
-  (setq org-hide-emphasis-markers nil)
-  (setq org-indent-indentation-per-level 1))
+  (setq org-re-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0"))
 
 (defun config/post-init-org ()
-  (with-eval-after-load 'org-agenda
-    (require 'org-projectile)
-    (push (org-projectile-project-todo-entry) org-capture-templates)
-    (mapcar #'(lambda (file)
-                (when (file-exists-p file)
-                  (push file org-agenda-files)))
-            (org-projectile-todo-files))
-    (global-set-key (kbd "C-c t") 'org-projectile-project-todo-completing-read))
-
   (evil-define-key '(normal visual motion) org-mode-map
     "gh" 'outline-up-heading
     "gj" 'outline-forward-same-level

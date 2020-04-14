@@ -98,6 +98,8 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            exunit
                                            forge
                                            keychain-environment
+                                           org-fancy-priorities
+                                           org-pretty-tags
                                            org-super-agenda
                                            org-superstar
                                            rainbow-mode
