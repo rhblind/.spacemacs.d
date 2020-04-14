@@ -4,7 +4,6 @@
 (provide 'personal)
 
 ;;; Globals
-;; (advice-add 'message :before 'ad-timestamp-message)       ;; Add timestamp to *Messages* buffer
 (global-company-mode)                                     ;; Enable company-mode globally
 (global-unset-key [down-mouse-1])                         ;; No dragging nonsense
 (global-set-key [down-mouse-1] 'mouse-select-window)      ;; Select window with mouse click

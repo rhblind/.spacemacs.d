@@ -89,6 +89,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
    dotspacemacs-additional-packages      '(buttercup
                                            counsel-dash
+                                           doct          ;; Declarative Org Capture Templates
                                            dap-mode
                                            drag-stuff
                                            dtrt-indent
@@ -97,6 +98,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            exunit
                                            forge
                                            keychain-environment
+                                           org-super-agenda
                                            org-superstar
                                            rainbow-mode
                                            posframe

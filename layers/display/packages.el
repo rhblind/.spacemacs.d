@@ -16,6 +16,7 @@
 
         ;; Personal display-related packages
         ;; (pretty-code     :location local)
+        (pretty-org      :location local)
         (pretty-eshell   :location local)
         (pretty-fonts    :location local)
         (pretty-magit    :location local)
@@ -138,6 +139,11 @@
   (spaceline-toggle-all-the-icons-time-on))
 
 ;;; Pretty Packages
+;;;; Pretty-org
+(defun display/init-pretty-org ()
+  (use-package pretty-org
+    :after (org)))
+
 ;;;; Pretty-code
 
 (defun display/init-pretty-code ()
