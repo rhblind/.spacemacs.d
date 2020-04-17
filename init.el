@@ -98,6 +98,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            exunit
                                            forge
                                            keychain-environment
+                                           live-py-mode
                                            lsp-ui
                                            org-fancy-priorities
                                            org-pretty-tags
@@ -134,11 +135,14 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
         custom-file "~/.spacemacs.d/.custom-settings.el")
 
   (when (spacemacs/system-is-mac)
+    (setq shell-file-name "/bin/bash")
     (setq dired-listing-switches "-aBhl --group-directories-first"
           helm-locate-command "glocate %s -e -A --regex %s"
           helm-locate-recursive-dirs-command "glocate -i -e -A --regex '^%s' '%s.*$'"
           insert-directory-program "/usr/local/bin/gls"
           ))
+  (when (spacemacs/system-is-linux)
+    (setq shell-file-name "/bin/bash"))
   )
 
 ;;;; Spacemacs/user-config

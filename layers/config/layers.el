@@ -66,11 +66,11 @@
    (python :variables
            python-backend 'lsp
            python-lsp-server 'mspyls
-           ;; python-lsp-git-root "~/.local/opt/python-language-server"
+           python-lsp-git-root "~/.local/opt/python-language-server"
            python-pipenv-activate t
-           python-test-runner 'pytest
+           python-test-runner '(pytest nose)
            python-save-before-test t
-           python-formatter 'yapf
+           python-formatter 'lsp
            python-spacemacs-indent-guess nil)
 
    windows-scripts

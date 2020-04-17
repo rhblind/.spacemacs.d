@@ -5,6 +5,7 @@
         aggressive-indent
         avy
         company
+        ;; dap-mode
         drag-stuff
         dtrt-indent
         elixir-mode
@@ -14,9 +15,9 @@
         evil-string-inflection
         flycheck
         ivy
-        lsp-ui
         magit
         ob org
+        python
         ranger
 
         ;; Owned Packages
@@ -50,6 +51,18 @@
       :backends company-lsp
       :modes elixir-mode python-mode))
   )
+
+;;;; Python
+(defun config/pre-init-python ()
+  (require 'lsp-python-ms)
+  (add-hook 'python-mode-hook #'lsp-deferred)
+
+  (with-eval-after-load 'python
+    (setq python-shell-interpreter "python3")
+    (custom-set-variables
+     '(flycheck-python-flake8-executable "python3")
+     '(flycheck-python-pycompile-executable "python3")
+     '(flycheck-python-pylint-executable "python3"))))
 
 ;;;; Drag-stuff
 (defun config/init-drag-stuff ()
