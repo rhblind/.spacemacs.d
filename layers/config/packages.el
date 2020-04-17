@@ -4,6 +4,7 @@
       '(;; Unowned Packages
         aggressive-indent
         avy
+        company
         drag-stuff
         dtrt-indent
         elixir-mode
@@ -13,7 +14,7 @@
         evil-string-inflection
         flycheck
         ivy
-        lsp
+        lsp-ui
         magit
         ob org
         ranger
@@ -29,8 +30,7 @@
 ;;;; Aggressive indent
 (defun config/pre-init-aggressive-indent ()
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-  (add-hook 'python-mode-hook     #'aggressive-indent-mode)
-  )
+  (add-hook 'python-mode-hook     #'aggressive-indent-mode))
 
 ;;;; Avy
 (defun config/pre-init-avy ()
@@ -39,6 +39,17 @@
   (evil-global-set-key 'normal "s" 'avy-goto-char-timer)
   (bind-keys ("C-l" . evil-avy-goto-line)
              ("C-h" . avy-pop-mark)))
+
+;;;; Company
+(defun config/post-init-company ()
+  (add-hook 'after-init-hook 'global-company-mode)
+  (when (configuration-layer/package-used-p 'lsp)
+    (setq company-lsp-cache-candidates nil
+          company-lsp-async t)
+    (spacemacs|add-company-backends
+      :backends company-lsp
+      :modes elixir-mode python-mode))
+  )
 
 ;;;; Drag-stuff
 (defun config/init-drag-stuff ()
@@ -54,7 +65,7 @@
 (defun config/post-init-elixir-mode ()
   (with-eval-after-load 'elixir-mode
     (spacemacs/declare-prefix-for-mode 'elixir-mode
-      "mt" "tests" "testing related functionality")
+      "mt" "test" "testing related functionality")
     (spacemacs/set-leader-keys-for-major-mode 'elixir-mode
       "tb" 'exunit-verify-all
       "ta" 'exunit-verify
@@ -125,57 +136,62 @@
              ("C-S-SPC"    . ivy-dispatching-call)))
 
 ;;;; Lsp
-(defun config/post-init-lsp ()
-  (require 'lsp-python-ms)
-  (require 'quelpa-use-package)
-  (use-package lsp-mode
-    :ensure t
-    :config
-    ;; Elixir
-    :hook (elixir-mode . lsp-deferred)
-    :hook (elixir-mode . (lambda ()
-                           (require 'dap-elixir)
-                           (dap-mode t)
-                           (dap-ui-mode t)
-                           (dap-tooltip-mode t)
-                           (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
+;; (defun config/init-lsp-ui ()
+;;   (spacemacs|use-package-add-hook lsp-ui
+;;     :after lsp)
+;;   )
 
-    ;; Python
-    :hook (python-mode . lsp-deferred)
-    :hook (python-mode . (lambda ()
-                           (require 'dap-python)
-                           (dap-mode t)
-                           (dap-ui-mode t)
-                           (dap-tooltip-mode t)
-                           (when (spacemacs/system-is-mac)
-                             (setq lsp-python-ms-executable
-                                   "~/.local/opt/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
-                           (when (spacemacs/system-is-linux)
-                             (setq lsp-python-ms-executable
-                                   "~/.local/opt/python-language-server/output/bin/Release/linux-64/publish/Microsoft.Python.LanguageServer"))
+;; (defun config/post-init-lsp ()
+;;   (require 'lsp-python-ms)
+;;   (require 'quelpa-use-package)
+;;   (use-package lsp-mode
+;;     :ensure t
+;;     :config
+;;     ;; Elixir
+;;     :hook (elixir-mode . lsp-deferred)
+;;     :hook (elixir-mode . (lambda ()
+;;                            (require 'dap-elixir)
+;;                            (dap-mode t)
+;;                            (dap-ui-mode t)
+;;                            (dap-tooltip-mode t)
+;;                            (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
 
-                           ))
-    :commands (lsp lsp-deferred))
+;;     ;; Python
+;;     :hook (python-mode . lsp-deferred)
+;;     :hook (python-mode . (lambda ()
+;;                            (require 'dap-python)
+;;                            (dap-mode t)
+;;                            (dap-ui-mode t)
+;;                            (dap-tooltip-mode t)
+;;                            (when (spacemacs/system-is-mac)
+;;                              (setq lsp-python-ms-executable
+;;                                    "~/.local/opt/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
+;;                            (when (spacemacs/system-is-linux)
+;;                              (setq lsp-python-ms-executable
+;;                                    "~/.local/opt/python-language-server"))
 
-  (add-hook 'dap-stopped-hook
-            (lambda (arg) (call-interactively #'dap-hydra)))
+;;                            ))
+;;     :commands (lsp lsp-deferred))
 
-  (use-package company-lsp
-    :commands company-lsp)
-  ;; (use-package helm-lsp
-  ;;   :commands helm-lsp-workspace-symbol)
-  ;; (use-package lsp-pwsh
-  ;;   :quelpa (lsp-pwsh :fetcher github :repo "kiennq/lsp-powershell")
-  ;;   :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp-deferred)))
-  ;;   :defer t)
-  (use-package lsp-treemacs
-    :config
-    (setq treemacs-follow-after-init t)
-    (treemacs-follow-mode t)
-    (treemacs-filewatch-mode t)
-    (lsp-treemacs-sync-mode t))
-  (use-package lsp-ui
-    :commands lsp-ui-mode))
+;;   (add-hook 'dap-stopped-hook
+;;             (lambda (arg) (call-interactively #'dap-hydra)))
+
+;;   (use-package company-lsp
+;;     :commands company-lsp)
+;;   ;; (use-package helm-lsp
+;;   ;;   :commands helm-lsp-workspace-symbol)
+;;   ;; (use-package lsp-pwsh
+;;   ;;   :quelpa (lsp-pwsh :fetcher github :repo "kiennq/lsp-powershell")
+;;   ;;   :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp-deferred)))
+;;   ;;   :defer t)
+;;   (use-package lsp-treemacs
+;;     :config
+;;     (setq treemacs-follow-after-init t)
+;;     (treemacs-follow-mode t)
+;;     (treemacs-filewatch-mode t)
+;;     (lsp-treemacs-sync-mode t))
+;;   (use-package lsp-ui
+;;     :commands lsp-ui-mode))
 
 ;;;; Magit
 (defun config/post-init-magit ()
@@ -188,9 +204,6 @@
              ("M-4" . winum-select-window-4)))
 
 ;;;; Org
-
-;; NOTE Moving org-mode visibility stuff to local/pretty-org package
-
 (defun config/pre-init-ob ()
   (setq org-confirm-babel-evaluate   nil)
   (setq org-src-fontify-natively     t)
@@ -202,23 +215,30 @@
     :post-config (add-to-list 'org-babel-load-languages '(dot . t))))
 
 (defun config/pre-init-org ()
-  ;; (setq org-ellipsis "")
-  ;; (setq org-priority-faces
-  ;;       '((65 :inherit org-priority :foreground "red")
-  ;;         (66 :inherit org-priority :foreground "brown")
-  ;;         (67 :inherit org-priority :foreground "blue")))
-  (setq org-structure-template-alist
-        '(("n" "#+NAME: ?")
-          ("L" "#+LaTeX: ")
-          ("h" "#+HTML: ")
-          ("q" "#+BEGIN_QUOTE\n\n#+END_QUOTE")
-          ("s" "#+BEGIN_SRC ?\n\n#+END_SRC")
-          ("se" "#+BEGIN_SRC elixir\n\n#+END_SRC")
-          ("sj" "#+BEGIN_SRC javascript\n\n#+END_SRC")
-          ("sp" "#+BEGIN_SRC python\n\n#+END_SRC")))
+  (setq org-ellipsis ""
+        org-catch-invisible-edits t
+        org-export-in-background t
+        org-hide-emphasis-markers t
+        org-hide-leading-stars t
+        org-indent-indentation-per-level 1
+        org-log-done-with-time t
+        org-startup-indented nil
+        org-priority-faces '((65 :inherit org-priority :foreground "red")
+                             (66 :inherit org-priority :foreground "brown")
+                             (67 :inherit org-priority :foreground "blue"))
+        org-structure-template-alist '(("n" "#+NAME: ?")
+                                       ("L" "#+LaTeX: ")
+                                       ("h" "#+HTML: ")
+                                       ("q" "#+BEGIN_QUOTE\n\n#+END_QUOTE")
+                                       ("s" "#+BEGIN_SRC ?\n\n#+END_SRC")
+                                       ("se" "#+BEGIN_SRC elixir\n\n#+END_SRC")
+                                       ("sj" "#+BEGIN_SRC javascript\n\n#+END_SRC")
+                                       ("sp" "#+BEGIN_SRC python\n\n#+END_SRC"))
+        )
 
   (add-hook 'org-mode-hook (lambda () (auto-fill-mode 1)))
   (add-hook 'org-mode-hook 'flyspell-mode)
+  (add-hook 'org-mode-hook 'variable-pitch-mode)
 
   (setq org-re-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0"))
 

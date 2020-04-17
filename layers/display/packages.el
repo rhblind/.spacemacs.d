@@ -6,6 +6,14 @@
         all-the-icons-ivy
         all-the-icons-dired
         ;; pretty-mode
+
+        ;; org-mode visuals
+        doct
+        org-fancy-priorities
+        org-pretty-tags
+        org-super-agenda
+        org-superstar
+
         solarized-theme
         (prettify-utils :location (recipe :fetcher github
                                           :repo "Ilazki/prettify-utils.el"))
@@ -16,7 +24,6 @@
 
         ;; Personal display-related packages
         ;; (pretty-code     :location local)
-        (pretty-org      :location local)
         (pretty-eshell   :location local)
         (pretty-fonts    :location local)
         (pretty-magit    :location local)
@@ -58,6 +65,262 @@
 (defun display/init-all-the-icons-dired ()
   (use-package all-the-icons-dired
     :hook (dired-mode . all-the-icons-dired-mode)))
+
+;;;; Declarative Org Capture Templates (DOCT)
+
+(defun display/init-doct ()
+  (use-package doct
+    :ensure t
+    :commands (doct)
+    :after (org-capture)
+    :init
+    (setq org-capture-templates
+          (doct `((,(format "%s\tPersonal todo" (all-the-icons-octicon "checklist" :face 'all-the-icons-green :v-adjust 0.01))
+                   :keys "t"
+                   :file org-default-notes-file
+                   :prepend t
+                   :headline "Inbox"
+                   :type entry
+                   :template ("* TODO %?"
+                              "%i %a")
+                   )
+                  (,(format "%s\tPersonal note" (all-the-icons-faicon "sticky-note-o" :face 'all-the-icons-green :v-adjust 0.01))
+                   :keys "n"
+                   :file org-default-notes-file
+                   :prepend t
+                   :headline "Inbox"
+                   :type entry
+                   :template ("* %?"
+                              "%i %a")
+                   )
+                  (,(format "%s\tWork" (all-the-icons-faicon "building" :face 'all-the-icons-purple :v-adjust 0.01))
+                   :keys "w"
+                   :file org-default-notes-file
+                   :headline "Work"
+                   :prepend t
+                   :type entry
+                   :children ((,(format "%s\tTask" (all-the-icons-faicon "tasks" :face 'all-the-icons-red :v-adjust 0.01))
+                               :keys "t"
+                               :template ("* TODO [#C] %? :work:tasks:"
+                                          "SCHEDULED: %^{Task date:}T"
+                                          "%i %a"))
+                              (,(format "%s\tAssignment" (all-the-icons-material "timer" :face 'all-the-icons-orange :v-adjust 0.01))
+                               :keys "a"
+                               :template ("* TODO [#B] %? :work:assignments:"
+                                          "DEADLINE: %^{Due date:}T"
+                                          "%i %a"))
+                              (,(format "%s\tMiscellaneous task" (all-the-icons-faicon "random" :face 'all-the-icons-yellow :v-adjust 0.01))
+                               :keys "m"
+                               :template ("* TODO [#C] %? :work:"
+                                          "%i %a"))))
+                  (,(format "%s\tEmail" (all-the-icons-faicon "envelope" :face 'all-the-icons-blue :v-adjust 0.01))
+                   :keys "e"
+                   :file org-default-notes-file
+                   :prepend t
+                   :headline "Inbox"
+                   :type entry
+                   :template ("* TODO %? :email:"
+                              "%i %a"))
+                  (,(format "%s\tInteresting" (all-the-icons-faicon "eye" :face 'all-the-icons-lcyan :v-adjust 0.01))
+                   :keys "i"
+                   :file org-default-notes-file
+                   :prepend t
+                   :headline "Interesting"
+                   :type entry
+                   :template ("* [ ] %{desc}%? :%{i-type}:"
+                              "%i %a")
+                   :children ((,(format "%s\tWebpage" (all-the-icons-faicon "globe" :face 'all-the-icons-green :v-adjust 0.01))
+                               :keys "w"
+                               :desc "%(org-cliplink-capture) "
+                               :i-type "read:web"
+                               )
+                              (,(format "%s\tArticle" (all-the-icons-octicon "file-text" :face 'all-the-icons-yellow :v-adjust 0.01))
+                               :keys "a"
+                               :desc ""
+                               :i-type "read:research"
+                               )
+                              (,(format "%s\tInformation" (all-the-icons-faicon "info-circle" :face 'all-the-icons-blue :v-adjust 0.01))
+                               :keys "i"
+                               :desc ""
+                               :i-type "read:info"
+                               )
+                              (,(format "%s\tIdea" (all-the-icons-material "bubble_chart" :face 'all-the-icons-silver :v-adjust 0.01))
+                               :keys "I"
+                               :desc ""
+                               :i-type "idea"
+                               )))
+                  (,(format "%s\tTasks" (all-the-icons-octicon "inbox" :face 'all-the-icons-yellow :v-adjust 0.01))
+                   :keys "k"
+                   :file org-default-notes-file
+                   :prepend t
+                   :headline "Tasks"
+                   :type entry
+                   :template ("* TODO %? %^G%{extra}"
+                              "%i")
+                   :children ((,(format "%s\tGeneral Task" (all-the-icons-octicon "inbox" :face 'all-the-icons-yellow :v-adjust 0.01))
+                               :keys "k"
+                               :extra ""
+                               )
+                              (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-orange :v-adjust -0.1))
+                               :keys "d"
+                               :extra "\nDEADLINE: %^{Deadline:}t"
+                               )
+                              (,(format "%s\tScheduled Task" (all-the-icons-octicon "calendar" :face 'all-the-icons-orange :v-adjust 0.01))
+                               :keys "s"
+                               :extra "\nSCHEDULED: %^{Start time:}t"
+                               )
+                              ))
+                  (,(format "%s\tProject" (all-the-icons-octicon "repo" :face 'all-the-icons-silver :v-adjust 0.01))
+                   :keys "p"
+                   :prepend t
+                   :type entry
+                   :headline "Inbox"
+                   :template ("* %{time-or-todo} %?"
+                              "%i"
+                              "%a")
+                   :file ""
+                   :custom (:time-or-todo "")
+                   :children ((,(format "%s\tProject todo" (all-the-icons-octicon "checklist" :face 'all-the-icons-green :v-adjust 0.01))
+                               :keys "t"
+                               :time-or-todo "TODO"
+                               :file org-default-projects-file)
+                              (,(format "%s\tProject note" (all-the-icons-faicon "sticky-note" :face 'all-the-icons-yellow :v-adjust 0.01))
+                               :keys "n"
+                               :time-or-todo "%U"
+                               :file org-default-projects-file)
+                              (,(format "%s\tProject changelog" (all-the-icons-faicon "list" :face 'all-the-icons-blue :v-adjust 0.01))
+                               :keys "c"
+                               :time-or-todo "%U"
+                               :heading "Unreleased"
+                               :file org-default-projects-file))
+                   ))))
+    :config
+    (progn
+      (advice-add 'org-capture-select-template :override #'org-capture-select-template-prettier)
+      (advice-add 'org-mks :override #'org-mks-pretty)))
+  )
+
+;;;; Org-fancy-priorities
+
+(defun display/init-org-fancy-priorities ()
+  (use-package org-fancy-priorities
+    :ensure t
+    :diminish
+    :defines org-fancy-priorities-list
+    :hook (org-mode . org-fancy-priorities-mode)
+    :config
+    (setq org-fancy-priorities-list '((?A . "⚑")  ;; ASAP
+                                      (?B . "⬆")  ;; High
+                                      (?C . "■")  ;; Medium
+                                      (?D . "⬇")  ;; Low
+                                      (?E . "❓")) ;; Optional
+          org-priority-faces '((?A . all-the-icons-red)
+                               (?B . all-the-icons-orange)
+                               (?C . all-the-icons-yellow)
+                               (?D . all-the-icons-green)
+                               (?E . all-the-icons-blue))
+          org-priority-highest ?A
+          org-priority-lowest ?E)
+    (unless (char-displayable-p ?❗)
+      (setq org-fancy-priorities-list '("HIGH" "MID" "LOW" "OPTIONAL")))))
+
+;;;; Org-pretty-tags
+
+(defun display/init-org-pretty-tags ()
+  (use-package org-pretty-tags
+    :ensure t
+    :config
+    (setq org-pretty-tags-surrogate-strings
+          '(("uni" . "🎓")
+            ("assignment" . "📓")
+            ("email" . "🖂")
+            ("read" . "🕮")
+            ("article" . "🖹")
+            ("web" . "🌐")
+            ("info" . "🛈")
+            ("issue" . "🐛")
+            ("emacs" . "ɛ")))
+    (org-pretty-tags-global-mode)))
+
+;;;; Org-super-agenda
+
+(defun display/init-org-super-agenda ()
+  (use-package org-super-agenda
+    :ensure t
+    :commands (org-super-agenda-mode)
+    :hook (org-agenda-mode . org-super-agenda-mode)
+    :init
+    (setq org-agenda-skip-scheduled-if-done t
+          org-agenda-skip-deadline-if-done t
+          org-agenda-include-deadlines t
+          org-agenda-block-separator nil
+          org-agenda-compact-blocks t)
+    (setq org-agenda-custom-commands
+          '(("o" "Overview"
+             ((agenda "" ((org-agenda-span 'day)
+                          (org-super-agenda-groups
+                           '((:name "Today"
+                                    :time-grid t
+                                    :date today
+                                    :todo "TODAY"
+                                    :scheduled today
+                                    :order 1)))))
+              (alltodo "" ((org-agenda-overriding-header "")
+                           (org-super-agenda-groups
+                            '((:name "Next to do"
+                                     :todo "NEXT"
+                                     :order 1)
+                              (:name "Important"
+                                     :tag "Important"
+                                     :priority "A"
+                                     :order 6)
+                              (:name "Due Today"
+                                     :deadline today
+                                     :order 2)
+                              (:name "Due Soon"
+                                     :deadline future
+                                     :order 8)
+                              (:name "Overdue"
+                                     :deadline past
+                                     :face error
+                                     :order 7)
+                              (:name "Assignments"
+                                     :tag "Assignment"
+                                     :order 10)
+                              (:name "Issues"
+                                     :tag "Issue"
+                                     :order 12)
+                              (:name "Projects"
+                                     :tag "Project"
+                                     :order 14)
+                              (:name "Emacs"
+                                     :tag "Emacs"
+                                     :order 13)
+                              (:name "Research"
+                                     :tag "Research"
+                                     :order 15)
+                              (:name "To read"
+                                     :tag "Read"
+                                     :order 30)
+                              (:name "Waiting"
+                                     :todo "WAITING"
+                                     :order 20)
+                              (:name "Trivial"
+                                     :priority<= "E"
+                                     :tag ("Trivial" "Unimportant")
+                                     :todo ("SOMEDAY" )
+                                     :order 90)
+                              (:discard (:tag ("Chore" "Routine" "Daily")))))))))))))
+
+;;;; Org-superstar
+
+(defun display/init-org-superstar ()
+  (use-package org-superstar
+    :ensure t
+    :hook (org-mode . org-superstar-mode)
+    :config
+    (setq org-superstar-prettify-item-bullets t
+          org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))))
 
 ;;;; Pretty-mode
 
@@ -139,11 +402,6 @@
   (spaceline-toggle-all-the-icons-time-on))
 
 ;;; Pretty Packages
-
-;;;; Pretty-org
-
-(defun display/init-pretty-org ()
-  (use-package pretty-org :after (org)))
 
 ;;;; Pretty-code
 
@@ -265,3 +523,17 @@
            (emacs-lisp-mode . pretty-outlines-add-bullets)
            (hy-mode         . pretty-outlines-add-bullets)
            (python-mode     . pretty-outlines-add-bullets))))
+
+;;;; Pretty-org
+
+;; (defun display/init-pretty-org ()
+;;   (use-package pretty-org
+;;     :init
+;;     (setq org-ellipsis ""
+;;           org-catch-invisible-edits t
+;;           org-export-in-background t
+;;           org-hide-emphasis-markers t
+;;           org-hide-leading-stars t
+;;           org-indent-indentation-per-level 1
+;;           org-log-done-with-time t
+;;           org-startup-indented nil)))

@@ -42,8 +42,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                 :width normal
                                 ))
    dotspacemacs-themes       '(solarized-light
-                               doom-gruvbox
-                               zenburn)
+                               doom-gruvbox)
 
    ;; General
    dotspacemacs-auto-generate-layout-names t
@@ -88,8 +87,9 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            (personal :location local))
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
    dotspacemacs-additional-packages      '(buttercup
+                                           company-lsp
                                            counsel-dash
-                                           doct          ;; Declarative Org Capture Templates
+                                           doct
                                            dap-mode
                                            drag-stuff
                                            dtrt-indent
@@ -98,6 +98,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            exunit
                                            forge
                                            keychain-environment
+                                           lsp-ui
                                            org-fancy-priorities
                                            org-pretty-tags
                                            org-super-agenda
@@ -115,7 +116,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
      anzu centered-cursor-mode column-enforce-mode company-statistics
      doom-modeline eshell-prompt-extras evil-anzu evil-tutor
      fancy-battery fill-column-indicator gnuplot golden-ratio indent-guide
-     iedit live-py-mode multi-term mwim neotree paradox py-isort
+     iedit live-py-mode multi-term mwim neotree org-bullets paradox py-isort
      yapfify
 
      ;; Packages that is installed as a dependency of others, but I don't want installed

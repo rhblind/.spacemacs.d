@@ -57,7 +57,7 @@
    lsp
    (elixir :variables
            elixir-backend 'lsp
-           elixir-ls-path "~/.local/opt/elixir-ls/release")
+           elixir-ls-path "~/.local/opt/elixir-ls")
    emacs-lisp
    erlang
    (javascript :variables
@@ -66,7 +66,7 @@
    (python :variables
            python-backend 'lsp
            python-lsp-server 'mspyls
-           python-lsp-git-root "~/.local/opt/python-language-server"
+           ;; python-lsp-git-root "~/.local/opt/python-language-server"
            python-pipenv-activate t
            python-test-runner 'pytest
            python-save-before-test t

@@ -9,11 +9,12 @@
 ;;; Config:
 ;;;; Readability
 ;;;;; Step 1 - Configure faces for Org mode headlines
-(setq org-ellipsis ""
-      org-startup-indented nil
-      org-indent-indentation-per-level 1
-      org-hide-emphasis-markers t
-      org-hide-leading-stars t)
+
+;; (setq org-ellipsis ""
+;;       org-startup-indented nil
+;;       org-indent-indentation-per-level 1
+;;       org-hide-emphasis-markers t
+;;       org-hide-leading-stars t)
 
 ;; Set up a nice proportional font, in different sizes for the headlines.
 ;; Listed fonts will be tried in sequence, and first match will be used.
@@ -39,19 +40,22 @@
    `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
 
 ;;;;; Step 2 - Setting up variable-pitch and fixed-pitch faces
+
 (custom-theme-set-faces
  'user
  '(variable-pitch ((t (:family "Source Sans Pro" :height 180 :weight light))))
  '(fixed-pitch ((t ( :family "Inconsolata" :slant normal :weight normal :height 1.0 :width normal)))))
 (add-hook 'org-mode-hook 'variable-pitch-mode)
 
-;;;;; Step 3 - Use long lines and visual-line-mode
+;;;;; Step 3 - (Optional) Use long lines and visual-line-mode
+
 ;; Use long lines and visual-line-mode. When using proportional fonts,
 ;; fill-paragraph doesn't make much sense anymore, since it's based on the
 ;; number of characters on any given line. Use `M-q' to readjust current paragraph!
-(add-hook 'org-mode-hook 'visual-line-mode)
+;; (add-hook 'org-mode-hook 'visual-line-mode)
 
 ;;;;; Step 4 - Configure faces for specific Org elements
+
 ;; All the changes above should give nice proportional fonts in Org files.
 ;; However, there are certain things we still wish to use monospaced
 ;; fonts for (such as code blocks, examples, tags, etc.).
@@ -71,10 +75,12 @@
  '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
 
 ;;;; Declarative Org Capture Templates (DOCT)
+
 (use-package doct
   :ensure t
   :commands (doct)
-  :after (org-capture)
+  ;; :after (org org-capture)
+  ;; :after (org org-capture)
 ;;;;; :init
   :init
   (setq org-capture-templates
@@ -315,132 +321,129 @@ is selected, only the bare key is returned."
           (interactive)
           (set-window-parameter nil 'mode-line-format 'none)
           (org-capture))))
-;;;; Org-fancy-priorities
-(use-package org-fancy-priorities
-  :ensure t
-  :diminish
-  :defines org-fancy-priorities-list
-  :hook (org-mode . org-fancy-priorities-mode)
-  :config
-  (setq org-fancy-priorities-list '((?A . "⚑")  ;; ASAP
-                                    (?B . "⬆")  ;; High
-                                    (?C . "■")  ;; Medium
-                                    (?D . "⬇")  ;; Low
-                                    (?E . "❓")) ;; Optional
-        org-priority-faces '((?A . all-the-icons-red)
-                             (?B . all-the-icons-orange)
-                             (?C . all-the-icons-yellow)
-                             (?D . all-the-icons-green)
-                             (?E . all-the-icons-blue))
-        org-priority-highest ?A
-        org-priority-lowest ?E)
-  (unless (char-displayable-p ?❗)
-    (setq org-fancy-priorities-list '("HIGH" "MID" "LOW" "OPTIONAL"))))
 
-;;;; Org-pretty-tags
-(use-package org-pretty-tags
-  :ensure t
-  :after (org)
-  :config
-  (setq org-pretty-tags-surrogate-strings
-        '(("uni" . "🎓")
-          ("assignment" . "📓")
-          ("email" . "🖂")
-          ("read" . "🕮")
-          ("article" . "🖹")
-          ("web" . "🌐")
-          ("info" . "🛈")
-          ("issue" . "🐛")
-          ("emacs" . "ɛ")))
-  ;; (setq org-pretty-tags-surrogate-strings
-  ;;       '(("work" . "🎓")
-  ;;         ("assignment" . "📓")
-  ;;         ("email" . "🖂")
-  ;;         ("read" . "🕮")
-  ;;         ("article" . "🖹")
-  ;;         ("web" . "🌐")
-  ;;         ("info" . "🛈")
-  ;;         ("issue" . "🐛")
-  ;;         ("emacs" . "ɛ")))
-  (org-pretty-tags-global-mode))
 
-;;;; Org-super-agenda
-(use-package org-super-agenda
-  :ensure t
-  :commands (org-super-agenda-mode)
-  :after (org-agenda)
-  :hook (org-agenda-mode . org-super-agenda-mode)
-  :config
-  (setq org-agenda-skip-scheduled-if-done t
-        org-agenda-skip-deadline-if-done t
-        org-agenda-include-deadlines t
-        org-agenda-block-separator nil
-        org-agenda-compact-blocks t)
 
-  (setq org-agenda-custom-commands
-        '(("o" "Overview"
-           ((agenda "" ((org-agenda-span 'day)
-                        (org-super-agenda-groups
-                         '((:name "Today"
-                                  :time-grid t
-                                  :date today
-                                  :todo "TODAY"
-                                  :scheduled today
-                                  :order 1)))))
-            (alltodo "" ((org-agenda-overriding-header "")
-                         (org-super-agenda-groups
-                          '((:name "Next to do"
-                                   :todo "NEXT"
-                                   :order 1)
-                            (:name "Important"
-                                   :tag "Important"
-                                   :priority "A"
-                                   :order 6)
-                            (:name "Due Today"
-                                   :deadline today
-                                   :order 2)
-                            (:name "Due Soon"
-                                   :deadline future
-                                   :order 8)
-                            (:name "Overdue"
-                                   :deadline past
-                                   :face error
-                                   :order 7)
-                            (:name "Assignments"
-                                   :tag "Assignment"
-                                   :order 10)
-                            (:name "Issues"
-                                   :tag "Issue"
-                                   :order 12)
-                            (:name "Projects"
-                                   :tag "Project"
-                                   :order 14)
-                            (:name "Emacs"
-                                   :tag "Emacs"
-                                   :order 13)
-                            (:name "Research"
-                                   :tag "Research"
-                                   :order 15)
-                            (:name "To read"
-                                   :tag "Read"
-                                   :order 30)
-                            (:name "Waiting"
-                                   :todo "WAITING"
-                                   :order 20)
-                            (:name "Trivial"
-                                   :priority<= "E"
-                                   :tag ("Trivial" "Unimportant")
-                                   :todo ("SOMEDAY" )
-                                   :order 90)
-                            (:discard (:tag ("Chore" "Routine" "Daily"))))))))))))
 
-;;;; Org-superstar
-(use-package org-superstar
-  :ensure t
-  :hook (org-mode . org-superstar-mode)
-  :config
-  (setq org-superstar-prettify-item-bullets t
-        org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶")))
+;; ;;;; Org-fancy-priorities
+
+;; (use-package org-fancy-priorities
+;;   :ensure t
+;;   :diminish
+;;   :defines org-fancy-priorities-list
+;;   :hook (org-mode . org-fancy-priorities-mode)
+;;   :config
+;;   (setq org-fancy-priorities-list '((?A . "⚑")  ;; ASAP
+;;                                     (?B . "⬆")  ;; High
+;;                                     (?C . "■")  ;; Medium
+;;                                     (?D . "⬇")  ;; Low
+;;                                     (?E . "❓")) ;; Optional
+;;         org-priority-faces '((?A . all-the-icons-red)
+;;                              (?B . all-the-icons-orange)
+;;                              (?C . all-the-icons-yellow)
+;;                              (?D . all-the-icons-green)
+;;                              (?E . all-the-icons-blue))
+;;         org-priority-highest ?A
+;;         org-priority-lowest ?E)
+;;   (unless (char-displayable-p ?❗)
+;;     (setq org-fancy-priorities-list '("HIGH" "MID" "LOW" "OPTIONAL"))))
+
+;; ;;;; Org-pretty-tags
+
+;; (use-package org-pretty-tags
+;;   :ensure t
+;;   :config
+;;   (setq org-pretty-tags-surrogate-strings
+;;         '(("uni" . "🎓")
+;;           ("assignment" . "📓")
+;;           ("email" . "🖂")
+;;           ("read" . "🕮")
+;;           ("article" . "🖹")
+;;           ("web" . "🌐")
+;;           ("info" . "🛈")
+;;           ("issue" . "🐛")
+;;           ("emacs" . "ɛ")))
+;;   (org-pretty-tags-global-mode))
+
+;; ;; ;;;; Org-super-agenda
+
+;; ;; (use-package org-super-agenda
+;; ;;   :ensure t
+;; ;;   :commands (org-super-agenda-mode)
+;; ;;   :hook (org-agenda-mode . org-super-agenda-mode)
+;; ;;   :config
+;; ;;   (setq org-agenda-skip-scheduled-if-done t
+;; ;;         org-agenda-skip-deadline-if-done t
+;; ;;         org-agenda-include-deadlines t
+;; ;;         org-agenda-block-separator nil
+;; ;;         org-agenda-compact-blocks t)
+
+;; ;;   (setq org-agenda-custom-commands
+;; ;;         '(("o" "Overview"
+;; ;;            ((agenda "" ((org-agenda-span 'day)
+;; ;;                         (org-super-agenda-groups
+;; ;;                          '((:name "Today"
+;; ;;                                   :time-grid t
+;; ;;                                   :date today
+;; ;;                                   :todo "TODAY"
+;; ;;                                   :scheduled today
+;; ;;                                   :order 1)))))
+;; ;;             (alltodo "" ((org-agenda-overriding-header "")
+;; ;;                          (org-super-agenda-groups
+;; ;;                           '((:name "Next to do"
+;; ;;                                    :todo "NEXT"
+;; ;;                                    :order 1)
+;; ;;                             (:name "Important"
+;; ;;                                    :tag "Important"
+;; ;;                                    :priority "A"
+;; ;;                                    :order 6)
+;; ;;                             (:name "Due Today"
+;; ;;                                    :deadline today
+;; ;;                                    :order 2)
+;; ;;                             (:name "Due Soon"
+;; ;;                                    :deadline future
+;; ;;                                    :order 8)
+;; ;;                             (:name "Overdue"
+;; ;;                                    :deadline past
+;; ;;                                    :face error
+;; ;;                                    :order 7)
+;; ;;                             (:name "Assignments"
+;; ;;                                    :tag "Assignment"
+;; ;;                                    :order 10)
+;; ;;                             (:name "Issues"
+;; ;;                                    :tag "Issue"
+;; ;;                                    :order 12)
+;; ;;                             (:name "Projects"
+;; ;;                                    :tag "Project"
+;; ;;                                    :order 14)
+;; ;;                             (:name "Emacs"
+;; ;;                                    :tag "Emacs"
+;; ;;                                    :order 13)
+;; ;;                             (:name "Research"
+;; ;;                                    :tag "Research"
+;; ;;                                    :order 15)
+;; ;;                             (:name "To read"
+;; ;;                                    :tag "Read"
+;; ;;                                    :order 30)
+;; ;;                             (:name "Waiting"
+;; ;;                                    :todo "WAITING"
+;; ;;                                    :order 20)
+;; ;;                             (:name "Trivial"
+;; ;;                                    :priority<= "E"
+;; ;;                                    :tag ("Trivial" "Unimportant")
+;; ;;                                    :todo ("SOMEDAY" )
+;; ;;                                    :order 90)
+;; ;;                             (:discard (:tag ("Chore" "Routine" "Daily"))))))))))))
+
+;; ;;;; Org-superstar
+
+;; (use-package org-superstar
+;;   :ensure t
+;;   :hook (org-mode . org-superstar-mode)
+;;   :config
+;;   (setq org-superstar-prettify-item-bullets t
+;;         org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶")))
 
 ;;; Provides:
+
 (provide 'pretty-org)
