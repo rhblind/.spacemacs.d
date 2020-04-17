@@ -5,8 +5,11 @@
    (auto-completion :variables
                     auto-completion-return-key-behavior 'complete
                     auto-completion-tab-key-behavior 'complete
+                    auto-completion-idle-delay 0.2
+                    auto-completion-private-snippets-directory nil
                     auto-completion-enable-snippets-in-popup t
                     auto-completion-enable-help-tooltip t
+                    auto-completion-use-company-box t
                     auto-completion-enable-sort-by-usage t)
    better-defaults
    (dash :variables
