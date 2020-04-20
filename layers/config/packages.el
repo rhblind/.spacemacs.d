@@ -43,6 +43,11 @@
 ;;;; Company
 (defun config/post-init-company ()
   (add-hook 'after-init-hook 'global-company-mode)
+  (with-eval-after-load 'company
+    (define-key company-active-map (kbd "C-d") #'company-next-page)
+    (define-key company-active-map (kbd "C-u") #'company-previous-page))
+
+
   (when (configuration-layer/package-used-p 'lsp)
     (setq company-lsp-cache-candidates nil
           company-lsp-async t)
@@ -95,7 +100,6 @@
     ;; Add a space after the icon
     (dolist (elt company-box-icons-all-the-icons)
       (setcdr elt (concat (cdr elt) " "))))
-
   )
 
 ;;;; Python
@@ -310,7 +314,6 @@
     "gl" 'outline-next-visible-heading
     "gu" 'outline-previous-visible-heading)
 
-  (spacemacs/set-leader-keys "aof" 'org-open-at-point-global)
   (spacemacs/set-leader-keys-for-major-mode 'org-mode
     "r" 'org-refile
     "h" 'org-metaleft  ; Because of MacOS's damned, indestructable M-h binding...

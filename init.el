@@ -11,9 +11,9 @@
 
 ;;;; Constants
 
-(defconst linux?   (eq system-type 'gnu/linux) "Are we on a linux machine?")
-(defconst mac?     (eq system-type 'darwin)    "Are we on a macOS machine?")
-(defconst windows? (not (or linux? mac?))      "Are we on windows machine?")
+(defconst linux?   (eq system-type 'gnu/linux)  "Are we on a linux machine?")
+(defconst mac?     (eq system-type 'darwin)     "Are we on a macOS machine?")
+(defconst windows? (eq system-type 'windows-nt) "Are we on windows machine?")
 
 ;;;; Configuration
 
@@ -32,15 +32,8 @@ They are all defined in `~/.emacs.d/core/core-dotspacemacs.el'.
 Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   (setq-default
    ;; Display
-   dotspacemacs-default-font '(("Fira Code"
-                                :size 13
-                                :weight medium
-                                :width normal)
-                               ("Fira Code Symbol"
-                                :size 13
-                                :weight normal
-                                :width normal
-                                ))
+   dotspacemacs-default-font `("Fira Code",
+                               :size ,(if (= 1440 (display-pixel-height)) 15 13))
    dotspacemacs-themes       '(solarized-light
                                doom-gruvbox)
    ;; General

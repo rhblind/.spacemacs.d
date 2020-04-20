@@ -79,7 +79,7 @@
                    :keys "t"
                    :file org-default-notes-file
                    :prepend t
-                   :headline "Inbox"
+                   :headline "Tasks"
                    :type entry
                    :template ("* TODO %?"
                               "%i %a")
@@ -88,7 +88,7 @@
                    :keys "n"
                    :file org-default-notes-file
                    :prepend t
-                   :headline "Inbox"
+                   :headline "Tasks"
                    :type entry
                    :template ("* %?"
                               "%i %a")
@@ -117,7 +117,7 @@
                    :keys "e"
                    :file org-default-notes-file
                    :prepend t
-                   :headline "Inbox"
+                   :headline "Tasks"
                    :type entry
                    :template ("* TODO %? :email:"
                               "%i %a"))
@@ -174,7 +174,7 @@
                    :keys "p"
                    :prepend t
                    :type entry
-                   :headline "Inbox"
+                   :headline "Tasks"
                    :template ("* %{time-or-todo} %?"
                               "%i"
                               "%a")

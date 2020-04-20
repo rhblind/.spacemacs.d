@@ -21,12 +21,12 @@
               ((x-list-fonts "Verdana")         '(:font "Verdana"))
               ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
               (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-       (base-font-color     (face-foreground 'default nil 'default))
-       (headline           `(:inherit default :weight bold :foreground ,base-font-color))
-       (variable-pitch     `(:family "Source Sans Pro" :height 180 :weight light))
-       (fixed-pitch        `(:family "Inconsolata" :slant normal :weight normal :height 1.0 :width normal))))
+       (base-font-color      (face-foreground 'default nil 'default))
+       (headline            `(:inherit default :weight bold :foreground ,base-font-color))
+       (variable-pitch-font `(:family "Source Sans Pro" :height 180 :weight light))
+       (fixed-pitch-font    `(:family "Inconsolata" :slant normal :weight normal :height 1.0 :width normal))))
 
-(setq solarized-use-variable-pitch nil)
+(setq solarized-use-variable-pitch t)
 (setq face-remapping-alist '(;; Headers - outlines match org
                              (outline-1 org-level-1)
                              (outline-2 org-level-2)
@@ -132,34 +132,34 @@
          ,@display/headers/common)))
 
 ;;;;; Org
-(setq display/org-blocks/common '(:inherit fixed-pitch :italic nil :underline nil :box t))
+(setq display/org-blocks/common '(:inherit fixed-pitch-font :italic nil :underline nil :box t))
 (setq display/org-blocks
       `((org-block-begin-line
          ,@display/org-blocks/common)
         (org-block-end-line
          ,@display/org-blocks/common)
         ))
-(setq display/org-code/common                  '(:inherit (shadow fixed-pitch)))
+(setq display/org-code/common                  '(:inherit (shadow fixed-pitch-font)))
 (setq display/org-code                         `((org-code ,@display/org-code/common)))
-(setq display/org-document-info/common         '(:foreground "dark orange")) ;; TODO Override in themed color
+(setq display/org-document-info/common         '(:foreground "dark orange"))
 (setq display/org-document-info                `((org-document-info ,@display/org-document-info/common)))
-(setq display/org-document-info-keyword/common '(:inherit (shadow fixed-pitch)))
+(setq display/org-document-info-keyword/common '(:inherit (shadow fixed-pitch-font)))
 (setq display/org-document-info-keyword        `((org-document-info-keyword ,@display/org-document-info-keyword/common)))
-(setq display/org-indent/common                '(:inherit (org-hide fixed-pitch)))
+(setq display/org-indent/common                '(:inherit (org-hide fixed-pitch-font)))
 (setq display/org-indent                       `((org-indent ,@display/org-indent/common)))
-(setq display/org-link/common                  '(:foreground "royal blue" :underline t)) ;; TODO Override in themed color
+(setq display/org-link/common                  '(:foreground "royal blue" :underline t))
 (setq display/org-link                         `((org-link ,@display/org-link/common)))
-(setq display/org-meta-line/common             '(:inherit (font-lock-comment-face fixed-pitch)))
+(setq display/org-meta-line/common             '(:inherit (font-lock-comment-face fixed-pitch-font)))
 (setq display/org-meta-line                    `((org-meta-line ,@display/org-meta-line/common)))
-(setq display/org-property-value/common        '(:inherit fixed-pitch))
+(setq display/org-property-value/common        '(:inherit fixed-pitch-font))
 (setq display/org-property-value               `((org-property-value ,@display/org-property-value/common)))
-(setq display/org-special-keyword/common       '(:inherit (font-lock-comment-face fixed-pitch)))
+(setq display/org-special-keyword/common       '(:inherit (font-lock-comment-face fixed-pitch-font)))
 (setq display/org-special-keyword              `((org-special-keyword ,@display/org-special-keyword/common)))
-(setq display/org-table/common                 '(:inherit fixed-pitch :foreground "#83a598")) ;; TODO Override in themed color
+(setq display/org-table/common                 '(:inherit fixed-pitch-font :foreground "#83a598"))
 (setq display/org-table                        `((org-table ,@display/org-table/common)))
-(setq display/org-tag/common                   '(:inherit (shadow fixed-pitch) :weight bold :height 0.8))
+(setq display/org-tag/common                   '(:inherit (shadow fixed-pitch-font) :weight bold :height 0.8))
 (setq display/org-tag                          `((org-tag ,@display/org-tag/common)))
-(setq display/org-verbatim/common              '(:inherit (shadow fixed-pitch)))
+(setq display/org-verbatim/common              '(:inherit (shadow fixed-pitch-font)))
 (setq display/org-verbatim                     `((org-verbatim ,@display/org-verbatim/common)))
 
 ;;;;; Company
