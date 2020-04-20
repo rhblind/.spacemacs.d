@@ -14,73 +14,7 @@
 ;; 4. Various small gradient changes to core font-lock-faces
 
 ;;; Configuration
-
 ;;;; Core
-
-(setq solarized-use-variable-pitch nil)
-(setq face-remapping-alist '(;; Headers - outlines match org
-                             (outline-1 org-level-1)
-                             (outline-2 org-level-2)
-                             (outline-3 org-level-3)
-
-                             ;; Modeline - invis. active, monochrome inactive
-                             (powerline-active1        mode-line)
-                             (powerline-active2        mode-line)
-                             (spaceline-highlight-face mode-line)
-
-                             (powerline-active0        mode-line)
-                             (mode-line-active         mode-line)
-                             (mode-line-inactive       mode-line)
-                             (powerline-inactive0      mode-line)
-                             (powerline-inactive1      mode-line)
-                             (powerline-inactive2      mode-line)
-                             ))
-
-;;;; Styling
-;;;;; Headers
-
-(setq display/headers/common '(:underline t :inherit nil))
-(setq display/headers/zenburn
-      `((org-level-1
-         ,@display/headers/common
-         :height 1.35
-         :foreground "#DFAF8F")
-        (org-level-2
-         ,@display/headers/common
-         :height 1.25
-         :foreground "#BFEBBF")
-        (org-level-3
-         ,@display/headers/common
-         :height 1.15
-         :foreground "#7CB8BB")))
-(setq display/headers/solarized-light
-      `((org-level-1
-         ,@display/headers/common
-         :height 1.35
-         :foreground "#a71d31")
-        (org-level-2
-         ,@display/headers/common
-         :height 1.25
-         :foreground "#8D6B94")
-        (org-level-3
-         ,@display/headers/common
-         :height 1.15)))
-(setq display/headers/doom-gruvbox
-      `((org-level-1
-         ,@display/headers/common
-         :height 1.35
-         :foreground "#fbf1c7")
-        (org-level-2
-         ,@display/headers/common
-         :height 1.25
-         :foreground "#BFEBBF")
-        (org-level-3
-         ,@display/headers/common
-         :height 1.15
-         :foreground "#83a598")))
-
-;;;;; Org-blocks
-
 ;; (let* ((variable-tuple
 ;;         (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
 ;;               ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
@@ -122,7 +56,68 @@
 ;;  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
 ;;  '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
 
+;; (setq solarized-use-variable-pitch nil)
+;; (setq face-remapping-alist '(;; Headers - outlines match org
+;;                              (outline-1 org-level-1)
+;;                              (outline-2 org-level-2)
+;;                              (outline-3 org-level-3)
 
+;;                              ;; Modeline - invis. active, monochrome inactive
+;;                              (powerline-active1        mode-line)
+;;                              (powerline-active2        mode-line)
+;;                              (spaceline-highlight-face mode-line)
+
+;;                              (powerline-active0        mode-line)
+;;                              (mode-line-active         mode-line)
+;;                              (mode-line-inactive       mode-line)
+;;                              (powerline-inactive0      mode-line)
+;;                              (powerline-inactive1      mode-line)
+;;                              (powerline-inactive2      mode-line)
+;;                              ))
+
+;;;; Styling
+;;;;; Headers
+(setq display/headers/common '(:underline t :inherit nil))
+(setq display/headers/zenburn
+      `((org-level-1
+         ,@display/headers/common
+         :height 1.35
+         :foreground "#DFAF8F")
+        (org-level-2
+         ,@display/headers/common
+         :height 1.25
+         :foreground "#BFEBBF")
+        (org-level-3
+         ,@display/headers/common
+         :height 1.15
+         :foreground "#7CB8BB")))
+(setq display/headers/solarized-light
+      `((org-level-1
+         ,@display/headers/common
+         :height 1.35
+         :foreground "#a71d31")
+        (org-level-2
+         ,@display/headers/common
+         :height 1.25
+         :foreground "#8D6B94")
+        (org-level-3
+         ,@display/headers/common
+         :height 1.15)))
+(setq display/headers/doom-gruvbox
+      `((org-level-1
+         ,@display/headers/common
+         :height 1.35
+         :foreground "#fbf1c7")
+        (org-level-2
+         ,@display/headers/common
+         :height 1.25
+         :foreground "#BFEBBF")
+        (org-level-3
+         ,@display/headers/common
+         :height 1.15
+         :foreground "#83a598")))
+
+;;;;; Org-blocks
 (setq display/org-blocks/common '(:italic nil :underline nil :box t))
 (setq display/org-blocks
       `((org-block-begin-line
@@ -132,7 +127,6 @@
         ))
 
 ;;;;; Company
-
 (setq display/company/common '(:weight bold :underline nil))
 (setq display/company
       `((company-tooltip-common
@@ -143,7 +137,6 @@
          :inherit company-tooltip-selection)))
 
 ;;;;; Mode-line
-
 (setq display/mode-line/common '(:box nil :underline nil))
 (setq display/mode-line
       `((mode-line
@@ -153,7 +146,6 @@
          ,@display/mode-line/common)))
 
 ;;;;; Font-locks
-
 (setq display/font-locks
       `((font-lock-comment-face
          :italic t
@@ -171,7 +163,6 @@
 
 ;;; Theming
 ;;;; Common
-
 (setq display/common-theming
       `(,@display/company
         ,@display/mode-line
@@ -242,7 +233,6 @@
         ))
 
 ;;;; Set Modifications
-
 ;; This variable is the only `theming' layer requirement to enable our theming
 
 (setq theming-modifications

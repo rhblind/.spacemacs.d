@@ -1,7 +1,6 @@
 ;;; Funcs -*- lexical-binding: t; -*-
 ;;; Owned Packages
 ;;;; All-the-icons-ivy
-
 (when (configuration-layer/package-used-p 'all-the-icons-ivy)
   (defun all-the-icons-ivy-file-transformer-stdized (s)
     "Fix `all-the-icons-ivy-file-transformer' vertical alignment issues."
@@ -14,7 +13,7 @@
             (propertize "\t" 'display
                         (all-the-icons-icon-for-file s :height 0.9 :v-adjust 0))
             s)))
-
+;;;; Org
 (defun org-capture-select-template-prettier (&optional keys)
   "Select a capture template, in a prettier way than default
 Lisp programs can force the template by setting KEYS to a string."

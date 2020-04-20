@@ -281,6 +281,7 @@
         org-hide-leading-stars t
         org-indent-indentation-per-level 1
         org-log-done-with-time t
+        org-re-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0"
         org-startup-indented nil
         org-priority-faces '((65 :inherit org-priority :foreground "red")
                              (66 :inherit org-priority :foreground "brown")
@@ -299,7 +300,7 @@
   (add-hook 'org-mode-hook 'flyspell-mode)
   (add-hook 'org-mode-hook 'variable-pitch-mode)
 
-  (setq org-re-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0"))
+  )
 
 (defun config/post-init-org ()
   (evil-define-key '(normal visual motion) org-mode-map
@@ -310,11 +311,15 @@
     "gu" 'outline-previous-visible-heading)
 
   (spacemacs/set-leader-keys "aof" 'org-open-at-point-global)
-
   (spacemacs/set-leader-keys-for-major-mode 'org-mode
     "r" 'org-refile
     "h" 'org-metaleft  ; Because of MacOS's damned, indestructable M-h binding...
-    "s p" 'org-sort-entries-priorities))
+    "s p" 'org-sort-entries-priorities)
+
+  ;; TODO: This should go to display/config.el
+  ;; Set some variable-pitch font faces for Org
+
+  )
 
 ;;;; Ranger
 (defun config/pre-init-ranger ()

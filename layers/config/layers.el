@@ -8,7 +8,7 @@
                     auto-completion-idle-delay 0.2
                     auto-completion-private-snippets-directory nil
                     auto-completion-enable-snippets-in-popup t
-                    auto-completion-enable-help-tooltip t
+                    auto-completion-enable-help-tooltip nil
                     auto-completion-use-company-box t
                     auto-completion-enable-sort-by-usage t)
    better-defaults

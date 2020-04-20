@@ -43,7 +43,6 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                 ))
    dotspacemacs-themes       '(solarized-light
                                doom-gruvbox)
-
    ;; General
    dotspacemacs-auto-generate-layout-names t
    dotspacemacs-auto-resume-layouts        t

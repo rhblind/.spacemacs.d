@@ -523,17 +523,3 @@
            (emacs-lisp-mode . pretty-outlines-add-bullets)
            (hy-mode         . pretty-outlines-add-bullets)
            (python-mode     . pretty-outlines-add-bullets))))
-
-;;;; Pretty-org
-
-;; (defun display/init-pretty-org ()
-;;   (use-package pretty-org
-;;     :init
-;;     (setq org-ellipsis ""
-;;           org-catch-invisible-edits t
-;;           org-export-in-background t
-;;           org-hide-emphasis-markers t
-;;           org-hide-leading-stars t
-;;           org-indent-indentation-per-level 1
-;;           org-log-done-with-time t
-;;           org-startup-indented nil)))
