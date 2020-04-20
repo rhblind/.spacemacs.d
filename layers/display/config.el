@@ -15,116 +15,152 @@
 
 ;;; Configuration
 ;;;; Core
-;; (let* ((variable-tuple
-;;         (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-;;               ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-;;               ((x-list-fonts "Verdana")         '(:font "Verdana"))
-;;               ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-;;               (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-;;        (base-font-color     (face-foreground 'default nil 'default))
-;;        (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+(let* ((variable-tuple
+        (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+              ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+              ((x-list-fonts "Verdana")         '(:font "Verdana"))
+              ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+              (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+       (base-font-color     (face-foreground 'default nil 'default))
+       (headline           `(:inherit default :weight bold :foreground ,base-font-color))
+       (variable-pitch     `(:family "Source Sans Pro" :height 180 :weight light))
+       (fixed-pitch        `(:family "Inconsolata" :slant normal :weight normal :height 1.0 :width normal))))
 
-;;   (custom-theme-set-faces
-;;    'user
-;;    `(org-level-8 ((t (,@headline ,@variable-tuple))))
-;;    `(org-level-7 ((t (,@headline ,@variable-tuple))))
-;;    `(org-level-6 ((t (,@headline ,@variable-tuple))))
-;;    `(org-level-5 ((t (,@headline ,@variable-tuple))))
-;;    `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
-;;    `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
-;;    `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
-;;    `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
-;;    `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
+(setq solarized-use-variable-pitch nil)
+(setq face-remapping-alist '(;; Headers - outlines match org
+                             (outline-1 org-level-1)
+                             (outline-2 org-level-2)
+                             (outline-3 org-level-3)
 
-;; (custom-theme-set-faces
-;;  'user
-;;  '(variable-pitch ((t (:family "Source Sans Pro" :height 180 :weight light))))
-;;  '(fixed-pitch ((t ( :family "Inconsolata" :slant normal :weight normal :height 1.0 :width normal)))))
+                             ;; Modeline - invis. active, monochrome inactive
+                             (powerline-active1        mode-line)
+                             (powerline-active2        mode-line)
+                             (spaceline-highlight-face mode-line)
 
-;; (custom-theme-set-faces
-;;  'user
-;;  '(org-block ((t (:inherit fixed-pitch))))
-;;  '(org-code ((t (:inherit (shadow fixed-pitch)))))
-;;  '(org-document-info ((t (:foreground "dark orange"))))
-;;  '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-;;  '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
-;;  '(org-link ((t (:foreground "royal blue" :underline t))))
-;;  '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-;;  '(org-property-value ((t (:inherit fixed-pitch))) t)
-;;  '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-;;  '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
-;;  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
-;;  '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
-
-;; (setq solarized-use-variable-pitch nil)
-;; (setq face-remapping-alist '(;; Headers - outlines match org
-;;                              (outline-1 org-level-1)
-;;                              (outline-2 org-level-2)
-;;                              (outline-3 org-level-3)
-
-;;                              ;; Modeline - invis. active, monochrome inactive
-;;                              (powerline-active1        mode-line)
-;;                              (powerline-active2        mode-line)
-;;                              (spaceline-highlight-face mode-line)
-
-;;                              (powerline-active0        mode-line)
-;;                              (mode-line-active         mode-line)
-;;                              (mode-line-inactive       mode-line)
-;;                              (powerline-inactive0      mode-line)
-;;                              (powerline-inactive1      mode-line)
-;;                              (powerline-inactive2      mode-line)
-;;                              ))
+                             (powerline-active0        mode-line)
+                             (mode-line-active         mode-line)
+                             (mode-line-inactive       mode-line)
+                             (powerline-inactive0      mode-line)
+                             (powerline-inactive1      mode-line)
+                             (powerline-inactive2      mode-line)
+                             ))
 
 ;;;; Styling
 ;;;;; Headers
-(setq display/headers/common '(:underline t :inherit nil))
+(setq display/headers/common '(@headline, @variable-tuple :underline nil :inherit nil))
 (setq display/headers/zenburn
-      `((org-level-1
+      `((org-document-title
          ,@display/headers/common
-         :height 1.35
+         :height 2)
+        (org-level-1
+         ,@display/headers/common
+         :height 1.75
          :foreground "#DFAF8F")
         (org-level-2
          ,@display/headers/common
-         :height 1.25
+         :height 1.5
          :foreground "#BFEBBF")
         (org-level-3
          ,@display/headers/common
-         :height 1.15
-         :foreground "#7CB8BB")))
-(setq display/headers/solarized-light
-      `((org-level-1
+         :height 1.25
+         :foreground "#7CB8BB")
+        (org-level-4
          ,@display/headers/common
-         :height 1.35
+         :height 1.1)
+        (org-level-5
+         ,@display/headers/common)
+        (org-level-6
+         ,@display/headers/common)
+        (org-level-7
+         ,@display/headers/common)
+        (org-level-8
+         ,@display/headers/common)))
+
+(setq display/headers/solarized-light
+      `((org-document-title
+         ,@display/headers/common
+         :height 2)
+        (org-level-1
+         ,@display/headers/common
+         :height 1.75
          :foreground "#a71d31")
         (org-level-2
          ,@display/headers/common
-         :height 1.25
+         :height 1.5
          :foreground "#8D6B94")
         (org-level-3
          ,@display/headers/common
-         :height 1.15)))
-(setq display/headers/doom-gruvbox
-      `((org-level-1
+         :height 1.25)
+        (org-level-4
          ,@display/headers/common
-         :height 1.35
+         :height 1.1)
+        (org-level-5
+         ,@display/headers/common)
+        (org-level-6
+         ,@display/headers/common)
+        (org-level-7
+         ,@display/headers/common)
+        (org-level-8
+         ,@display/headers/common)))
+
+(setq display/headers/doom-gruvbox
+      `((org-document-title
+         ,@display/headers/common
+         :height 2)
+        (org-level-1
+         ,@display/headers/common
+         :height 1.75
          :foreground "#fbf1c7")
         (org-level-2
          ,@display/headers/common
-         :height 1.25
+         :height 1.5
          :foreground "#BFEBBF")
         (org-level-3
          ,@display/headers/common
-         :height 1.15
-         :foreground "#83a598")))
+         :height 1.25
+         :foreground "#83a598")
+        (org-level-4
+         ,@display/headers/common
+         :height 1.1)
+        (org-level-5
+         ,@display/headers/common)
+        (org-level-6
+         ,@display/headers/common)
+        (org-level-7
+         ,@display/headers/common)
+        (org-level-8
+         ,@display/headers/common)))
 
-;;;;; Org-blocks
-(setq display/org-blocks/common '(:italic nil :underline nil :box t))
+;;;;; Org
+(setq display/org-blocks/common '(:inherit fixed-pitch :italic nil :underline nil :box t))
 (setq display/org-blocks
       `((org-block-begin-line
          ,@display/org-blocks/common)
         (org-block-end-line
          ,@display/org-blocks/common)
         ))
+(setq display/org-code/common                  '(:inherit (shadow fixed-pitch)))
+(setq display/org-code                         `((org-code ,@display/org-code/common)))
+(setq display/org-document-info/common         '(:foreground "dark orange")) ;; TODO Override in themed color
+(setq display/org-document-info                `((org-document-info ,@display/org-document-info/common)))
+(setq display/org-document-info-keyword/common '(:inherit (shadow fixed-pitch)))
+(setq display/org-document-info-keyword        `((org-document-info-keyword ,@display/org-document-info-keyword/common)))
+(setq display/org-indent/common                '(:inherit (org-hide fixed-pitch)))
+(setq display/org-indent                       `((org-indent ,@display/org-indent/common)))
+(setq display/org-link/common                  '(:foreground "royal blue" :underline t)) ;; TODO Override in themed color
+(setq display/org-link                         `((org-link ,@display/org-link/common)))
+(setq display/org-meta-line/common             '(:inherit (font-lock-comment-face fixed-pitch)))
+(setq display/org-meta-line                    `((org-meta-line ,@display/org-meta-line/common)))
+(setq display/org-property-value/common        '(:inherit fixed-pitch))
+(setq display/org-property-value               `((org-property-value ,@display/org-property-value/common)))
+(setq display/org-special-keyword/common       '(:inherit (font-lock-comment-face fixed-pitch)))
+(setq display/org-special-keyword              `((org-special-keyword ,@display/org-special-keyword/common)))
+(setq display/org-table/common                 '(:inherit fixed-pitch :foreground "#83a598")) ;; TODO Override in themed color
+(setq display/org-table                        `((org-table ,@display/org-table/common)))
+(setq display/org-tag/common                   '(:inherit (shadow fixed-pitch) :weight bold :height 0.8))
+(setq display/org-tag                          `((org-tag ,@display/org-tag/common)))
+(setq display/org-verbatim/common              '(:inherit (shadow fixed-pitch)))
+(setq display/org-verbatim                     `((org-verbatim ,@display/org-verbatim/common)))
 
 ;;;;; Company
 (setq display/company/common '(:weight bold :underline nil))
@@ -163,11 +199,23 @@
 
 ;;; Theming
 ;;;; Common
+
 (setq display/common-theming
       `(,@display/company
         ,@display/mode-line
-        ,@display/org-blocks
         ,@display/git-gutter+
+        ,@display/org-blocks
+        ,@display/org-code
+        ,@display/org-document-info
+        ,@display/org-document-info-keyword
+        ,@display/org-indent
+        ,@display/org-link
+        ,@display/org-meta-line
+        ,@display/org-property-value
+        ,@display/org-special-keyword
+        ,@display/org-table
+        ,@display/org-tag
+        ,@display/org-verbatim
 
         (avy-background-face :italic nil)
         (fringe :background nil)))
