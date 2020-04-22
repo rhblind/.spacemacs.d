@@ -192,16 +192,16 @@
                  :children ((,(format "%s\tProject todo" (all-the-icons-octicon "checklist" :face 'all-the-icons-green :v-adjust 0.01))
                              :keys "t"
                              :time-or-todo "TODO"
-                             :file org-default-projects-file)
+                             :file org-projects-file)
                             (,(format "%s\tProject note" (all-the-icons-faicon "sticky-note" :face 'all-the-icons-yellow :v-adjust 0.01))
                              :keys "n"
                              :time-or-todo "%U"
-                             :file org-default-projects-file)
+                             :file org-projects-file)
                             (,(format "%s\tProject changelog" (all-the-icons-faicon "list" :face 'all-the-icons-blue :v-adjust 0.01))
                              :keys "c"
                              :time-or-todo "%U"
                              :heading "Unreleased"
-                             :file org-default-projects-file))
+                             :file org-projects-file))
                  )
                 )))
 ;;;;; :config

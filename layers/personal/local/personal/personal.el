@@ -52,8 +52,9 @@
 
 ;;; Org-mode
 (setq org-directory "~/Dropbox/org"
-      org-default-notes-file "~/Dropbox/org/todo.org"
-      org-default-projects-file "~/Dropbox/org/project.org"
+      org-default-notes-file "~/Dropbox/org/misc.org"
+      org-projects-file "~/Dropbox/org/project.org"
+      org-work-file "~/Dropbox/org/work.org"
       org-download-image-dir "~/Dropbox/org/pics"
       org-agenda-files (file-expand-wildcards "~/Dropbox/org/*.org")
       org-use-property-inheritance t

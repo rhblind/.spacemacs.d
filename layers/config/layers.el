@@ -26,8 +26,10 @@
         org-want-todo-bindings t)
    (shell :variables
           shell-default-shell 'eshell)
+   spell-checking
    ;; (spell-checking :variables
-   ;;                 spell-checking-enable-by-default t
+   ;;                 spell-checking-enable-by-default nil
+   ;;                 spell-checking-enable-auto-dictionary t
    ;;                 enable-flyspell-auto-completion t)
    syntax-checking
    (version-control :variables

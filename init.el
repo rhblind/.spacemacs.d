@@ -78,7 +78,8 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            (display  :location local)
                                            (personal :location local))
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
-   dotspacemacs-additional-packages      '(buttercup
+   dotspacemacs-additional-packages      '(auto-dictionary
+                                           buttercup
                                            company-lsp
                                            counsel-dash
                                            doct
@@ -93,7 +94,6 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            live-py-mode
                                            lsp-ui
                                            org-fancy-priorities
-                                           org-pretty-tags
                                            org-super-agenda
                                            org-superstar
                                            rainbow-mode
