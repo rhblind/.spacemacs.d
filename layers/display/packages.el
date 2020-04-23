@@ -74,60 +74,57 @@
     :after (org-capture)
     :init
     (setq org-capture-templates
+          ;; https://github.com/progfolio/doct#manual
+          ;; https://orgmode.org/manual/Template-expansion.html#Template-expansion
           (doct `((,(format "%s\tTasks" (all-the-icons-octicon "inbox" :face 'all-the-icons-yellow :v-adjust 0.01))
                    :keys "k"
                    :headline "Tasks"
                    :prepend t
                    :type entry
                    :file org-default-notes-file
-                   :children ((,(format "%s\tGeneral task" (all-the-icons-octicon "inbox" :face 'all-the-icons-yellow :v-adjust 0.01))
+                   :children ((,(format "%s\tGeneral task" (all-the-icons-octicon "checklist" :face 'all-the-icons-yellow :v-adjust 0.01))
                                :keys "k"
-                               :template ("* TODO %?"
-                                          "%i %a")
-                               )
-                              (,(format "%s\tPersonal task" (all-the-icons-octicon "checklist" :face 'all-the-icons-green :v-adjust 0.01))
+                               :template ("* TODO %? %^G"
+                                          "%i"))
+                              (,(format "%s\tCapture point task" (all-the-icons-octicon "checklist" :face 'all-the-icons-green :v-adjust 0.01))
                                :keys "t"
-                               :template ("* TODO %? :personal:"
-                                          "%i")
-                               )
+                               :template ("* TODO %? %^G"
+                                          "%i %a"))
                               (,(format "%s\tPersonal note" (all-the-icons-faicon "sticky-note-o" :face 'all-the-icons-green :v-adjust 0.01))
                                :keys "n"
                                :template ("* %? :personal:"
-                                          "%i")
-                               )
-                              (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-orange :v-adjust -0.1))
+                                          "%i"))
+                              (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))
                                :keys "d"
                                :template ("* TODO %? %^G%{extra}"
                                           "%i %a")
-                               :extra "\nDEADLINE: %^{Deadline:}t"
-                               )
-                              (,(format "%s\tScheduled task" (all-the-icons-octicon "calendar" :face 'all-the-icons-orange :v-adjust 0.01))
+                               :extra "\nDEADLINE: %^{Due date:}T")
+                              (,(format "%s\tScheduled task" (all-the-icons-octicon "calendar" :face 'all-the-icons-red :v-adjust 0.01))
                                :keys "s"
                                :template ("* TODO %? %^G%{extra}"
                                           "%i %a")
-                               :extra "\nSCHEDULED: %^{Start time:}t"
-                               )
+                               :extra "\nSCHEDULED: %^{Task date}t")
                               ))
                   (,(format "%s\tWork" (all-the-icons-faicon "building" :face 'all-the-icons-purple :v-adjust 0.01))
                    :keys "w"
-                   :headline "Work"
+                   :headline "Tasks"
                    :prepend t
                    :type entry
                    :file org-work-file
-                   :children ((,(format "%s\tTask" (all-the-icons-faicon "tasks" :face 'all-the-icons-red :v-adjust 0.01))
-                               :keys "t"
-                               :template ("* TODO [#C] %? :work:task:"
-                                          "SCHEDULED: %^{Task date:}T"
-                                          "%i %a"))
-                              (,(format "%s\tAssignment" (all-the-icons-material "timer" :face 'all-the-icons-orange :v-adjust 0.01))
-                               :keys "a"
-                               :template ("* TODO [#B] %? :work:assignment:"
-                                          "DEADLINE: %^{Due date:}T"
-                                          "%i %a"))
-                              (,(format "%s\tMiscellaneous task" (all-the-icons-faicon "random" :face 'all-the-icons-yellow :v-adjust 0.01))
+                   :children ((,(format "%s\tMiscellaneous task" (all-the-icons-faicon "random" :face 'all-the-icons-yellow :v-adjust 0.01))
                                :keys "m"
-                               :template ("* TODO [#C] %? :work:misc:"
-                                          "%i %a"))))
+                               :template ("* TODO [#C] %? %^G:work:"
+                                          "%i"))
+                              (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))
+                               :keys "d"
+                               :template ("* TODO [#B] %? %^G:work:%{extra}"
+                                          "%i")
+                               :extra "\nDEADLINE: %^{Due date:}T")
+                              (,(format "%s\tScheduled task" (all-the-icons-octicon "calendar" :face 'all-the-icons-red :v-adjust 0.01))
+                               :keys "s"
+                               :template ("* TODO [#C] %? %^G:work:%{extra}"
+                                          "%i")
+                               :extra "\nSCHEDULED: %^{Task date}t")))
                   (,(format "%s\tEmail" (all-the-icons-faicon "envelope" :face 'all-the-icons-blue :v-adjust 0.01))
                    :keys "e"
                    :headline "Tasks"
@@ -185,7 +182,8 @@
                                :keys "c"
                                :time-or-todo "%U"
                                :heading "Unreleased"))
-                   ))))
+                   ))
+                ))
     :config
     (progn
       (advice-add 'org-capture-select-template :override #'org-capture-select-template-prettier)
@@ -233,8 +231,7 @@
   (use-package org-super-agenda
     :ensure t
     :commands (org-super-agenda-mode)
-    :hook
-    (org-agenda-mode . org-super-agenda-mode)
+    :hook (org-agenda-mode . org-super-agenda-mode)
     :init
     (setq org-agenda-block-separator 9472      ;; Use a straight line as separator between agenda agenda blocks
           org-agenda-compact-blocks t
