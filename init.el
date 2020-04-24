@@ -92,6 +92,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            live-py-mode
                                            lsp-ui
                                            org-fancy-priorities
+                                           org-gcal
                                            org-super-agenda
                                            org-superstar
                                            rainbow-mode
@@ -118,11 +119,17 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 (defun dotspacemacs/user-init ()
   "Package independent settings to run before `dotspacemacs/user-config'."
   (fringe-mode 0)
+  (require 'iso-transl)  ;; Enables "dead keys" for non-english keyboards
+  (require 'epa-file)    ;; Load library for decrypting the `secrets.el.gpg' file
+  (epa-file-enable)
 
-  ;; Enables "dead keys" for non-english keyboards
-  (require 'iso-transl)
   (setq auto-resume-layers t
-        custom-file "~/.spacemacs.d/.custom-settings.el")
+        auth-source-debug nil  ;; Enable logging of authentication related stuff to the `*Messages' buffer. Disable when not needed!
+        custom-file "~/.spacemacs.d/.custom-settings.el"
+        secrets-file "~/.spacemacs.d/secrets.el.gpg")
+
+  ;; This file keeps secrets for emacs configurations
+  (load-file secrets-file)
 
   (when (spacemacs/system-is-mac)
     (setq shell-file-name "/bin/bash")
@@ -150,5 +157,4 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 
 (defun dotspacemacs/user-config ()
   "Configuration that cannot be delegated to layers."
-  (dotspacemacs/user-config/post-layer-load-config)
-  )
+  (dotspacemacs/user-config/post-layer-load-config))

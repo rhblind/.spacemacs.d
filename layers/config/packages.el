@@ -16,7 +16,7 @@
         flyspell
         ivy
         magit
-        ob org
+        ob org org-gcal
         python
         ranger
 
@@ -347,6 +347,21 @@
   ;; TODO: This should go to display/config.el
   ;; Set some variable-pitch font faces for Org
 
+  )
+
+;;;; Org-gcal
+(defun config/init-org-gcal ()
+  ;; https://github.com/kidd/org-gcal.el/
+  (use-package org-gcal
+    :after org
+    :config (setq
+             ;; org-gcal-client-id variable set in `secrets.el.gpg'
+             ;; org-gcal-client-secret  variable set in `secrets.el.gpg'
+             org-gcal-file-alist '(("rhblind@gmail.com" . "~/Dropbox/org/gcal.org"))
+             org-gcal-auto-archive nil
+             org-gcal-notify-p nil)
+    (add-hook 'org-agenda-mode-hook 'org-gcal-fetch)
+    (add-hook 'org-capture-after-finalize-hook 'org-gcal-fetch))
   )
 
 ;;;; Ranger
