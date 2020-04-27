@@ -349,7 +349,6 @@
 
   )
 
-;;;; Org-gcal
 (defun config/init-org-gcal ()
   ;; https://github.com/kidd/org-gcal.el/
   (use-package org-gcal
@@ -357,7 +356,9 @@
     :config (setq
              ;; org-gcal-client-id variable set in `secrets.el.gpg'
              ;; org-gcal-client-secret  variable set in `secrets.el.gpg'
-             org-gcal-file-alist '(("rhblind@gmail.com" . "~/Dropbox/org/gcal.org"))
+             ;; TODO: Read org-gcal-file-alist from `personal.el' file
+             org-gcal-file-alist '(("rhblind@gmail.com" . "~/Dropbox/org/gcal.org")
+                                   ("family07115093619329273023@group.calendar.google.com" . "~/Dropbox/org/family.org"))
              org-gcal-auto-archive nil
              org-gcal-notify-p nil)
     (add-hook 'org-agenda-mode-hook 'org-gcal-fetch)

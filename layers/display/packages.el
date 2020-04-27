@@ -76,7 +76,22 @@
     (setq org-capture-templates
           ;; https://github.com/progfolio/doct#manual
           ;; https://orgmode.org/manual/Template-expansion.html#Template-expansion
-          (doct `((,(format "%s\tTasks" (all-the-icons-octicon "inbox" :face 'all-the-icons-yellow :v-adjust 0.01))
+          (doct `(
+                  ;; FIXME: This is broken in org-gcal
+                  ;; https://github.com/kidd/org-gcal.el/issues/52
+                  ;; (,(format "%s\tAppointments" (all-the-icons-material "date_range" :face 'all-the-icons-red :v-adjust 0.01))
+                  ;;  :keys "a"
+                  ;;  :type entry
+                  ;;  :file org-gcal-file
+                  ;;  :children ((,(format "%s\tNew appointment" (all-the-icons-material "event" :face 'all-the-icons-red :v-adjust 0.01))
+                  ;;              :keys "a"
+                  ;;              :template ("* %?\n :PROPERTIES:\n :calendar-id: rhblind@gmail.com\n :END:\n:org-gcal:\n%^T--%^T\n:END:\n")
+                  ;;              ;; :template ("* %?"
+                  ;;              ;;            ":PROPERTIES:\n:calendar-id: rhblind@gmail.com\n:END:"
+                  ;;              ;;            ":org-gcal:\n%^T\n:END:\n")
+                  ;;              ))
+                  ;;  )
+                  (,(format "%s\tTasks" (all-the-icons-octicon "inbox" :face 'all-the-icons-yellow :v-adjust 0.01))
                    :keys "k"
                    :headline "Tasks"
                    :prepend t
