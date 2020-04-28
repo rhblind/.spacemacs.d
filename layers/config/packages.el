@@ -16,7 +16,7 @@
         flyspell
         ivy
         magit
-        ob org org-gcal
+        ob org org-gcal org-projectile
         python
         ranger
 
@@ -364,6 +364,17 @@
     (add-hook 'org-agenda-mode-hook 'org-gcal-fetch)
     (add-hook 'org-capture-after-finalize-hook 'org-gcal-fetch))
   )
+
+(defun config/pre-init-org-projectile ()
+  (use-package org-projectile
+    :after org
+    :config
+    (progn
+      (setq org-projectile-per-project-filepath "TODO.org"
+            org-projectile-capture-template "* %? %^G\n%i\n%a"
+      org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+    (org-projectile-per-project))
+  ))
 
 ;;;; Ranger
 (defun config/pre-init-ranger ()

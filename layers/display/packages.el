@@ -200,9 +200,22 @@
                                :keys "n"
                                :time-or-todo "%U")
                               (,(format "%s\tProject changelog" (all-the-icons-faicon "list" :face 'all-the-icons-blue :v-adjust 0.01))
-                               :keys "c"
+                               :keys "l"
                                :time-or-todo "%U"
-                               :heading "Unreleased"))
+                               :heading "Unreleased")
+                              ;; (,(format "%s\tCurrent project" (all-the-icons-faicon "sticky-note" :face 'all-the-icons-red :v-adjust 0.01))
+                              ;;  :keys "p"
+                              ;;  :headline "Tasks"
+                              ;;  :prepend t
+                              ;;  :file org-projectile-per-project-filepath
+                              ;;  :children ((,(format "%s\tCapture point task" (all-the-icons-faicon "code" :face 'all-the-icons-red :v-adjust 0.01))
+                              ;;              :keys "c"
+                              ;;              :template ("* %? %^G"
+                              ;;                         "%i"
+                              ;;                         "%a")
+                              ;;              ))
+                              ;;  )
+                              )
                    ))
                 ))
     :config
