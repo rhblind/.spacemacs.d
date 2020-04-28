@@ -371,7 +371,7 @@
     :config
     (progn
       (setq org-projectile-per-project-filepath "TODO.org"
-            org-projectile-capture-template "* %? %^G\n%i\n%a"
+            org-projectile-capture-template "* TODO %? %^G\n%i\n%a"
       org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
     (org-projectile-per-project))
   ))
