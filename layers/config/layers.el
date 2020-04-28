@@ -63,7 +63,15 @@
    emacs-lisp
    erlang
    (javascript :variables
-               javascript-disable-tern-port-files nil)
+               javascript-backend 'lsp
+               javascript-lsp-linter nil
+               javascript-disable-tern-port-files nil
+               javascript-fmt-tool 'web-beautify
+               javascript-fmt-on-save t
+               js-indent-level 2
+               js2-basic-offset 2
+               js2-include-node-externs t
+               node-add-modules-path t)
    django
    (python :variables
            python-backend 'lsp
@@ -74,6 +82,6 @@
            python-save-before-test t
            python-formatter 'lsp
            python-spacemacs-indent-guess nil)
-
+   web-beautify
    windows-scripts
    ))
