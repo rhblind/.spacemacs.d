@@ -289,8 +289,9 @@
 
 (defun config/pre-init-org ()
   (setq-default org-display-custom-times t)
-  (setq org-ellipsis ""
+  (setq org-agenda-skip-unavailable-files t
         org-catch-invisible-edits t
+        org-ellipsis ""
         org-export-in-background t
         org-fontify-whole-heading-line t
         org-fontify-done-headline nil
