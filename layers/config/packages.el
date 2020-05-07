@@ -307,14 +307,14 @@
         org-priority-faces '((65 :inherit org-priority :foreground "red")
                              (66 :inherit org-priority :foreground "brown")
                              (67 :inherit org-priority :foreground "blue"))
-        org-structure-template-alist '(("n"  "#+NAME: ?")
-                                       ("L"  "#+LaTeX: ")
-                                       ("h"  "#+HTML: ")
-                                       ("q"  "#+BEGIN_QUOTE\n\n#+END_QUOTE")
-                                       ("s"  "#+BEGIN_SRC ?\n\n#+END_SRC")
-                                       ("se" "#+BEGIN_SRC elixir\n\n#+END_SRC")
-                                       ("sj" "#+BEGIN_SRC javascript\n\n#+END_SRC")
-                                       ("sp" "#+BEGIN_SRC python\n\n#+END_SRC"))
+        ;; org-structure-template-alist '(("n"  "#+NAME: ?")
+        ;;                                ("L"  "#+LaTeX: ")
+        ;;                                ("h"  "#+HTML: ")
+        ;;                                ("q"  "#+BEGIN_QUOTE\n\n#+END_QUOTE")
+        ;;                                ("s"  "#+BEGIN_SRC ?\n\n#+END_SRC")
+        ;;                                ("se" "#+BEGIN_SRC elixir\n\n#+END_SRC")
+        ;;                                ("sj" "#+BEGIN_SRC javascript\n\n#+END_SRC")
+        ;;                                ("sp" "#+BEGIN_SRC python\n\n#+END_SRC"))
         org-time-stamp-custom-formats '("<%a %d.%m.%Y>" . "<%a %d.%m.%Y %H:%M>"))
 
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
@@ -322,6 +322,7 @@
   (add-hook 'org-mode-hook 'org-indent-mode)
   (add-hook 'org-mode-hook 'flyspell-mode)
   (add-hook 'org-mode-hook (lambda () (progn
+                                        (require 'org-tempo)  ;; Required for new org templating system to work
                                         (setq line-spacing 0.2
                                               header-line-format " "
                                               left-margin-width 2
