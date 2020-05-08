@@ -126,6 +126,8 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   (require 'epa-file)    ;; Load library for decrypting the `secrets.el.gpg' file
 
   (setq epa-pinentry-mode 'loopback)  ;; Allows unlocking gpg keys using the Emacs minibuffer (gpg --> gpg-agent --> pinentry --> Emacs)
+  (when (spacemacs/system-is-mac)
+    (custom-set-variables '(epg-gpg-program "/usr/local/bin/gpg")))
   (epa-file-enable)
 
   (setq auto-resume-layers t
