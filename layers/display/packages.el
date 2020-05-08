@@ -160,8 +160,8 @@
                    :prepend t
                    :type entry
                    :file org-default-notes-file
-                   :template ("* [ ] %{desc}%? :%{i-type}:"
-                              "%i %a")
+                   :template ("* [ ] %{desc}%? :%{i-type}:%^G"
+                              "%i")
                    :children ((,(format "%s\tWebpage" (all-the-icons-faicon "globe" :face 'all-the-icons-green :v-adjust 0.01))
                                :keys "w"
                                :desc "%(org-cliplink-capture) "

@@ -9,7 +9,9 @@
 (defun personal/init-outline-ivy ()
   (use-package outline-ivy
     :defer t
-    :bind ("C-j" . oi-jump)))
+    ;; :bind ("C-j" . oi-jump))
+    :bind (:map outline-minor-mode-map ("C-j" . oi-jump))
+    ))
 
 ;;; Personal
 

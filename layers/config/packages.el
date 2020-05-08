@@ -204,7 +204,9 @@
   (setq completion-in-region-function 'ivy-completion-in-region))
 
 (defun config/post-init-ivy ()
-  (setq ivy-height 20)
+  (setq ivy-height 20
+        ivy-re-builders-alist '((t . ivy--regex-fuzzy))  ;; Puts wildcards for fuzzy search on each character
+        )
 
   (spacemacs/set-leader-keys "ai" 'ivy-resume)
 
@@ -311,6 +313,7 @@
         org-indent-indentation-per-level 1
         org-log-state-notes-into-drawer t
         org-log-done-with-time t
+        ;; org-refile-targets '((org-agenda-files . (:maxlevel . 6)))  ;; TODO https://sachachua.com/blog/2015/02/learn-take-notes-efficiently-org-mode/
         org-re-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0"
         org-startup-indented t
         org-pretty-entities t
@@ -341,7 +344,64 @@
   ;; (add-hook 'org-mode-hook (lambda () (progn
   ;;                                       (setq left-margin-width 4
   ;;                                             right-margin-width 4))))
-  )
+
+  ;; Org LaTeX, templates (also for PDF exports)
+  (with-eval-after-load 'ox-latex
+    ;; (add-to-list 'org-latex-classes
+    ;;'("org-article"
+                                        ;                    "\\documentclass[11pt,a4paper]{article}
+    ;; \\usepackage[utf8]{inputenc}
+    ;; \\usepackage[T1]{fontenc}
+    ;; \\usepackage{fixltx2e}
+    ;; \\usepackage{graphicx}
+    ;; \\usepackage{longtable}
+    ;; \\usepackage{float}
+    ;; \\usepackage{wrapfig}
+    ;; \\usepackage{rotating}
+    ;; \\usepackage[normalem]{ulem}
+    ;; \\usepackage{amsmath}
+    ;; \\usepackage{textcomp}
+    ;; \\usepackage{marvosym}
+    ;; \\usepackage{wasysym}
+    ;; \\usepackage{amssymb}
+    ;; \\usepackage{hyperref}
+    ;; \\usepackage{mathpazo}
+    ;; \\usepackage{color}
+    ;; \\usepackage{enumerate}
+    ;; \\definecolor{bg}{rgb}{0.95,0.95,0.95}
+    ;; \\tolerance=1000
+    ;;       [NO-DEFAULT-PACKAGES]
+    ;;       [PACKAGES]
+    ;;       [EXTRA]
+    ;; \\linespread{1.1}
+    ;; \\hypersetup{pdfborder=0 0 0}"
+    ;;                    ("\\section{%s}" . "\\section*{%s}")
+    ;;                    ("\\subsection{%s}" . "\\subsection*{%s}")
+    ;;                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+    ;;                    ("\\paragraph{%s}" . "\\paragraph*{%s}"))
+
+
+    ;; )
+
+    ;; (add-to-list 'org-latex-classes
+    ;;              '("org-article"
+    ;;                "\\documentclass[10pt,article,oneside]{memoir}"
+    ;;                ("\\section{%s}" . "\\section*{%s}")
+    ;;                ("\\subsection{%s}" . "\\subsection*{%s}")
+    ;;                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+    ;;                ("\\paragraph{%s}" . "\\paragraph*{%s}")
+    ;;                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+    ;;              )
+
+    ;; ;; Settings to export code with `minted' instead of `verbatim'.
+    ;; (setq org-export-latex-listings t)
+    ;; (setq org-latex-listings 'minted
+    ;;       org-latex-packages-alist '(("" "minted")
+    ;;                                  ("" "memoir"))
+    ;;       ;; org-latex-pdf-process '("pdflatex -shell-escape -intera")
+    ;;       )
+
+    ))
 
 (defun config/post-init-org ()
   (evil-define-key '(normal visual motion) org-mode-map
@@ -352,14 +412,10 @@
     "gu" 'outline-previous-visible-heading)
 
   (spacemacs/set-leader-keys-for-major-mode 'org-mode
-    "r" 'org-refile
-    "h" 'org-metaleft  ; Because of MacOS's damned, indestructable M-h binding...
-    "s p" 'org-sort-entries-priorities)
-
-  ;; TODO: This should go to display/config.el
-  ;; Set some variable-pitch font faces for Org
-
-  )
+    "o"   'counsel-outline
+    "r"   'org-refile
+    "h"   'org-metaleft  ; Because of MacOS's damned, indestructable M-h binding...
+    "s p" 'org-sort-entries-priorities))
 
 (defun config/init-org-gcal ()
   ;; https://github.com/kidd/org-gcal.el/
@@ -466,6 +522,7 @@
         :post-config
         (progn
           (bind-keys :map org-mode-map
+                     ("C-j"                 . counsel-outline)
                      ([(meta return)]       . org-meta-return)
                      ([(meta shift return)] . org-insert-subheading))
           (advice-add 'org-insert-heading    :before 'org-fix-heading-pos)
