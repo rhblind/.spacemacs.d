@@ -186,8 +186,7 @@
     (setq lang-ring (make-ring (length langs)))
     (dolist (elem langs) (ring-insert lang-ring elem)))
 
-  (global-set-key (kbd "<f8>") 'cycle-ispell-languages)
-  )
+  (global-set-key (kbd "<f8>") 'cycle-ispell-languages))
 
 ;;;; Gdscript-mode (Godot)
 (defun config/init-gdscript-mode ()
@@ -329,9 +328,9 @@
         org-time-stamp-custom-formats '("<%a %d.%m.%Y>" . "<%a %d.%m.%Y %H:%M>"))
 
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
+  (add-hook 'org-mode-hook 'turn-on-flyspell)
   (add-hook 'org-mode-hook 'visual-line-mode)
   (add-hook 'org-mode-hook 'org-indent-mode)
-  (add-hook 'org-mode-hook 'flyspell-mode)
   (add-hook 'org-mode-hook (lambda () (progn
                                         (require 'org-tempo)  ;; Required for new org templating system to work
                                         (setq line-spacing 0.2
