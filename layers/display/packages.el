@@ -394,7 +394,7 @@
   (setq spaceline-all-the-icons-icon-set-modified         'chain)
   (setq spaceline-all-the-icons-icon-set-window-numbering 'square)
   (setq spaceline-all-the-icons-separator-type            'none)
-  (setq spaceline-all-the-icons-primary-separator         "")
+  (setq spaceline-all-the-icons-primary-separator         "·")
 
   ;; !!!!!!!!!!!!!!!!
   ;; !! https://github.com/domtronn/spaceline-all-the-icons.el/issues/55
@@ -411,7 +411,7 @@
 
   ;; Buffer Segments
   (spaceline-toggle-all-the-icons-buffer-size-off)
-  (spaceline-toggle-all-the-icons-buffer-position-off)
+  (spaceline-toggle-all-the-icons-buffer-position-on)
   (spaceline-toggle-all-the-icons-buffer-id-on)
 
   ;; Git Segments
