@@ -86,8 +86,10 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            dtrt-indent
                                            evil-mc
                                            evil-string-inflection
+                                           exec-path-from-shell
                                            exunit
                                            forge
+                                           gdscript-mode
                                            keychain-environment
                                            live-py-mode
                                            lsp-ui
@@ -95,7 +97,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            org-gcal
                                            org-super-agenda
                                            org-superstar
-					                                 pinentry
+	                                         pinentry
                                            rainbow-mode
                                            posframe
                                            quelpa
@@ -122,11 +124,8 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   (fringe-mode 0)
   (require 'iso-transl)  ;; Enables "dead keys" for non-english keyboards
   (require 'epa-file)    ;; Load library for decrypting the `secrets.el.gpg' file
-  (require 'pinentry)    ;; Allows unlocking gpg keys using the Emacs minibuffer (gpg --> gpg-agent --> pinentry --> Emacs)
 
-  (setq epa-pinentry-mode 'loopback)
-
-  (pinentry-start)
+  (setq epa-pinentry-mode 'loopback)  ;; Allows unlocking gpg keys using the Emacs minibuffer (gpg --> gpg-agent --> pinentry --> Emacs)
   (epa-file-enable)
 
   (setq auto-resume-layers t
@@ -157,7 +156,9 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
              (configuration-layer/package-used-p 'redo-spacemacs))
     (redo-spacemacs-bindings))
 
-  )
+  (when (spacemacs/system-is-mac)
+    (setq exec-path-from-shell-check-startup-files nil) ;; Don't check .*rc files
+    (exec-path-from-shell-initialize)))
 
 ;;;;; Core
 (defun dotspacemacs/user-config ()

@@ -40,6 +40,7 @@
       projectile-globally-ignored-directories '(
                                                 ".git"
                                                 ".idea"
+                                                ".import"
                                                 ".elixir_ls"
                                                 ".htmlcov"
                                                 ".pytest_cache"

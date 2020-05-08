@@ -14,6 +14,7 @@
         evil-string-inflection
         flycheck
         flyspell
+        gdscript-mode
         ivy
         magit
         ob org org-gcal org-projectile
@@ -187,6 +188,15 @@
 
   (global-set-key (kbd "<f8>") 'cycle-ispell-languages)
   )
+
+;;;; Gdscript-mode (Godot)
+(defun config/init-gdscript-mode ()
+  (use-package gdscript-mode
+    :ensure t
+    :hook (gdscript-mode . lsp)
+    :config
+    (when (spacemacs/system-is-mac)
+      (setq gdscript-godot-executable "/Applications/Godot.app/Contents/MacOS/Godot"))))
 
 ;;;; Ivy
 (defun config/pre-init-ivy ()
@@ -374,9 +384,9 @@
     (progn
       (setq org-projectile-per-project-filepath "TODO.org"
             org-projectile-capture-template "* TODO %? %^G\n%i\n%a"
-      org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
-    (org-projectile-per-project))
-  ))
+            org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+      (org-projectile-per-project))
+    ))
 
 ;;;; Ranger
 (defun config/pre-init-ranger ()

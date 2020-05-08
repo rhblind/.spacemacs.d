@@ -52,6 +52,10 @@
    ;; Markups
    csv
    html
+   (latex :variables
+          latex-build-command "LaTex"
+          latex-enable-folding t
+          latex-enable-magic t)
    markdown
    yaml
 
