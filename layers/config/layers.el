@@ -27,7 +27,8 @@
    (shell :variables
           shell-default-shell 'eshell)
    (spell-checking :variables
-                   spell-checking-enable-by-default nil)
+                   spell-checking-enable-by-default t
+                   enable-flyspell-auto-completion nil)
    syntax-checking
    (version-control :variables
                     version-control-diff-side 'left

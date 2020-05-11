@@ -204,9 +204,7 @@
   (setq completion-in-region-function 'ivy-completion-in-region))
 
 (defun config/post-init-ivy ()
-  (setq ivy-height 20
-        ivy-re-builders-alist '((t . ivy--regex-fuzzy))  ;; Puts wildcards for fuzzy search on each character
-        )
+  (setq ivy-height 20)
 
   (spacemacs/set-leader-keys "ai" 'ivy-resume)
 
@@ -340,10 +338,6 @@
                                               header-line-format " "
                                               left-margin-width 2
                                               right-margin-width 2))))
-  ;; TODO consider
-  ;; (add-hook 'org-mode-hook (lambda () (progn
-  ;;                                       (setq left-margin-width 4
-  ;;                                             right-margin-width 4))))
 
   ;; Org LaTeX, templates (also for PDF exports)
   (with-eval-after-load 'ox-latex
