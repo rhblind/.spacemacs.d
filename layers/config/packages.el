@@ -407,7 +407,8 @@
   (spacemacs/set-leader-keys-for-major-mode 'org-mode
     "o"   'counsel-outline
     "r"   'org-refile
-    "h"   'org-metaleft  ; Because of MacOS's damned, indestructable M-h binding...
+    "h"   'org-metaleft                    ;; Because of MacOS's damned, indestructable M-h binding...
+    "d o" 'org-toggle-time-stamp-overlays  ;; Required to toggle off before changing time when using custom formats
     "s p" 'org-sort-entries-priorities))
 
 (defun config/init-org-gcal ()
