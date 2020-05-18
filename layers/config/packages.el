@@ -108,6 +108,7 @@
 (defun config/pre-init-python ()
   (require 'lsp-python-ms)
   (add-hook 'python-mode-hook #'lsp-deferred)
+  (add-hook 'python-mode-hook (lambda () (setq-local counsel-dash-docsets '("Python"))))
 
   (with-eval-after-load 'python
     (setq python-shell-interpreter "python3")
@@ -138,6 +139,7 @@
       "tt" 'exunit-verify-single
       "tu" 'exunit-verify-all-in-umbrella
       ))
+  (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir"))))
   )
 
 ;;;; Eshell

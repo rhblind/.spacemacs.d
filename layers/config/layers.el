@@ -13,7 +13,8 @@
                     auto-completion-enable-sort-by-usage t)
    better-defaults
    (dash :variables
-         dash-docs-docset-newpath: "~/.local/share/Zeal/Zeal/docsets") ;; FIXME: fix MacOS compatibility
+         dash-docs-docset-newpath (cond ((eq system-type 'gnu/linux) "~/.local/share/Zeal/Zeal/docsets")
+                                        ((eq system-type 'darwin) "~/Library/Application Support/Dash/DocSets")))
    docker
    (multiple-cursors :variables
                      multiple-cursors-backend 'evil-mc)
