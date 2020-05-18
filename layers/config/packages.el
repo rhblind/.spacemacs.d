@@ -313,7 +313,7 @@
         org-log-state-notes-into-drawer t
         org-log-done-with-time t
         ;; org-refile-targets '((org-agenda-files . (:maxlevel . 6)))  ;; TODO https://sachachua.com/blog/2015/02/learn-take-notes-efficiently-org-mode/
-        org-re-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0"
+        org-re-reveal-root "https://revealjs.com/"
         org-startup-indented t
         org-pretty-entities t
         org-priority-faces '((65 :inherit org-priority :foreground "red")

@@ -82,6 +82,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            counsel-dash
                                            doct
                                            dap-mode
+                                           doom-themes
                                            drag-stuff
                                            dtrt-indent
                                            evil-mc
@@ -99,9 +100,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            org-superstar
 	                                         pinentry
                                            rainbow-mode
-                                           posframe
-                                           quelpa
-                                           quelpa-use-package)
+                                           posframe)
    dotspacemacs-frozen-packages          '()
    dotspacemacs-excluded-packages
    '(;; Must Exclude (for styling, functionality, bug-fixing reasons)

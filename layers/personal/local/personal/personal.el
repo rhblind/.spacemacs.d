@@ -65,10 +65,10 @@
       org-babel-default-header-args '((:session . "none")
                                       (:results . "replace")
                                       (:exports . "code")
-                                      (:cache . "no")
-                                      (:noweb . "no")
-                                      (:hlines . "no")
-                                      (:tangle . "no")
+                                      (:cache   . "no")
+                                      (:noweb   . "no")
+                                      (:hlines  . "no")
+                                      (:tangle  . "no")
                                       (:comment . "link")))
 
 
