@@ -286,7 +286,9 @@
     (add-to-list 'forge-alist '("gitlab.intility.no" "gitlab.intility.no/api/v4" "gitlab.intility.no" forge-gitlab-repository))
     (setq gitlab.user "user")
     (when (string= system-type "darwin")
-      (setq ghub-use-workaround-for-emacs-bug 'force)))
+      (setq ghub-use-workaround-for-emacs-bug 'force))
+
+    (define-key magit-mode-map (kbd "C-c C-c") 'forge-copy-url-at-point-as-kill))
 
   (bind-keys :map magit-mode-map
              ("M-1" . winum-select-window-1)
