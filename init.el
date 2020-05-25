@@ -164,4 +164,5 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 ;;;;; Core
 (defun dotspacemacs/user-config ()
   "Configuration that cannot be delegated to layers."
+  (require 'window-purpose) ;; Workaround until https://github.com/bmag/emacs-purpose/issues/158 is fixed
   (dotspacemacs/user-config/post-layer-load-config))
