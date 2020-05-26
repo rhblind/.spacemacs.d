@@ -140,7 +140,9 @@
       "tu" 'exunit-verify-all-in-umbrella
       ))
   (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir"))))
-  )
+  (add-hook 'lsp-mode-hook (lambda ()
+                             (dolist (ignore-pattern '("[/\\\\]\\.elixir_ls$" "[/\\\\]\\.log$" "[/\\\\]_build$" "[/\\\\]deps$"))
+                               (add-to-list 'lsp-file-watch-ignored ignore-pattern)))))
 
 ;;;; Eshell
 (defun config/pre-init-eshell ()
