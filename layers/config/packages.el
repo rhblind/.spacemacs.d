@@ -15,11 +15,13 @@
         flycheck
         flyspell
         gdscript-mode
+        html
         ivy
         magit
         ob org org-gcal org-projectile
         python
         ranger
+        smartparens
 
         ;; Owned Packages
         auto-dim-other-buffers
@@ -435,6 +437,21 @@
                ("M-3" . winum-select-window-3)
                ("M-4" . winum-select-window-4)
                ("M-5" . winum-select-window-5))))
+
+;;;; Smartparens
+(defun config/post-init-smartparens ()
+  (add-hook 'typescript-mode-hook 'turn-off-smartparens-strict-mode)
+  (add-hook 'javascript-mode-hook 'turn-off-smartparens-strict-mode)
+  (add-hook 'js2-mode-hook        'turn-off-smartparens-strict-mode)
+  (add-hook 'rjsx-mode-hook       'turn-off-smartparens-strict-mode))
+
+;;;; Web
+(defun config/post-init-html ()
+  ;; 2 space indent also for element's attributes, concatenations and contiguous function calls
+  (with-eval-after-load 'web-mode
+    (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
+    (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
+    (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil))))
 
 ;;; Owned Packages
 ;;;; Auto Dim Other Buffers

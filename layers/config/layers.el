@@ -55,7 +55,16 @@
 
    ;; Markups
    csv
-   html
+   (html :variables
+         css-enable-lsp t
+         css-indent-offset 2
+         less-enable-lsp t
+         scss-enable-lsp t
+         html-enable-lsp t
+         web-mode-markup-indent-offset 2
+         web-mode-css-indent-offset 2
+         web-mode-code-indent-offset 2
+         web-mode-attr-indent-offset 2)
    (latex :variables
           latex-build-command "LaTex"
           latex-enable-folding t
@@ -68,15 +77,25 @@
            elixir-ls-path "~/.local/opt/elixir-ls")
    emacs-lisp
    erlang
+   (typescript :variables
+               typescript-backend 'lsp
+               typescript-fmt-on-save t
+               typescript-fmt-tool 'tide
+               typescript-indent-level 2
+               typescript-linter 'eslint
+               typescript-lsp-linter nil)
    (javascript :variables
                javascript-backend 'lsp
                javascript-lsp-linter nil
                javascript-disable-tern-port-files nil
                javascript-fmt-tool 'web-beautify
                javascript-fmt-on-save t
+               javascript-repl `nodejs
                js-indent-level 2
                js2-basic-offset 2
                js2-include-node-externs t
+               js2-mode-show-strict-warnings nil ;; js2-mode is sometimes confused by the type syntax when using lsp backend
+               js2-mode-show-parse-errors nil    ;; js2-mode is sometimes confused by the type syntax when using lsp backend
                node-add-modules-path t)
    django
    (python :variables
@@ -88,6 +107,7 @@
            python-save-before-test t
            python-formatter 'lsp
            python-spacemacs-indent-guess nil)
+   react
    web-beautify
    windows-scripts
    ))
