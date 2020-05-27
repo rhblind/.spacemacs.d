@@ -18,6 +18,8 @@
    docker
    (multiple-cursors :variables
                      multiple-cursors-backend 'evil-mc)
+   dap
+   lsp
    git
    (ivy :variables
         ivy-extra-directories nil)
@@ -60,9 +62,7 @@
           latex-enable-magic t)
    markdown
    yaml
-
    ;; Languages
-   lsp
    (elixir :variables
            elixir-backend 'lsp
            elixir-ls-path "~/.local/opt/elixir-ls")

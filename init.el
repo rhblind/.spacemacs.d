@@ -81,7 +81,6 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-additional-packages      '(company-lsp
                                            counsel-dash
                                            doct
-                                           dap-mode
                                            doom-themes
                                            drag-stuff
                                            dtrt-indent

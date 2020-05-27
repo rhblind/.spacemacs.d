@@ -4,7 +4,7 @@
         aggressive-indent
         avy
         company
-        ;; dap-mode
+        dap
         drag-stuff
         dtrt-indent
         elixir-mode
@@ -26,7 +26,11 @@
         dash-functional
         faceup
         outshine  ; also configures `outline-mode'
-        s))
+        s
+
+        ;; Local Packages
+        ;; (redo-spacemacs :location local)
+        ))
 
 
 ;;;; Aggressive indent
@@ -104,18 +108,9 @@
       (setcdr elt (concat (cdr elt) " "))))
   )
 
-;;;; Python
-(defun config/pre-init-python ()
-  (require 'lsp-python-ms)
-  (add-hook 'python-mode-hook #'lsp-deferred)
-  (add-hook 'python-mode-hook (lambda () (setq-local counsel-dash-docsets '("Python"))))
-
-  (with-eval-after-load 'python
-    (setq python-shell-interpreter "python3")
-    (custom-set-variables
-     '(flycheck-python-flake8-executable "python3")
-     '(flycheck-python-pycompile-executable "python3")
-     '(flycheck-python-pylint-executable "python3"))))
+;;;; Dap
+(defun config/post-init-dap ()
+  (add-hook 'dap-stopped-hook (lambda (arg) (call-interactively #'dap-hydra))))  ;; Open a Hydra debug menu whenever hitting a breakpoint
 
 ;;;; Drag-stuff
 (defun config/init-drag-stuff ()
@@ -139,6 +134,20 @@
       "tt" 'exunit-verify-single
       "tu" 'exunit-verify-all-in-umbrella
       ))
+
+  ;; Register your debug run configurations here
+  ;; (see dap-elixir for defaults injected into the "Elixir" type)
+  (require 'dap-elixir)
+  (with-eval-after-load 'dap-mode
+    (dap-register-debug-template "Phoenix Run Configuration"
+                                 (list :type "Elixir"
+                                       :cwd (lsp-workspace-root)
+                                       :request "launch"
+                                       :program nil
+                                       :projectDir (lsp-workspace-root)
+                                       :name "Elixir::Phoenix Server"
+                                       :task "phx.server")))
+
   (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir"))))
   (add-hook 'lsp-mode-hook (lambda ()
                              (dolist (ignore-pattern '("[/\\\\]\\.elixir_ls$" "[/\\\\]\\.log$" "[/\\\\]_build$" "[/\\\\]deps$"))
@@ -220,64 +229,6 @@
              ("C-<return>" . ivy-call)
              ("C-SPC"      . ivy-dispatching-done)
              ("C-S-SPC"    . ivy-dispatching-call)))
-
-;;;; Lsp
-;; (defun config/init-lsp-ui ()
-;;   (spacemacs|use-package-add-hook lsp-ui
-;;     :after lsp)
-;;   )
-
-;; (defun config/post-init-lsp ()
-;;   (require 'lsp-python-ms)
-;;   (require 'quelpa-use-package)
-;;   (use-package lsp-mode
-;;     :ensure t
-;;     :config
-;;     ;; Elixir
-;;     :hook (elixir-mode . lsp-deferred)
-;;     :hook (elixir-mode . (lambda ()
-;;                            (require 'dap-elixir)
-;;                            (dap-mode t)
-;;                            (dap-ui-mode t)
-;;                            (dap-tooltip-mode t)
-;;                            (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
-
-;;     ;; Python
-;;     :hook (python-mode . lsp-deferred)
-;;     :hook (python-mode . (lambda ()
-;;                            (require 'dap-python)
-;;                            (dap-mode t)
-;;                            (dap-ui-mode t)
-;;                            (dap-tooltip-mode t)
-;;                            (when (spacemacs/system-is-mac)
-;;                              (setq lsp-python-ms-executable
-;;                                    "~/.local/opt/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
-;;                            (when (spacemacs/system-is-linux)
-;;                              (setq lsp-python-ms-executable
-;;                                    "~/.local/opt/python-language-server"))
-
-;;                            ))
-;;     :commands (lsp lsp-deferred))
-
-;;   (add-hook 'dap-stopped-hook
-;;             (lambda (arg) (call-interactively #'dap-hydra)))
-
-;;   (use-package company-lsp
-;;     :commands company-lsp)
-;;   ;; (use-package helm-lsp
-;;   ;;   :commands helm-lsp-workspace-symbol)
-;;   ;; (use-package lsp-pwsh
-;;   ;;   :quelpa (lsp-pwsh :fetcher github :repo "kiennq/lsp-powershell")
-;;   ;;   :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp-deferred)))
-;;   ;;   :defer t)
-;;   (use-package lsp-treemacs
-;;     :config
-;;     (setq treemacs-follow-after-init t)
-;;     (treemacs-follow-mode t)
-;;     (treemacs-filewatch-mode t)
-;;     (lsp-treemacs-sync-mode t))
-;;   (use-package lsp-ui
-;;     :commands lsp-ui-mode))
 
 ;;;; Magit
 (defun config/post-init-magit ()
@@ -450,6 +401,20 @@
             org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
       (org-projectile-per-project))
     ))
+
+;;;; Python
+(defun config/pre-init-python ()
+  (require 'dap-python)
+  (require 'lsp-python-ms)
+  (add-hook 'python-mode-hook #'lsp-deferred)
+  (add-hook 'python-mode-hook (lambda () (setq-local counsel-dash-docsets '("Python"))))
+
+  (with-eval-after-load 'python
+    (setq python-shell-interpreter "python3")
+    (custom-set-variables
+     '(flycheck-python-flake8-executable "python3")
+     '(flycheck-python-pycompile-executable "python3")
+     '(flycheck-python-pylint-executable "python3"))))
 
 ;;;; Ranger
 (defun config/pre-init-ranger ()
