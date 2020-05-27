@@ -58,6 +58,15 @@
       org-work-file "~/Dropbox/org/work.org"
       org-download-image-dir "~/Dropbox/org/pics"
       org-agenda-files (file-expand-wildcards "~/Dropbox/org/*.org")
+      org-todo-keywords              '((sequence "TODO" "FEEDBACK" "VERIFY"
+                                                 "|"
+                                                 "DONE" "DELEGATED" "NEVERMIND"))
+      ;; org-todo-keyword-faces         '(("TODO" . org-warning)
+      ;;                                  ("FEEDBACK" . org-warning)
+      ;;                                  ("VERIFY" . org-warning)
+      ;;                                  ("DONE" . org-done)
+      ;;                                  ("DELEGATED" . org-done)
+      ;;                                  ("NEVERMIND" . org-done))
       org-use-property-inheritance t
       org-log-done-with-time t
       org-export-in-background t
