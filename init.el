@@ -10,10 +10,10 @@
 ;; `init.el' sets spacemacs up, defining required `dotspacemacs/..' funcs & vars.
 
 ;;;; Constants
-
-(defconst linux?   (eq system-type 'gnu/linux)  "Are we on a linux machine?")
-(defconst mac?     (eq system-type 'darwin)     "Are we on a macOS machine?")
-(defconst windows? (eq system-type 'windows-nt) "Are we on windows machine?")
+(defconst linux?   (eq system-type 'gnu/linux)                   "Are we on a linux machine?")
+(defconst mac?     (eq system-type 'darwin)                      "Are we on a macOS machine?")
+(defconst windows? (eq system-type 'windows-nt)                  "Are we on a windows machine?")
+(defconst wsl?     (and (not (eq (getenv "WSLENV") nil)) linux?) "Are we on a wsl environment?")
 
 ;;;; Configuration
 
@@ -26,8 +26,7 @@
 (defun dotspacemacs/init ()
   "Instantiate Spacemacs core settings.
 
-All `dotspacemacs-' variables with values set different than their defaults.
-
+  All `dotspacemacs-' variables with values set different than their defaults.
 They are all defined in `~/.emacs.d/core/core-dotspacemacs.el'.
 Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   (setq-default
@@ -157,7 +156,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
     (redo-spacemacs-bindings))
 
   (when (spacemacs/system-is-mac)
-    (setq exec-path-from-shell-check-startup-files nil) ;; Don't check .*rc files
+    (setq exec-path-from-shell-check-startup-files nil)  ;; Don't complain about putting thing in the wrong files
     (exec-path-from-shell-initialize)))
 
 ;;;;; Core
