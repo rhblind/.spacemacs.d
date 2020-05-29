@@ -20,8 +20,8 @@
         ob org org-gcal org-projectile
         python
         ranger
-        rjsx-mode
         smartparens
+        web-mode
 
         ;; Owned Packages
         auto-dim-other-buffers
@@ -447,18 +447,23 @@
                ("M-4" . winum-select-window-4)
                ("M-5" . winum-select-window-5))))
 
-;;;; Rjsx (React)
-(defun config/post-init-rjsx-mode ()
-  ;; Workaround for emacs lockfiles causing node to crash
-  ;; https://github.com/facebook/create-react-app/issues/9056#issuecomment-633540572
-  (add-hook 'rjsx-mode-hook (lambda () (setq-local create-lockfiles nil))))
 
+;;;; Web-mode
+(defun config/post-init-web-mode ()
+  "Workaround for emacs lockfiles causing node to crash
+   https://github.com/facebook/create-react-app/issues/9056#issuecomment-633540572"
+  (dolist (hook '(web-mode-hook
+                  css-mode-hook
+                  scss-mode-hook
+                  rjsx-mode-hook
+                  typescript-mode-hook
+                  javascript-mode-hook))
+    (add-hook hook (lambda () (setq-local create-lockfiles nil))))
 
-;;;; Smartparens
-(defun config/post-init-smartparens ()
+  ;; Disable smartparens strict mode in order to be able to write out
+  ;; arrow functions like ie. `() => {...}'
   (add-hook 'typescript-mode-hook 'turn-off-smartparens-strict-mode)
   (add-hook 'javascript-mode-hook 'turn-off-smartparens-strict-mode)
-  (add-hook 'js2-mode-hook        'turn-off-smartparens-strict-mode)
   (add-hook 'rjsx-mode-hook       'turn-off-smartparens-strict-mode))
 
 ;;; Owned Packages

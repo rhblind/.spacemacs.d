@@ -28,6 +28,7 @@
         org-enable-reveal-js-support t
         org-want-todo-bindings t)
    (shell :variables
+          close-window-with-terminal t
           shell-default-shell 'eshell)
    (spell-checking :variables
                    spell-checking-enable-by-default t
