@@ -41,6 +41,7 @@
 
    ;; Misc
    graphviz
+   nginx
    (ranger :variables
            ranger-show-preview t
            ranger-show-literal nil

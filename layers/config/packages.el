@@ -20,7 +20,6 @@
         ob org org-gcal org-projectile
         python
         ranger
-        smartparens
         web-mode
 
         ;; Owned Packages
