@@ -446,7 +446,6 @@
                ("M-4" . winum-select-window-4)
                ("M-5" . winum-select-window-5))))
 
-
 ;;;; Web-mode
 (defun config/post-init-web-mode ()
   "Workaround for emacs lockfiles causing node to crash

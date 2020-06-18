@@ -198,7 +198,7 @@
                                :time-or-todo "TODO")
                               (,(format "%s\tProject note" (all-the-icons-faicon "sticky-note" :face 'all-the-icons-yellow :v-adjust 0.01))
                                :keys "n"
-                               :time-or-todo "%U")
+                               :template "* %? %^G")
                               (,(format "%s\tProject changelog" (all-the-icons-faicon "list" :face 'all-the-icons-blue :v-adjust 0.01))
                                :keys "l"
                                :time-or-todo "%U"

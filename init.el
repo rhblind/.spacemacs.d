@@ -34,7 +34,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-default-font `("Fira Code",
                                :size ,(if (= 1440 (display-pixel-height)) 15 13))
    dotspacemacs-themes       '(solarized-light
-                               doom-gruvbox)
+                               solarized-zenburn)
    ;; General
    dotspacemacs-auto-generate-layout-names t
    dotspacemacs-auto-resume-layouts        t
