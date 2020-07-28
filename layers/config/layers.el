@@ -79,6 +79,7 @@
            elixir-ls-path "~/.local/opt/elixir-ls")
    emacs-lisp
    erlang
+   (evil-snipe :variables evil-snipe-enable-alternate-f-and-t-behaviors t)
    (typescript :variables
                typescript-backend 'lsp
                typescript-fmt-on-save t

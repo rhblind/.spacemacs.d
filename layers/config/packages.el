@@ -43,7 +43,8 @@
 (defun config/pre-init-avy ()
   (setq avy-timeout-seconds 0.35)
 
-  (evil-global-set-key 'normal "s" 'avy-goto-char-timer)
+  ;; Trying out evil-snipe, which conflicts with this shortcut. Use C-j-j to trigger avy-goto-char-timer
+  ;; (evil-global-set-key 'normal "s" 'avy-goto-char-timer)
   (bind-keys ("C-l" . evil-avy-goto-line)
              ("C-h" . avy-pop-mark)))
 

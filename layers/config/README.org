@@ -35,7 +35,7 @@ Redone bindings are disabled by default. Turn on with ~redo-bindings?~ in
 | ~H~         | evil-first-non-blank |
 | ~L~         | evil-end-of-line     |
 | ~0~         | evil-jump-item       |
-| ~s~         | avy-goto-char-timer  |
+| ~s~         | +avy-goto-char-timer+  |
 | ~_~         | ranger               |
 
 ** Navigation and Windows
