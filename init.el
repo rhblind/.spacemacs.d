@@ -93,7 +93,6 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            live-py-mode
                                            lsp-ui
                                            org-fancy-priorities
-                                           org-gcal
                                            org-super-agenda
                                            org-superstar
 	                                         pinentry

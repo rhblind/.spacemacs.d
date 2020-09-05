@@ -17,7 +17,7 @@
         gdscript-mode
         ivy
         magit
-        ob org org-gcal org-projectile
+        ob org org-projectile
         python
         ranger
         web-mode
@@ -386,22 +386,6 @@
     "h"   'org-metaleft                    ;; Because of MacOS's damned, indestructable M-h binding...
     "d o" 'org-toggle-time-stamp-overlays  ;; Required to toggle off before changing time when using custom formats
     "s p" 'org-sort-entries-priorities))
-
-(defun config/init-org-gcal ()
-  ;; https://github.com/kidd/org-gcal.el/
-  (use-package org-gcal
-    :after org
-    :config (setq
-             ;; org-gcal-client-id variable set in `secrets.el.gpg'
-             ;; org-gcal-client-secret  variable set in `secrets.el.gpg'
-             ;; TODO: Read org-gcal-file-alist from `personal.el' file
-             org-gcal-file-alist '(("rhblind@gmail.com" . "~/Dropbox/org/gcal.org")
-                                   ("family07115093619329273023@group.calendar.google.com" . "~/Dropbox/org/family.org"))
-             org-gcal-auto-archive nil
-             org-gcal-notify-p nil)
-    (add-hook 'org-agenda-mode-hook 'org-gcal-fetch)
-    (add-hook 'org-capture-after-finalize-hook 'org-gcal-fetch))
-  )
 
 (defun config/pre-init-org-projectile ()
   (use-package org-projectile
