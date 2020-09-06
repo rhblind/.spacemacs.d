@@ -78,6 +78,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            (personal :location local))
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
    dotspacemacs-additional-packages      '(company-lsp
+                                           company-org-roam
                                            counsel-dash
                                            doct
                                            doom-themes
@@ -93,6 +94,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            live-py-mode
                                            lsp-ui
                                            org-fancy-priorities
+                                           org-roam
                                            org-super-agenda
                                            org-superstar
 	                                         pinentry

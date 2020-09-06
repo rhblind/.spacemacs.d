@@ -79,6 +79,7 @@
                                       (:hlines  . "no")
                                       (:tangle  . "no")
                                       (:comment . "link")))
+(setq org-roam-directory (concat (file-name-as-directory org-directory) "roam"))
 
 
 ;; Don't enable this package as this config is not generally applicable

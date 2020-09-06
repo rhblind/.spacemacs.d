@@ -17,7 +17,7 @@
         gdscript-mode
         ivy
         magit
-        ob org org-projectile
+        ob org org-roam org-projectile
         python
         ranger
         web-mode
@@ -31,6 +31,7 @@
 
         ;; Local Packages
         ;; (redo-spacemacs :location local)
+        (org-roam :local local)
         ))
 
 
@@ -55,6 +56,9 @@
     (define-key company-active-map (kbd "C-d") #'company-next-page)
     (define-key company-active-map (kbd "C-u") #'company-previous-page))
 
+  (spacemacs|add-company-backends
+    :backends company-org-roam
+    :modes org-roam-mode)
 
   (when (configuration-layer/package-used-p 'lsp)
     (setq company-lsp-cache-candidates nil
@@ -387,6 +391,35 @@
     "d o" 'org-toggle-time-stamp-overlays  ;; Required to toggle off before changing time when using custom formats
     "s p" 'org-sort-entries-priorities))
 
+;;;;; Org-roam
+(defun config/init-org-roam ()
+  (use-package org-roam
+    :defer t
+    :hook (after-init . org-roam-mode)
+    :init
+    (progn
+      (setq foobar "hello, world")
+      (spacemacs/declare-prefix "aoR" "org-roam")
+      (spacemacs/set-leader-keys
+        ;; org-roam
+        "aoRl" 'org-roam
+        "aoRf" 'org-roam-find-file
+        "aoRg" 'org-roam-graph-show
+        )
+
+      (spacemacs/declare-prefix-for-mode 'org-mode "mR" "org-roam")
+      (spacemacs/set-leader-keys-for-major-mode 'org-mode
+        "Rl" 'org-roam
+        "Rf" 'org-roam-find-file
+        "Rg" 'org-roam-graph-show
+        "Ri" 'org-roam-insert
+        "RI" 'org-roam-insert-immediate)
+
+      )
+    )
+  )
+
+;;;;; Org-projectile
 (defun config/pre-init-org-projectile ()
   (use-package org-projectile
     :after org
