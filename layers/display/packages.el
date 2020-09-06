@@ -323,7 +323,7 @@
 
 ;;;; Org-superstar
 
-(defun display/init-org-superstar ()
+(defun display/pre-init-org-superstar ()
   (use-package org-superstar
     :ensure t
     :hook (org-mode . org-superstar-mode)
