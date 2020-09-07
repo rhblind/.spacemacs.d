@@ -17,6 +17,8 @@
 
 ;;;; Configuration
 
+(defvar debug? t
+  "Set true to enable debug messages")
 (defvar server? t
   "Alias `dotspacemacs-enable-server'. Set true if running emacs as a daemon")
 
@@ -29,6 +31,13 @@
   All `dotspacemacs-' variables with values set different than their defaults.
 They are all defined in `~/.emacs.d/core/core-dotspacemacs.el'.
 Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
+
+  ;; Adopt a sneaky garbage collection strategy of waiting until idle time to
+  ;; collect; staving off the collector while the user is working.
+  (setq gcmh-idle-delay 5
+        gcmh-high-cons-threshold (* 16 1024 1024)  ; 16mb
+        gcmh-verbose debug?)
+
   (setq-default
    ;; Display
    dotspacemacs-default-font `("Fira Code",
@@ -89,6 +98,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            exec-path-from-shell
                                            exunit
                                            forge
+                                           gcmh
                                            gdscript-mode
                                            keychain-environment
                                            live-py-mode
@@ -128,6 +138,9 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
     (custom-set-variables '(epg-gpg-program "/usr/local/bin/gpg")))
   (epa-file-enable)
 
+  ;; Enable gcmh-mode
+  (add-hook 'emacs-startup-hook #'gcmh-mode)
+
   (setq auto-resume-layers t
         auth-source-debug nil  ;; Enable logging of authentication related stuff to the `*Messages' buffer. Disable when not needed!
         custom-file "~/.spacemacs.d/.custom-settings.el"
@@ -135,6 +148,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 
   ;; This file keeps secrets for emacs configurations
   (load-file secrets-file)
+
 
   (when (spacemacs/system-is-mac)
     (setq shell-file-name "/bin/bash")
