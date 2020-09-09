@@ -312,6 +312,7 @@
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
   (add-hook 'org-mode-hook 'turn-on-flyspell)
   (add-hook 'org-mode-hook 'visual-line-mode)
+  (add-hook 'org-mode-hook 'variable-pitch-mode)
   (add-hook 'org-mode-hook 'org-indent-mode)
   (add-hook 'org-mode-hook (lambda () (progn
                                         (require 'org-tempo)  ;; Required for new org templating system to work
@@ -487,7 +488,7 @@
   (add-hook 'rjsx-mode-hook       'turn-off-smartparens-strict-mode))
 
 ;;;; Writeroom-mode
-(defun config/init-writeroom-mode ()
+(defun config/post-init-writeroom-mode ()
   "See configuration options here
    https://github.com/joostkremers/writeroom-mode"
 

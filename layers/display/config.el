@@ -15,6 +15,7 @@
 
 ;;; Configuration
 ;;;; Core
+;; Taken from https://zzamboni.org/post/beautifying-org-mode-in-emacs/
 (let* ((variable-tuple
         (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
               ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
@@ -22,11 +23,27 @@
               ((x-list-fonts "Verdana")         '(:font "Verdana"))
               ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
               (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-       (base-font-color      (face-foreground 'default nil 'default))
-       (headline            `(:inherit default :weight bold :foreground ,base-font-color))
-       (variable-pitch      `(:family "ETBembo" :height 180 :weight thin))
-       (fixed-pitch         `(:family "Fira Code Retina" :slant normal :weight normal :height 160 :width normal))))
+       (base-font-color     (face-foreground 'default nil 'default))
+       (headline           `(:inherit default :weight bold :foreground ,base-font-color))
+       (fixed-pitch        `(:family "Fira Code Retina" :height 160)))
 
+  (setq-local variable-tuple variable-tuple
+              fixed-pitch    fixed-pitch
+              headline       headline)
+
+  ;; (custom-theme-set-faces
+  ;;  'user
+  ;;  `(org-level-8 ((t (,@headline ,@variable-tuple))))
+  ;;  `(org-level-7 ((t (,@headline ,@variable-tuple))))
+  ;;  `(org-level-6 ((t (,@headline ,@variable-tuple))))
+  ;;  `(org-level-5 ((t (,@headline ,@variable-tuple))))
+  ;;  `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+  ;;  `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+  ;;  `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+  ;;  `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+  ;;  `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil)))))
+
+  )
 
 (setq solarized-use-variable-pitch t)
 (setq face-remapping-alist '(;; Headers - outlines match org
@@ -49,7 +66,7 @@
 
 ;;;; Styling
 ;;;;; Headers
-(setq display/headers/common '(@headline, @variable-tuple :underline nil :inherit nil))
+(setq display/headers/common `(,@headline ,@variable-tuple :underline nil :inherit nil))
 (setq display/headers/zenburn
       `((org-document-title
          ,@display/headers/common
@@ -78,6 +95,8 @@
         (org-level-8
          ,@display/headers/common)))
 
+;; https://en.wikipedia.org/wiki/Solarized_(color_scheme)
+;;;;;; Solarized-Light
 (setq display/headers/solarized-light
       `((org-document-title
          ,@display/headers/common
@@ -85,25 +104,31 @@
         (org-level-1
          ,@display/headers/common
          :height 1.75
-         :foreground "#a71d31")
+         :foreground "#b58900")
         (org-level-2
          ,@display/headers/common
          :height 1.5
-         :foreground "#8D6B94")
+         :foreground "#586e75")
         (org-level-3
          ,@display/headers/common
-         :height 1.25)
+         :height 1.25
+         :foreground "#657b83")
         (org-level-4
          ,@display/headers/common
-         :height 1.1)
+         :height 1.1
+         :foreground "#839496")
         (org-level-5
-         ,@display/headers/common)
+         ,@display/headers/common
+         :foreground "#839496")
         (org-level-6
-         ,@display/headers/common)
+         ,@display/headers/common
+         :foreground "#839496")
         (org-level-7
-         ,@display/headers/common)
+         ,@display/headers/common
+         :foreground "#839496")
         (org-level-8
-         ,@display/headers/common)))
+         ,@display/headers/common
+         :foreground "#93a1a1")))
 
 ;;;;; Org
 (setq display/org-blocks/common '(:inherit fixed-pitch :italic nil :underline nil :box t))
@@ -115,13 +140,13 @@
         ))
 (setq display/org-code/common                  '(:inherit (shadow fixed-pitch)))
 (setq display/org-code                         `((org-code ,@display/org-code/common)))
-(setq display/org-document-info/common         '(:foreground "dark orange"))
+(setq display/org-document-info/common         '(:foreground "#cb4b16"))
 (setq display/org-document-info                `((org-document-info ,@display/org-document-info/common)))
 (setq display/org-document-info-keyword/common '(:inherit (shadow fixed-pitch)))
 (setq display/org-document-info-keyword        `((org-document-info-keyword ,@display/org-document-info-keyword/common)))
 (setq display/org-indent/common                '(:inherit (org-hide fixed-pitch)))
 (setq display/org-indent                       `((org-indent ,@display/org-indent/common)))
-(setq display/org-link/common                  '(:foreground "royal blue" :underline t))
+(setq display/org-link/common                  '(:foreground "#268bd2" :underline t))
 (setq display/org-link                         `((org-link ,@display/org-link/common)))
 (setq display/org-meta-line/common             '(:inherit (font-lock-comment-face fixed-pitch)))
 (setq display/org-meta-line                    `((org-meta-line ,@display/org-meta-line/common)))
@@ -173,6 +198,11 @@
 
 ;;; Theming
 ;;;; Common
+
+(custom-theme-set-faces
+ 'user
+ `(variable-pitch ((t (,@variable-tuple :height 190 :weight thin))))
+ `(fixed-pitch    ((t (,@fixed-pitch)))))
 
 (setq display/common-theming
       `(,@display/company
