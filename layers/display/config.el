@@ -16,15 +16,17 @@
 ;;; Configuration
 ;;;; Core
 (let* ((variable-tuple
-        (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+        (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+              ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
               ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
               ((x-list-fonts "Verdana")         '(:font "Verdana"))
               ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
               (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
        (base-font-color      (face-foreground 'default nil 'default))
        (headline            `(:inherit default :weight bold :foreground ,base-font-color))
-       (variable-pitch      `(:family "Source Code Pro" :height 180 :weight light))
-       (fixed-pitch         `(:family "Inconsolata" :slant normal :weight normal :height 1.0 :width normal))))
+       (variable-pitch      `(:family "ETBembo" :height 180 :weight thin))
+       (fixed-pitch         `(:family "Fira Code Retina" :slant normal :weight normal :height 160 :width normal))))
+
 
 (setq solarized-use-variable-pitch t)
 (setq face-remapping-alist '(;; Headers - outlines match org

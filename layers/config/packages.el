@@ -20,6 +20,7 @@
         ob org org-roam org-projectile
         python
         ranger
+        writeroom-mode
         web-mode
 
         ;; Owned Packages
@@ -66,7 +67,7 @@
           company-lsp-async t)
     (spacemacs|add-company-backends
       :backends company-lsp
-      :modes elixir-mode python-mode))
+      :modes elixir-mode typescript-mode python-mode))
 
   ;; Sweet icons for company-mode
   ;; TODO This takes massive ammount of CPU, can we fix it?
@@ -485,12 +486,27 @@
   (add-hook 'javascript-mode-hook 'turn-off-smartparens-strict-mode)
   (add-hook 'rjsx-mode-hook       'turn-off-smartparens-strict-mode))
 
+;;;; Writeroom-mode
+(defun config/init-writeroom-mode ()
+  "See configuration options here
+   https://github.com/joostkremers/writeroom-mode"
+
+  (setq writeroom-width 140)
+  (with-eval-after-load 'writeroom-mode
+    (define-key writeroom-mode-map (kbd "C-<") #'writeroom-decrease-width)
+    (define-key writeroom-mode-map (kbd "C->") #'writeroom-increase-width)
+    (define-key writeroom-mode-map (kbd "C-=") #'writeroom-adjust-width))
+
+  ;; Recalculate margins after text size adjustment
+  (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
+
 ;;; Owned Packages
 ;;;; Auto Dim Other Buffers
 (defun config/init-auto-dim-other-buffers ()
   (use-package auto-dim-other-buffers
     :config
     (auto-dim-other-buffers-mode)))
+
 
 ;;;; Dash functional
 (defun config/init-dash-functional ()

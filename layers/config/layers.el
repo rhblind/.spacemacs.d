@@ -63,6 +63,7 @@
          less-enable-lsp t
          scss-enable-lsp t
          html-enable-lsp t
+         web-fmt-tool 'web-beautify
          web-mode-markup-indent-offset 2
          web-mode-css-indent-offset 2
          web-mode-code-indent-offset 2
@@ -86,10 +87,10 @@
                typescript-fmt-tool 'tide
                typescript-indent-level 2
                typescript-linter 'eslint
-               typescript-lsp-linter nil)
+               typescript-lsp-linter 'lsp)
    (javascript :variables
                javascript-backend 'lsp
-               javascript-lsp-linter nil
+               javascript-lsp-linter 'lsp
                javascript-disable-tern-port-files nil
                javascript-fmt-tool 'web-beautify
                javascript-fmt-on-save t

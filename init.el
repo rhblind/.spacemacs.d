@@ -17,7 +17,7 @@
 
 ;;;; Configuration
 
-(defvar debug? t
+(defvar debug? nil
   "Set true to enable debug messages")
 (defvar server? t
   "Alias `dotspacemacs-enable-server'. Set true if running emacs as a daemon")
