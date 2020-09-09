@@ -17,8 +17,18 @@
 
 ;;;; Configuration
 
-(defvar debug? nil
-  "Set true to enable debug messages")
+;; Defer garbage collection further back in the startup process.
+;; This is reset by spacemacs (dotspacemacs-gc-cons) after spacemacs
+;; has completed loading.
+(setq gc-cons-threshold most-positive-fixnum)
+
+;; Adopt a sneaky garbage collection strategy of waiting until idle time to
+;; collect; staving off the collector while the user is working.
+(add-hook 'emacs-startup-hook #'(lambda ()
+                                  (setq gcmh-idle-delay 5
+                                        gcmh-high-cons-threshold (* 16 1024 1024)  ;; 16mb
+                                        gcmh-verbose nil)))
+
 (defvar server? t
   "Alias `dotspacemacs-enable-server'. Set true if running emacs as a daemon")
 
@@ -34,9 +44,9 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 
   ;; Adopt a sneaky garbage collection strategy of waiting until idle time to
   ;; collect; staving off the collector while the user is working.
-  (setq gcmh-idle-delay 5
-        gcmh-high-cons-threshold (* 16 1024 1024)  ; 16mb
-        gcmh-verbose debug?)
+  ;; (setq gcmh-idle-delay 5
+  ;;       gcmh-high-cons-threshold (* 16 1024 1024)  ; 16mb
+  ;;       gcmh-verbose debug?)
 
   (setq-default
    ;; Display
@@ -90,7 +100,6 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            company-org-roam
                                            counsel-dash
                                            doct
-                                           doom-themes
                                            drag-stuff
                                            dtrt-indent
                                            evil-mc
