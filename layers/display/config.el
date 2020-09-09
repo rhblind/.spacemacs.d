@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 
-;; Display mofidications for `solarized-light', `doom-gruvbox' and `zenburn' applied here.
+;; Display mofidications for `solarized-light' and `zenburn' applied here.
 
 ;; Try out changes with `spacemacs/update-theme' to see theme updates
 ;; or alternatively run `spacemacs/cycle-spacemacs-theme' with 'SPC T n'.
@@ -93,34 +93,6 @@
         (org-level-3
          ,@display/headers/common
          :height 1.25)
-        (org-level-4
-         ,@display/headers/common
-         :height 1.1)
-        (org-level-5
-         ,@display/headers/common)
-        (org-level-6
-         ,@display/headers/common)
-        (org-level-7
-         ,@display/headers/common)
-        (org-level-8
-         ,@display/headers/common)))
-
-(setq display/headers/doom-gruvbox
-      `((org-document-title
-         ,@display/headers/common
-         :height 2)
-        (org-level-1
-         ,@display/headers/common
-         :height 1.75
-         :foreground "#fbf1c7")
-        (org-level-2
-         ,@display/headers/common
-         :height 1.5
-         :foreground "#BFEBBF")
-        (org-level-3
-         ,@display/headers/common
-         :height 1.25
-         :foreground "#83a598")
         (org-level-4
          ,@display/headers/common
          :height 1.1)
@@ -263,25 +235,6 @@
         ;; ... Experiments ...
         ))
 
-;;;;; Doom-Gruvbox
-(setq display/doom-gruvbox-theming
-      `(;; Overwrites
-        ;; (font-lock-comment-face :foreground "gray50"
-        ;;                         ,@(alist-get 'font-lock-comment-face
-        ;;                                      display/font-locks))
-        ;; (font-lock-doc-face :foreground "gray65"
-        ;;                     ,@(alist-get 'font-lock-doc-face
-        ;;                                  display/font-locks))
-
-        ;; ;; Extra
-        ;; (font-lock-comment-delimiter-face :foreground "gray35")
-        ;; (font-lock-function-name-face     :foreground "CadetBlue2")
-        ;; (font-lock-type-face              :foreground "LightCoral")
-        ;; (auto-dim-other-buffers-face      :background "gray22")
-
-        ;; ;; ... Experiments ...
-        ))
-
 ;;;; Set Modifications
 ;; This variable is the only `theming' layer requirement to enable our theming
 
@@ -291,7 +244,4 @@
                          ,@display/zenburn-theming)
         (solarized-light ,@display/common-theming
                          ,@display/headers/solarized-light
-                         ,@display/solarized-light-theming)
-        (doom-gruvbox    ,@display/common-theming
-                         ,@display/headers/doom-gruvbox
-                         ,@display/doom-gruvbox-theming)))
+                         ,@display/solarized-light-theming)))
