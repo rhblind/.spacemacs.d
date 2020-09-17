@@ -87,10 +87,10 @@
                typescript-fmt-tool 'tide
                typescript-indent-level 2
                typescript-linter 'eslint
-               typescript-lsp-linter 'lsp)
+               typescript-lsp-linter nil)
    (javascript :variables
                javascript-backend 'lsp
-               javascript-lsp-linter 'lsp
+               javascript-lsp-linter nil
                javascript-disable-tern-port-files nil
                javascript-fmt-tool 'web-beautify
                javascript-fmt-on-save t
