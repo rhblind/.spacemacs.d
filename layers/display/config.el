@@ -104,7 +104,7 @@
         (org-level-1
          ,@display/headers/common
          :height 1.75
-         :foreground "#b58900")
+         :foreground "#586e75")
         (org-level-2
          ,@display/headers/common
          :height 1.5
