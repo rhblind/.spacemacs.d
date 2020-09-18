@@ -299,14 +299,6 @@
         org-priority-faces '((65 :inherit org-priority :foreground "red")
                              (66 :inherit org-priority :foreground "brown")
                              (67 :inherit org-priority :foreground "blue"))
-        ;; org-structure-template-alist '(("n"  "#+NAME: ?")
-        ;;                                ("L"  "#+LaTeX: ")
-        ;;                                ("h"  "#+HTML: ")
-        ;;                                ("q"  "#+BEGIN_QUOTE\n\n#+END_QUOTE")
-        ;;                                ("s"  "#+BEGIN_SRC ?\n\n#+END_SRC")
-        ;;                                ("se" "#+BEGIN_SRC elixir\n\n#+END_SRC")
-        ;;                                ("sj" "#+BEGIN_SRC javascript\n\n#+END_SRC")
-        ;;                                ("sp" "#+BEGIN_SRC python\n\n#+END_SRC"))
         org-time-stamp-custom-formats '("<%a %d.%m.%Y>" . "<%a %d.%m.%Y %H:%M>"))
 
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
@@ -402,7 +394,6 @@
     :hook (after-init . org-roam-mode)
     :init
     (progn
-      (setq foobar "hello, world")
       (spacemacs/declare-prefix "aoR" "org-roam")
       (spacemacs/set-leader-keys
         ;; org-roam
@@ -414,12 +405,14 @@
       (spacemacs/declare-prefix-for-mode 'org-mode "mR" "org-roam")
       (spacemacs/set-leader-keys-for-major-mode 'org-mode
         "R!" 'org-roam-jump-to-index
-        "Rl"  'org-roam
-        "Rf"  'org-roam-find-file
-        "Rg"  'org-roam-graph-show
-        "Ri"  'org-roam-insert
-        "RI"  'org-roam-insert-immediate)
+        "Rl" 'org-roam
+        "Rd" 'org-roam-doctor
+        "Rf" 'org-roam-find-file
+        "Rg" 'org-roam-graph-show
+        "Ri" 'org-roam-insert
+        "RI" 'org-roam-insert-immediate)
       )
+    :config (require 'org-roam-protocol)
     )
   )
 

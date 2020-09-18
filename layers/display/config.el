@@ -29,21 +29,7 @@
 
   (setq-local variable-tuple variable-tuple
               fixed-pitch    fixed-pitch
-              headline       headline)
-
-  ;; (custom-theme-set-faces
-  ;;  'user
-  ;;  `(org-level-8 ((t (,@headline ,@variable-tuple))))
-  ;;  `(org-level-7 ((t (,@headline ,@variable-tuple))))
-  ;;  `(org-level-6 ((t (,@headline ,@variable-tuple))))
-  ;;  `(org-level-5 ((t (,@headline ,@variable-tuple))))
-  ;;  `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
-  ;;  `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
-  ;;  `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
-  ;;  `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
-  ;;  `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil)))))
-
-  )
+              headline       headline))
 
 (setq solarized-use-variable-pitch t)
 (setq face-remapping-alist '(;; Headers - outlines match org
@@ -70,7 +56,7 @@
 (setq display/headers/zenburn
       `((org-document-title
          ,@display/headers/common
-         :height 2)
+         :height 2.0)
         (org-level-1
          ,@display/headers/common
          :height 1.75
@@ -100,7 +86,7 @@
 (setq display/headers/solarized-light
       `((org-document-title
          ,@display/headers/common
-         :height 2)
+         :height 2.0)
         (org-level-1
          ,@display/headers/common
          :height 1.75

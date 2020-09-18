@@ -91,11 +91,6 @@
                                :keys "c"
                                :template ("* TODO %? %^G"
                                           "%i %a"))
-                              (,(format "%s\tPersonal note" (all-the-icons-faicon "sticky-note-o" :face 'all-the-icons-green :v-adjust 0.01))
-                               :keys "n"
-                               :headline "Notes"
-                               :template ("* %? :personal:"
-                                          "%i"))
                               (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))
                                :keys "d"
                                :template ("* TODO %? %^G%{extra}"
@@ -132,21 +127,13 @@
                                :template ("* TODO [#C] %? %^G:work:%{extra}"
                                           "%i")
                                :extra "\nSCHEDULED: %^{Task date}t")))
-                  (,(format "%s\tEmail" (all-the-icons-faicon "envelope" :face 'all-the-icons-blue :v-adjust 0.01))
-                   :keys "e"
-                   :headline "Tasks"
-                   :prepend t
-                   :type entry
-                   :file org-default-notes-file
-                   :template ("* TODO %? :email:"
-                              "%i %a"))
                   (,(format "%s\tInteresting" (all-the-icons-faicon "eye" :face 'all-the-icons-lcyan :v-adjust 0.01))
                    :keys "i"
                    :headline "Interesting"
                    :prepend t
                    :type entry
                    :file org-default-notes-file
-                   :template ("* [ ] %{desc}%? :%{i-type}:%^G"
+                   :template ("* %{desc}%? :%{i-type}:%^G"
                               "%i")
                    :children ((,(format "%s\tWebpage" (all-the-icons-faicon "globe" :face 'all-the-icons-green :v-adjust 0.01))
                                :keys "w"
@@ -168,41 +155,7 @@
                                :desc ""
                                :i-type "idea"
                                )))
-
-                  (,(format "%s\tProject" (all-the-icons-octicon "repo" :face 'all-the-icons-silver :v-adjust 0.01))
-                   :keys "p"
-                   :headline "Tasks"
-                   :prepend t
-                   :type entry
-                   :file org-projects-file
-                   :template ("* %{time-or-todo} %?"
-                              "%i"
-                              "%a")
-                   :custom (:time-or-todo "")
-                   :children ((,(format "%s\tProject todo" (all-the-icons-octicon "checklist" :face 'all-the-icons-green :v-adjust 0.01))
-                               :keys "t"
-                               :time-or-todo "TODO")
-                              (,(format "%s\tProject note" (all-the-icons-faicon "sticky-note" :face 'all-the-icons-yellow :v-adjust 0.01))
-                               :keys "n"
-                               :template "* %? %^G")
-                              (,(format "%s\tProject changelog" (all-the-icons-faicon "list" :face 'all-the-icons-blue :v-adjust 0.01))
-                               :keys "l"
-                               :time-or-todo "%U"
-                               :heading "Unreleased")
-                              ;; (,(format "%s\tCurrent project" (all-the-icons-faicon "sticky-note" :face 'all-the-icons-red :v-adjust 0.01))
-                              ;;  :keys "p"
-                              ;;  :headline "Tasks"
-                              ;;  :prepend t
-                              ;;  :file org-projectile-per-project-filepath
-                              ;;  :children ((,(format "%s\tCapture point task" (all-the-icons-faicon "code" :face 'all-the-icons-red :v-adjust 0.01))
-                              ;;              :keys "c"
-                              ;;              :template ("* %? %^G"
-                              ;;                         "%i"
-                              ;;                         "%a")
-                              ;;              ))
-                              ;;  )
-                              )
-                   ))
+                  )
                 ))
     :config
     (progn

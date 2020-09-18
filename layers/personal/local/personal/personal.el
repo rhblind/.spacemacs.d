@@ -81,4 +81,7 @@
                                       (:hlines  . "no")
                                       (:tangle  . "no")
                                       (:comment . "link")))
+
+;;;; Org-roam
 (setq org-roam-directory (concat (file-name-as-directory org-directory) "roam"))
+(setq org-roam-index-file (concat (file-name-as-directory org-roam-directory) "index.org"))
