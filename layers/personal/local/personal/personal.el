@@ -1,6 +1,5 @@
 ;;; personal.el --- The random config dumping ground -*- lexical-binding: t; -*-
 
-;; (require 'mu4e)
 (provide 'personal)
 
 ;;; Globals
@@ -53,26 +52,22 @@
       x-mouse-click-focus-ignore-position t               ;; Makes switching windows with mouse work on X-Window system
       )
 
-;;; Org-mode
-(setq org-directory "~/Dropbox/org"
-      org-default-notes-file "~/Dropbox/org/misc.org"
-      org-projects-file "~/Dropbox/org/project.org"
-      org-work-file "~/Dropbox/org/work.org"
-      org-download-image-dir "~/Dropbox/org/pics"
-      org-agenda-files (file-expand-wildcards "~/Dropbox/org/*.org")
-      org-todo-keywords              '((sequence "TODO" "FEEDBACK" "VERIFY"
-                                                 "|"
-                                                 "DONE" "DELEGATED" "NEVERMIND"))
-      ;; org-todo-keyword-faces         '(("TODO" . org-warning)
-      ;;                                  ("FEEDBACK" . org-warning)
-      ;;                                  ("VERIFY" . org-warning)
-      ;;                                  ("DONE" . org-done)
-      ;;                                  ("DELEGATED" . org-done)
-      ;;                                  ("NEVERMIND" . org-done))
-      org-use-property-inheritance t
-      org-log-done-with-time t
-      org-export-in-background t
-      org-catch-invisible-edits 'smart
+;;; Org config
+(setq org-directory                 "~/Dropbox/org")
+(setq org-roam-directory            (concat (file-name-as-directory org-directory) "roam"))
+(setq org-default-notes-file        (concat (file-name-as-directory org-directory) "misc.org")
+      org-work-notes-file           (concat (file-name-as-directory org-directory) "work.org")
+      org-projects-file             (concat (file-name-as-directory org-directory) "projects.org")
+      org-download-image-dir        (concat (file-name-as-directory org-directory) "images")
+      org-roam-index-file           (concat (file-name-as-directory org-roam-directory) "index.org")
+      org-agenda-files              (file-expand-wildcards (concat (file-name-as-directory org-directory) "*.org"))
+      org-todo-keywords             '((sequence "TODO" "IN PROGRESS"
+                                                "|"
+                                                "DONE" "NEVERMIND"))
+      org-use-property-inheritance  t
+      org-log-done-with-time        t
+      org-export-in-background      t
+      org-catch-invisible-edits     'smart
       org-babel-default-header-args '((:session . "none")
                                       (:results . "replace")
                                       (:exports . "code")
@@ -81,7 +76,3 @@
                                       (:hlines  . "no")
                                       (:tangle  . "no")
                                       (:comment . "link")))
-
-;;;; Org-roam
-(setq org-roam-directory (concat (file-name-as-directory org-directory) "roam"))
-(setq org-roam-index-file (concat (file-name-as-directory org-roam-directory) "index.org"))

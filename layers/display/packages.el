@@ -94,39 +94,42 @@
                               (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))
                                :keys "d"
                                :template ("* TODO %? %^G%{extra}"
-                                          "%i %a")
+                                          "%i")
                                :extra "\nDEADLINE: %^{Due date:}T")
                               (,(format "%s\tScheduled task" (all-the-icons-octicon "calendar" :face 'all-the-icons-red :v-adjust 0.01))
                                :keys "s"
                                :template ("* TODO %? %^G%{extra}"
-                                          "%i %a")
+                                          "%i")
                                :extra "\nSCHEDULED: %^{Task date}t")
                               ))
                   (,(format "%s\tWork" (all-the-icons-faicon "building" :face 'all-the-icons-purple :v-adjust 0.01))
                    :keys "w"
-                   :headline "Tasks"
+                   :headline "Work"
                    :prepend t
                    :type entry
-                   :file org-work-file
+                   :file org-work-notes-file
                    :children ((,(format "%s\tMiscellaneous task" (all-the-icons-octicon "checklist" :face 'all-the-icons-yellow :v-adjust 0.01))
                                :keys "k"
+                               :headline "* Tasks"
                                :template ("* TODO [#C] %? %^G:work:"
-                                          "%i"))
-                              (,(format "%s\tWork note" (all-the-icons-faicon "sticky-note-o" :face 'all-the-icons-green :v-adjust 0.01))
-                               :keys "n"
-                               :headline "Notes"
-                               :template ("* %? :work:"
                                           "%i"))
                               (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))
                                :keys "d"
+                               :headline "Tasks"
                                :template ("* TODO [#B] %? %^G:work:%{extra}"
                                           "%i")
                                :extra "\nDEADLINE: %^{Due date:}T")
                               (,(format "%s\tScheduled task" (all-the-icons-octicon "calendar" :face 'all-the-icons-red :v-adjust 0.01))
                                :keys "s"
+                               :headline "Tasks"
                                :template ("* TODO [#C] %? %^G:work:%{extra}"
                                           "%i")
-                               :extra "\nSCHEDULED: %^{Task date}t")))
+                               :extra "\nSCHEDULED: %^{Task date}t")
+                              (,(format "%s\tWork note" (all-the-icons-faicon "sticky-note-o" :face 'all-the-icons-green :v-adjust 0.01))
+                               :keys "n"
+                               :headline "Notes"
+                               :template ("* %? :work:"
+                                          "%i"))))
                   (,(format "%s\tInteresting" (all-the-icons-faicon "eye" :face 'all-the-icons-lcyan :v-adjust 0.01))
                    :keys "i"
                    :headline "Interesting"
