@@ -117,15 +117,12 @@
          :foreground "#93a1a1")))
 
 ;;;;; Org
-(setq display/org-blocks/common '(:inherit fixed-pitch :italic nil :underline nil :box t))
-(setq display/org-blocks
-      `((org-block-begin-line
-         ,@display/org-blocks/common)
-        (org-block-end-line
-         ,@display/org-blocks/common)
-        ))
 (setq display/org-code/common                  '(:inherit (shadow fixed-pitch)))
 (setq display/org-code                         `((org-code ,@display/org-code/common)))
+(setq display/org-blocks/common                '(:inherit fixed-pitch :italic nil :underline nil :box t))
+(setq display/org-blocks                       `((org-block            ,@display/org-code/common)
+                                                 (org-block-begin-line ,@display/org-blocks/common)
+                                                 (org-block-end-line   ,@display/org-blocks/common)))
 (setq display/org-document-info/common         '(:foreground "#cb4b16"))
 (setq display/org-document-info                `((org-document-info ,@display/org-document-info/common)))
 (setq display/org-document-info-keyword/common '(:inherit (shadow fixed-pitch)))
