@@ -19,7 +19,8 @@
    (multiple-cursors :variables
                      multiple-cursors-backend 'evil-mc)
    dap
-   lsp
+   (lsp :variables
+        lsp-prefer-flymake nil)  ;; lsp prefer flymake over flycheck, but it's poorly supported in spacemacs
    git
    (ivy :variables
         ivy-extra-directories nil)
@@ -33,7 +34,8 @@
    (spell-checking :variables
                    spell-checking-enable-by-default t
                    enable-flyspell-auto-completion nil)
-   syntax-checking
+   (syntax-checking :variables
+                    syntax-checking-enable-by-default t)
    (version-control :variables
                     version-control-diff-side 'left
                     version-control-global-margin t
@@ -63,7 +65,7 @@
          less-enable-lsp t
          scss-enable-lsp t
          html-enable-lsp t
-         web-fmt-tool 'web-beautify
+         web-fmt-tool 'prettier
          web-mode-markup-indent-offset 2
          web-mode-css-indent-offset 2
          web-mode-code-indent-offset 2
@@ -72,18 +74,22 @@
           latex-build-command "LaTex"
           latex-enable-folding t
           latex-enable-magic t)
-   markdown
+   (markdown :variables
+             markdown-command "/usr/local/bin/pandoc"
+             markdown-live-preview-engine 'vmd)
    yaml
+   (evil-snipe :variables evil-snipe-enable-alternate-f-and-t-behaviors t)
    ;; Languages
    (elixir :variables
            elixir-backend 'lsp
            elixir-ls-path "~/.local/opt/elixir-ls")
    emacs-lisp
    erlang
-   (evil-snipe :variables evil-snipe-enable-alternate-f-and-t-behaviors t)
+   prettier
+   ruby
    (typescript :variables
                typescript-backend 'lsp
-               typescript-fmt-on-save t
+               typescript-fmt-on-save nil
                typescript-fmt-tool 'tide
                typescript-indent-level 2
                typescript-linter 'eslint
@@ -92,8 +98,8 @@
                javascript-backend 'lsp
                javascript-lsp-linter nil
                javascript-disable-tern-port-files nil
-               javascript-fmt-tool 'web-beautify
-               javascript-fmt-on-save t
+               javascript-fmt-tool 'prettier
+               javascript-fmt-on-save nil
                javascript-repl `nodejs
                js-indent-level 2
                js2-basic-offset 2
@@ -104,14 +110,14 @@
    django
    (python :variables
            python-backend 'lsp
-           python-lsp-server 'mspyls
-           python-lsp-git-root "~/.local/opt/python-language-server"
+           python-lsp-server 'pyright
+           ;; python-lsp-server 'mspyls
+           ;; python-lsp-git-root "~/.local/opt/python-language-server"
            python-pipenv-activate t
            python-test-runner '(pytest nose)
            python-save-before-test t
            python-formatter 'lsp
            python-spacemacs-indent-guess nil)
    react
-   web-beautify
    windows-scripts
    ))

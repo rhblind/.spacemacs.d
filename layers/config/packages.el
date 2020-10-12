@@ -32,7 +32,7 @@
 
         ;; Local Packages
         ;; (redo-spacemacs :location local)
-        (org-roam :local local)
+        (ivy-todo :location local)
         ))
 
 
@@ -67,7 +67,7 @@
           company-lsp-cache-candidates t)
     (spacemacs|add-company-backends
       :backends company-lsp
-      :modes elixir-mode typescript-mode python-mode))
+      :modes elixir-mode typescript-mode python-mode ruby-mode))
 
   (setq company-dabbrev-other-buffers nil
         company-dabbrev-ignore-case   nil
@@ -257,6 +257,11 @@
              ("C-<return>" . ivy-call)
              ("C-SPC"      . ivy-dispatching-done)
              ("C-S-SPC"    . ivy-dispatching-call)))
+
+;;;; Ivy-todo
+(defun config/init-ivy-todo ()
+  (use-package ivy-todo
+    :init (progn (spacemacs/set-leader-keys "pO" 'ivy-todo/task-list))))
 
 ;;;; Magit
 (defun config/post-init-magit ()

@@ -132,6 +132,19 @@ subheading level already exists within the buffer."
       (kill-region cp (- cp 1)))
     ))
 
+(defun backward-kill-word-fixed ()
+  "Smarter backward-kill-word
+https://stackoverflow.com/a/60826269"
+  (interactive)
+  (if (looking-back "[ \n]")
+      ;; delete horizontal space before us and then check to see if we
+      ;; are looking at a newline
+      (progn (delete-horizontal-space 't)
+             (while (looking-back "[ \n]")
+               (backward-delete-char 1)))
+    ;; otherwise, just do the normal kill word.
+    (backward-kill-word 1)))
+
 (defun newline-above()
   "Inserts a new line above the current line"
   (interactive)

@@ -42,12 +42,6 @@
 They are all defined in `~/.emacs.d/core/core-dotspacemacs.el'.
 Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 
-  ;; Adopt a sneaky garbage collection strategy of waiting until idle time to
-  ;; collect; staving off the collector while the user is working.
-  ;; (setq gcmh-idle-delay 5
-  ;;       gcmh-high-cons-threshold (* 16 1024 1024)  ; 16mb
-  ;;       gcmh-verbose debug?)
-
   (setq-default
    ;; Display
    dotspacemacs-default-font `("Fira Code",
@@ -146,9 +140,6 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   (when (spacemacs/system-is-mac)
     (custom-set-variables '(epg-gpg-program "/usr/local/bin/gpg")))
   (epa-file-enable)
-
-  ;; Enable gcmh-mode
-  (add-hook 'emacs-startup-hook #'gcmh-mode)
 
   (setq auto-resume-layers t
         auth-source-debug nil  ;; Enable logging of authentication related stuff to the `*Messages' buffer. Disable when not needed!
