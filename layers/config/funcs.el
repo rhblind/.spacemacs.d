@@ -95,6 +95,19 @@ subheading level already exists within the buffer."
       (outline-demote 'region))))
 
 ;;; Misc
+;;;; Overrides
+
+(defun sp-react--after-equals-p (_id action _context)
+  "Allow ES6 arrow '=>' in react-mode"
+  (when (memq action '(insert navigate))
+    (sp--looking-back-p "=>" 2)))
+
+(defun sp-react--after-equals-skip (ms mb _me)
+  (when (eq ms ">")
+    (save-excursion
+      (goto-char mb)
+      (sp--looking-back-p "=" 1))))
+
 ;;;; Keybindings
 
 (defun backward-kill-word ()

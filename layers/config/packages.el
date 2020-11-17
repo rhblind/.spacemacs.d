@@ -152,7 +152,8 @@
       "tk" 'exunit-rerun
       "tt" 'exunit-verify-single
       "tu" 'exunit-verify-all-in-umbrella
-      ))
+      "hd" 'dash-at-point
+      "hD" 'dash-at-point-with-docset))
 
   ;; Register your debug run configurations here
   ;; (see dap-elixir for defaults injected into the "Elixir" type)
@@ -167,7 +168,8 @@
                                        :name "Elixir::Phoenix Server"
                                        :task "phx.server")))
 
-  (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir"))))
+  (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir")
+                                                     dash-at-point-docset "elixir")))
   (add-hook 'lsp-mode-hook (lambda ()
                              (dolist (ignore-pattern '("[/\\\\]\\.elixir_ls$" "[/\\\\]\\.log$" "[/\\\\]_build$" "[/\\\\]deps$"))
                                (add-to-list 'lsp-file-watch-ignored ignore-pattern)))))
@@ -478,9 +480,11 @@
                ("M-5" . winum-select-window-5))))
 
 ;;;; Web-mode
-(defun config/post-init-web-mode ()
-  "Workaround for emacs lockfiles causing node to crash
-   https://github.com/facebook/create-react-app/issues/9056#issuecomment-633540572"
+(defun config/pre-init-web-mode ()
+  "Various changes to how web-mode (and minors) should work"
+
+  ;; Workaround for emacs lockfiles causing node to crash
+  ;; https://github.com/facebook/create-react-app/issues/9056#issuecomment-633540572
   (dolist (hook '(web-mode-hook
                   css-mode-hook
                   scss-mode-hook
@@ -489,11 +493,20 @@
                   javascript-mode-hook))
     (add-hook hook (lambda () (setq-local create-lockfiles nil))))
 
+  ;; Enable sgml-electric-tag-pair-mode for some minor modes
+  (dolist (hook '(html-mode-hook
+                  rjsx-mode-hook
+                  typescript-tsx-mode-hook
+                  xml-mode))
+    (add-hook hook 'sgml-electric-tag-pair-mode))
+
   ;; Disable smartparens strict mode in order to be able to write out
   ;; arrow functions like ie. `() => {...}'
-  (add-hook 'typescript-mode-hook 'turn-off-smartparens-strict-mode)
-  (add-hook 'javascript-mode-hook 'turn-off-smartparens-strict-mode)
-  (add-hook 'rjsx-mode-hook       'turn-off-smartparens-strict-mode))
+  (dolist (hook '(rjsx-mode-hook
+                  typescript-mode-hook
+                  typescript-tsx-mode-hook
+                  javascript-mode-hook))
+    (add-hook hook 'turn-off-smartparens-strict-mode)))
 
 ;;;; Writeroom-mode
 (defun config/post-init-writeroom-mode ()

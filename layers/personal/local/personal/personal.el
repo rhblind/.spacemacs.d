@@ -76,3 +76,6 @@
                                       (:hlines  . "no")
                                       (:tangle  . "no")
                                       (:comment . "link")))
+
+;;; Newsticker
+(setq newsticker-dir "~/.emacs.d/.cache/newsticker")

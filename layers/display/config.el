@@ -50,6 +50,10 @@
                              (powerline-inactive2      mode-line)
                              ))
 
+;; Support Emojis for MacOS
+(when (spacemacs/system-is-mac)
+  (set-fontset-font t 'symbol "Apple Color Emoji"))
+
 ;;;; Styling
 ;;;;; Headers
 (setq display/headers/common `(,@headline ,@variable-tuple :underline nil :inherit nil))

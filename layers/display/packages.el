@@ -110,7 +110,7 @@
                    :file org-work-notes-file
                    :children ((,(format "%s\tMiscellaneous task" (all-the-icons-octicon "checklist" :face 'all-the-icons-yellow :v-adjust 0.01))
                                :keys "k"
-                               :headline "* Tasks"
+                               :headline "Tasks"
                                :template ("* TODO [#C] %? %^G:work:"
                                           "%i"))
                               (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))

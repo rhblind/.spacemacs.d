@@ -111,13 +111,11 @@
    (python :variables
            python-backend 'lsp
            python-lsp-server 'pyright
-           ;; python-lsp-server 'mspyls
-           ;; python-lsp-git-root "~/.local/opt/python-language-server"
            python-pipenv-activate t
            python-test-runner '(pytest nose)
            python-save-before-test t
            python-formatter 'lsp
-           python-spacemacs-indent-guess nil)
+           python-spacemacs-indent-guess t)
    react
    windows-scripts
    ))
