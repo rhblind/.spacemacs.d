@@ -522,6 +522,11 @@
   ;; Recalculate margins after text size adjustment
   (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
 
+;;;; Yasnippet
+(defun config/post-init-yasnippet-snippets ()
+  (add-to-list 'yas-snippet-dirs 'yasnippet-snippets-dir t)
+  (define-key prog-mode-map (kbd "C-c C-i") 'yas-insert-snippet))
+
 ;;; Owned Packages
 ;;;; Auto Dim Other Buffers
 (defun config/init-auto-dim-other-buffers ()

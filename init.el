@@ -102,7 +102,6 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            exunit
                                            forge
                                            gcmh
-                                           gdscript-mode
                                            keychain-environment
                                            live-py-mode
                                            lsp-ui
@@ -112,7 +111,8 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            org-superstar
 	                                         pinentry
                                            rainbow-mode
-                                           posframe)
+                                           posframe
+                                           yasnippet-snippets)
    dotspacemacs-frozen-packages          '()
    dotspacemacs-excluded-packages
    '(;; Must Exclude (for styling, functionality, bug-fixing reasons)
