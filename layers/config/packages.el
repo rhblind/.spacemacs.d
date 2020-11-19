@@ -14,7 +14,6 @@
         evil-string-inflection
         flycheck
         flyspell
-        gdscript-mode
         ivy
         magit
         ob org org-roam org-projectile
@@ -22,6 +21,7 @@
         ranger
         writeroom-mode
         web-mode
+        yasnippet-snippets
 
         ;; Owned Packages
         auto-dim-other-buffers
@@ -38,8 +38,7 @@
 
 ;;;; Aggressive indent
 (defun config/pre-init-aggressive-indent ()
-  (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-  (add-hook 'python-mode-hook     #'aggressive-indent-mode))
+  (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
 
 ;;;; Avy
 (defun config/pre-init-avy ()
@@ -222,15 +221,6 @@
 
   (global-set-key (kbd "<f8>") 'cycle-ispell-languages))
 
-;;;; Gdscript-mode (Godot)
-(defun config/init-gdscript-mode ()
-  (use-package gdscript-mode
-    :ensure t
-    :hook (gdscript-mode . lsp)
-    :config
-    (when (spacemacs/system-is-mac)
-      (setq gdscript-godot-executable "/Applications/Godot.app/Contents/MacOS/Godot"))))
-
 ;;;; HTML
 ;; (defun config/post-init-html ()
 ;;   ;; TODO: https://gist.github.com/CodyReichert/9dbc8bd2a104780b64891d8736682cea
@@ -405,7 +395,7 @@
     "s p" 'org-sort-entries-priorities))
 
 ;;;;; Org-roam
-(defun config/init-org-roam ()
+(defun config/post-init-org-roam ()
   (use-package org-roam
     :defer t
     :hook (after-init . org-roam-mode)
