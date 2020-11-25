@@ -261,7 +261,7 @@
     :after magit
     :defer t
     :config
-    (add-to-list 'forge-alist '("gitlab.intility.no" "gitlab.intility.no/api/v4" "gitlab.intility.no" forge-gitlab-repository))
+    (add-to-list 'forge-alist '("gitlab.intility.com" "gitlab.intility.com/api/v4" "gitlab.intility.com" forge-gitlab-repository))
     (setq gitlab.user "user")
     (when (string= system-type "darwin")
       (setq ghub-use-workaround-for-emacs-bug 'force))
