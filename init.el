@@ -29,6 +29,14 @@
                                         gcmh-high-cons-threshold (* 16 1024 1024)  ;; 16mb
                                         gcmh-verbose nil)))
 
+;;;;; Byte compilation blacklist
+(if (require 'comp nil t)
+    (dolist (blacklist '("smartparens" ;; https://github.com/Fuco1/smartparens/issues/1055#issuecomment-729747116
+                         ))
+      (add-to-list 'comp-bootstrap-black-list blacklist)
+      (add-to-list 'comp-deferred-compilation-black-list blacklist))
+  (message "Library 'comp not found."))
+
 (defvar server? t
   "Alias `dotspacemacs-enable-server'. Set true if running emacs as a daemon")
 
