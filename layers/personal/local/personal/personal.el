@@ -46,6 +46,7 @@
                                                 ".htmlcov"
                                                 ".pytest_cache"
                                                 "_build"
+                                                "__pycache__"
                                                 "deps"
                                                 "node_modules"
                                                 )
