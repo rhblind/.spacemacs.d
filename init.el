@@ -102,6 +102,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            company-org-roam
                                            counsel-dash
                                            doct
+                                           dotnet
                                            drag-stuff
                                            dtrt-indent
                                            evil-mc
