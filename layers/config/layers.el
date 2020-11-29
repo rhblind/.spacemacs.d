@@ -88,12 +88,14 @@
            elixir-ls-path "~/.local/opt/elixir-ls")
    emacs-lisp
    erlang
+   (fsharp :variables
+           fsharp-backend 'lsp)
    prettier
    ruby
    (typescript :variables
                typescript-backend 'lsp
-               typescript-fmt-on-save nil
-               typescript-fmt-tool 'tide
+               typescript-fmt-on-save t
+               typescript-fmt-tool 'prettier
                typescript-indent-level 2
                typescript-linter 'eslint
                typescript-lsp-linter nil)
@@ -102,7 +104,7 @@
                javascript-lsp-linter nil
                javascript-disable-tern-port-files nil
                javascript-fmt-tool 'prettier
-               javascript-fmt-on-save nil
+               javascript-fmt-on-save t
                javascript-repl `nodejs
                js-indent-level 2
                js2-basic-offset 2
@@ -114,11 +116,12 @@
    (python :variables
            python-backend 'lsp
            python-lsp-server 'pyright
-           python-pipenv-activate t
+           python-pipenv-activate nil ;; using poetry.el for python
            python-test-runner '(pytest nose)
            python-save-before-test t
            python-formatter 'lsp
            python-spacemacs-indent-guess t)
    react
+   rust
    windows-scripts
    ))
