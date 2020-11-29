@@ -118,6 +118,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            org-super-agenda
                                            org-superstar
 	                                         pinentry
+                                           poetry
                                            rainbow-mode
                                            posframe
                                            yasnippet-snippets)
@@ -131,7 +132,6 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
      doom-modeline eshell-prompt-extras evil-anzu evil-tutor
      fancy-battery fill-column-indicator gnuplot golden-ratio indent-guide
      iedit live-py-mode multi-term mwim neotree org-bullets paradox py-isort
-     yapfify
 
      ;; Packages that is installed as a dependency of others, but I don't want installed
      alchemist)))

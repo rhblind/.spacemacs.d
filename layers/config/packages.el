@@ -438,16 +438,26 @@
 ;;;; Python
 (defun config/pre-init-python ()
   (require 'dap-python)
-  (require 'lsp-python-ms)
   (add-hook 'python-mode-hook #'lsp-deferred)
   (add-hook 'python-mode-hook (lambda () (setq-local counsel-dash-docsets '("Python"))))
 
+
   (with-eval-after-load 'python
     (setq python-shell-interpreter "python3")
+
+    ;; TODO Figure out how to run poetry automatically when entering a python project.
+    ;; Still have to run poetry command manually once
+    (use-package poetry
+      :ensure t
+      :hook ((python-mode . poetry-tracking-mode)
+             (python-mode . (lambda () (when (poetry-venv-exist-p) ;; FIXME This fails if run before poetry is initialized for project
+                                         (setq-local lsp-pyright-venv-path poetry-project-venv))))))
     (custom-set-variables
      '(flycheck-python-flake8-executable "python3")
      '(flycheck-python-pycompile-executable "python3")
-     '(flycheck-python-pylint-executable "python3"))))
+     '(flycheck-python-pylint-executable "python3"))
+
+    (spacemacs/set-leader-keys-for-major-mode 'python-mode "p" 'poetry)))
 
 ;;;; Ranger
 (defun config/pre-init-ranger ()
