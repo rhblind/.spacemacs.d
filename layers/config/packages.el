@@ -148,7 +148,7 @@
     (spacemacs/set-leader-keys-for-major-mode 'elixir-mode
       "tb" 'exunit-verify-all
       "ta" 'exunit-verify
-      "tk" 'exunit-rerun
+      "tl" 'exunit-rerun
       "tt" 'exunit-verify-single
       "tu" 'exunit-verify-all-in-umbrella
       "hd" 'dash-at-point
