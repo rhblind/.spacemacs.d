@@ -87,7 +87,8 @@
            elixir-backend 'lsp
            elixir-ls-path "~/.local/opt/elixir-ls")
    emacs-lisp
-   erlang
+   (erlang :variables
+           erlang-backend 'lsp)
    (fsharp :variables
            fsharp-backend 'lsp)
    prettier

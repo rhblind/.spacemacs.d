@@ -31,7 +31,7 @@
 
 ;;;;; Byte compilation blacklist
 (if (require 'comp nil t)
-    (dolist (blacklist '("smartparens" ;; https://github.com/Fuco1/smartparens/issues/1055#issuecomment-729747116
+    (dolist (blacklist '(;; Add packages to this list to blacklist them from native compilation
                          ))
       (add-to-list 'comp-bootstrap-black-list blacklist)
       (add-to-list 'comp-deferred-compilation-black-list blacklist))
@@ -94,7 +94,8 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 (defun dotspacemacs/layers ()
   "Instantiate Spacemacs layers declarations and package configurations."
   (setq-default
-   dotspacemacs-configuration-layers     '((config   :location local)
+   dotspacemacs-configuration-layers     '(sql
+                                           (config   :location local)
                                            (display  :location local)
                                            (personal :location local))
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
