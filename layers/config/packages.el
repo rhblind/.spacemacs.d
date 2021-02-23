@@ -169,6 +169,7 @@
 
   (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir")
                                                      dash-at-point-docset "elixir")))
+  (add-hook 'elixir-mode-hook (lambda () (untabify (point-min) (point-max))))
   (add-hook 'lsp-mode-hook (lambda ()
                              (dolist (ignore-pattern '("[/\\\\]\\.elixir_ls$" "[/\\\\]\\.log$" "[/\\\\]_build$" "[/\\\\]deps$"))
                                (add-to-list 'lsp-file-watch-ignored ignore-pattern)))))
@@ -202,6 +203,7 @@
 
 ;;;; Evil-String-Inflection
 (defun config/init-evil-string-inflection ()
+  ;; Toggle between snake case, camel case and pascal case
   (use-package evil-string-inflection :ensure t)
   (define-key evil-normal-state-map "gC" 'evil-operator-string-inflection))
 
@@ -319,6 +321,10 @@
                                               header-line-format " "
                                               left-margin-width 2
                                               right-margin-width 2))))
+
+  ;; Custom file handlers for org-mode (MacOS)
+  (when (string= system-type "darwin")
+    (push '("\\.docx?\\'" . "open %s") org-file-apps-macos))
 
   ;; Org LaTeX, templates (also for PDF exports)
   (with-eval-after-load 'ox-latex
