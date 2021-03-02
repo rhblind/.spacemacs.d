@@ -3,6 +3,7 @@
       '(;; Unowned Packages
         aggressive-indent
         avy
+        csharp-mode
         company
         dap
         drag-stuff
@@ -49,43 +50,57 @@
   (bind-keys ("C-l" . evil-avy-goto-line)
              ("C-h" . avy-pop-mark)))
 
+
+;;;; Csharp
+(defun config/post-init-csharp-mode ()
+  (add-hook 'csharp-mode-hook (lambda () (setq-local counsel-dash-docsets '("NET_Framework")
+                                                     dash-at-point-docset "NET_Framework"))))
+
 ;;;; Company
 (defun config/post-init-company ()
   (add-hook 'after-init-hook 'global-company-mode)
 
   (with-eval-after-load 'company
     (define-key company-active-map (kbd "C-d") #'company-next-page)
-    (define-key company-active-map (kbd "C-u") #'company-previous-page))
+    (define-key company-active-map (kbd "C-u") #'company-previous-page)
 
-  (spacemacs|add-company-backends
-    :backends company-org-roam
-    :modes org-roam-mode)
+    (setq company-dabbrev-other-buffers nil
+          company-dabbrev-ignore-case   nil
+          company-dabbrev-downcase      nil)
 
-  (when (configuration-layer/package-used-p 'lsp)
-    (setq company-lsp-async t
-          company-lsp-cache-candidates t)
     (spacemacs|add-company-backends
-      :backends company-lsp
-      :modes elixir-mode typescript-mode python-mode ruby-mode))
+      :backends company-org-roam
+      :modes org-roam-mode))
 
-  (setq company-dabbrev-other-buffers nil
-        company-dabbrev-ignore-case   nil
-        company-dabbrev-downcase      nil)
 
 ;;;;; Company-box
   (use-package company-box
+    :diminish
+    :if (display-graphic-p)
+    :defines company-box-icons-all-the-icons
     :hook (company-mode . company-box-mode)
+    :custom
+    (company-box-backends-colors nil)
     :config
-    (setq company-box-show-single-candidate t
-          company-box-backends-colors nil
-          company-box-max-candidates 50
-          company-box-icons-alist 'company-box-icons-all-the-icons
-          company-box-icons-functions
-          (cons #'+company-box-icons--elisp-fn
-                (delq 'company-box-icons--elisp
-                      company-box-icons-functions))
-          company-box-icons-all-the-icons
-          (let ((all-the-icons-scale-factor 0.8))
+    (with-no-warnings
+      ;; Prettify icons
+      (defun +company-box-icons--elisp-fn (candidate)
+        (when (derived-mode-p 'emacs-lisp-mode)
+          (let ((sym (intern candidate)))
+            (cond ((fboundp  sym) 'ElispFunction)
+                  ((featurep sym) 'ElispFeature)
+                  ((facep    sym) 'ElispFace)
+                  ((boundp   sym) 'ElispVariable)
+                  ((symbolp  sym) 'Text)
+                  (t .       nil)))))
+      (advice-add #'company-box-icons--elisp :override #'+company-box-icons--elisp))
+
+    (when (and (display-graphic-p)
+               (require 'all-the-icons nil t))
+      (declare-function all-the-icons-faicon 'all-the-icons)
+      (declare-function all-the-icons-material 'all-the-icons)
+      (declare-function all-the-icons-octicon 'all-the-icons)
+      (setq company-box-icons-all-the-icons
             `((Unknown       . ,(all-the-icons-material "find_in_page"             :face 'all-the-icons-purple))
               (Text          . ,(all-the-icons-material "text_fields"              :face 'all-the-icons-green))
               (Method        . ,(all-the-icons-material "functions"                :face 'all-the-icons-red))
@@ -116,15 +131,8 @@
               (ElispFunction . ,(all-the-icons-material "functions"                :face 'all-the-icons-red))
               (ElispVariable . ,(all-the-icons-material "check_circle"             :face 'all-the-icons-blue))
               (ElispFeature  . ,(all-the-icons-material "stars"                    :face 'all-the-icons-orange))
-              (ElispFace     . ,(all-the-icons-material "format_paint"             :face 'all-the-icons-pink)))))
-
-    (defun +company-box-icons--elisp-fn (candidate)
-      (when (derived-mode-p 'emacs-lisp-mode)
-        (let ((sym (intern candidate)))
-          (cond ((fboundp sym)  'ElispFunction)
-                ((boundp sym)   'ElispVariable)
-                ((featurep sym) 'ElispFeature)
-                ((facep sym)    'ElispFace)))))))
+              (ElispFace     . ,(all-the-icons-material "format_paint"             :face 'all-the-icons-pink)))
+            company-box-icons-alist 'company-box-icons-all-the-icons))))
 
 ;;;; Dap
 (defun config/post-init-dap ()
@@ -323,8 +331,8 @@
                                               right-margin-width 2))))
 
   ;; Custom file handlers for org-mode (MacOS)
-  (when (string= system-type "darwin")
-    (push '("\\.docx?\\'" . "open %s") org-file-apps-macos))
+  ;; (when (string= system-type "darwin")
+  ;;   (push '("\\.docx?\\'" . "open %s") org-file-apps-macos))
 
   ;; Org LaTeX, templates (also for PDF exports)
   (with-eval-after-load 'ox-latex

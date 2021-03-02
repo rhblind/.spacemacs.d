@@ -99,11 +99,9 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            (display  :location local)
                                            (personal :location local))
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
-   dotspacemacs-additional-packages      '(company-lsp
-                                           company-org-roam
+   dotspacemacs-additional-packages      '(company-org-roam
                                            counsel-dash
                                            doct
-                                           dotnet
                                            drag-stuff
                                            dtrt-indent
                                            evil-mc

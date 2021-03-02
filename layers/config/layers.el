@@ -83,6 +83,9 @@
    yaml
    (evil-snipe :variables evil-snipe-enable-alternate-f-and-t-behaviors t)
    ;; Languages
+   (csharp :variables
+           csharp-backend 'lsp)
+   dotnet
    (elixir :variables
            elixir-backend 'lsp
            elixir-ls-path "~/.local/opt/elixir-ls")
