@@ -66,11 +66,7 @@
 
     (setq company-dabbrev-other-buffers nil
           company-dabbrev-ignore-case   nil
-          company-dabbrev-downcase      nil)
-
-    (spacemacs|add-company-backends
-      :backends company-org-roam
-      :modes org-roam-mode))
+          company-dabbrev-downcase      nil))
 
 
 ;;;;; Company-box
