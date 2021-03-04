@@ -25,6 +25,8 @@
    (ivy :variables
         ivy-extra-directories nil)
    (org :variables
+        org-enable-valign t
+        org-enable-roam-support t
         org-enable-github-support t
         org-enable-reveal-js-support t
         org-want-todo-bindings t)

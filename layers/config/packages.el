@@ -330,10 +330,6 @@
                                               left-margin-width 2
                                               right-margin-width 2))))
 
-  ;; Custom file handlers for org-mode (MacOS)
-  ;; (when (string= system-type "darwin")
-  ;;   (push '("\\.docx?\\'" . "open %s") org-file-apps-macos))
-
   ;; Org LaTeX, templates (also for PDF exports)
   (with-eval-after-load 'ox-latex
     ;; (add-to-list 'org-latex-classes
@@ -406,7 +402,12 @@
     "g"   'org-mark-ring-goto
     "h"   'org-metaleft                    ;; Because of MacOS's damned, indestructable M-h binding...
     "d o" 'org-toggle-time-stamp-overlays  ;; Required to toggle off before changing time when using custom formats
-    "s p" 'org-sort-entries-priorities))
+    "s p" 'org-sort-entries-priorities)
+
+  ;; Custom file handlers for org-mode (MacOS)
+  (when (string= system-type "darwin")
+    (push '("\\.docx?\\'"   . "open %s") org-file-apps-macos)
+    (push '("\\.x?html?\\'" . "open %s") org-file-apps-macos)))
 
 ;;;;; Org-roam
 (defun config/post-init-org-roam ()
