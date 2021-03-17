@@ -89,7 +89,7 @@
                   ((boundp   sym) 'ElispVariable)
                   ((symbolp  sym) 'Text)
                   (t .       nil)))))
-      (advice-add #'company-box-icons--elisp :override #'+company-box-icons--elisp))
+      (advice-add #'company-box-icons--elisp :override #'+company-box-icons--elisp-fn))
 
     (when (and (display-graphic-p)
                (require 'all-the-icons nil t))
@@ -400,10 +400,11 @@
     "d o" 'org-toggle-time-stamp-overlays  ;; Required to toggle off before changing time when using custom formats
     "s p" 'org-sort-entries-priorities)
 
-  ;; Custom file handlers for org-mode (MacOS)
-  (when (string= system-type "darwin")
-    (push '("\\.docx?\\'"   . "open %s") org-file-apps-macos)
-    (push '("\\.x?html?\\'" . "open %s") org-file-apps-macos)))
+  ;; Custom file handlers for org-mode (MacOS) FIXME not working
+  ;; (when (string= system-type "darwin")
+  ;;   (push '("\\.docx?\\'"   . "open %s") org-file-apps-macos)
+  ;;   (push '("\\.x?html?\\'" . "open %s") org-file-apps-macos))
+  )
 
 ;;;;; Org-roam
 (defun config/post-init-org-roam ()
@@ -457,12 +458,13 @@
     (setq python-shell-interpreter "python3")
 
     ;; TODO Figure out how to run poetry automatically when entering a python project.
+    ;; FIXME This breaks python snippets in org-mode - should only apply for actual python projects
     ;; Still have to run poetry command manually once
-    (use-package poetry
-      :ensure t
-      :hook ((python-mode . poetry-tracking-mode)
-             (python-mode . (lambda () (when (poetry-venv-exist-p) ;; FIXME This fails if run before poetry is initialized for project
-                                         (setq-local lsp-pyright-venv-path poetry-project-venv))))))
+    ;; (use-package poetry
+    ;;   :ensure t
+    ;;   :hook ((python-mode . poetry-tracking-mode)
+    ;;          (python-mode . (lambda () (when (poetry-venv-exist-p) ;; FIXME This fails if run before poetry is initialized for project
+    ;;                                      (setq-local lsp-pyright-venv-path poetry-project-venv))))))
     (custom-set-variables
      '(flycheck-python-flake8-executable "python3")
      '(flycheck-python-pycompile-executable "python3")

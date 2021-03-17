@@ -14,6 +14,9 @@
 (global-set-key (kbd "<C-return>") 'newline-below)
 (global-set-key (kbd "<S-return>") 'newline-above)
 (global-set-key (kbd "<C-backspace>") 'backward-kill-word)
+
+;; (define-key text-mode-map (kbd "<tab>") 'indent-for-tab-command)  ;; Not quite working
+
 (evil-ex-define-cmd "q[uit]" 'evil-delete-buffer)         ;; Redefine :q to delete buffer instead of exiting emacs
 
 ;;;; Variables

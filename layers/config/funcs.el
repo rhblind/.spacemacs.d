@@ -95,8 +95,31 @@ subheading level already exists within the buffer."
       (outline-demote 'region))))
 
 ;;; Misc
-;;;; Overrides
+;;;; Utilities
+(defun align-whitespace (start end)
+  "Align columns by whitespace
+https://www.emacswiki.org/emacs/AlignCommands"
+  (interactive "r")
+  (align-regexp start end
+                "\\(\\s-*\\)\\s-" 1 0 t))
 
+(defun sort-words (reverse start end)
+  "Sort words in region alphabetically, in REVERSE if negative.
+Prefixed with negative \\[universal-argument], sorts in reverse.
+The variable `sort-fold-case' determines whether alphabetic case
+affects the sort order.
+See `sort-regexp-fields'.
+https://www.emacswiki.org/emacs/SortWords"
+  (interactive "*P\nr")
+  (sort-regexp-fields reverse "\\w+" "\\&" start end))
+
+(defun sort-symbols (reverse start end)
+  "Sort symbols in region alphabetically, in REVERSE if negative.
+See `sort-words'."
+  (interactive "*P\nr")
+  (sort-regexp-fields reverse "\\(\\sw\\|\\s_\\)+" "\\&" start end))
+
+;;;; Overrides
 (defun sp-react--after-equals-p (_id action _context)
   "Allow ES6 arrow '=>' in react-mode"
   (when (memq action '(insert navigate))

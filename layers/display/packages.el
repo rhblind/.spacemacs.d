@@ -163,7 +163,8 @@
     :config
     (progn
       (advice-add 'org-capture-select-template :override #'org-capture-select-template-prettier)
-      (advice-add 'org-mks :override #'org-mks-pretty)))
+      ;; (advice-add 'org-mks :override #'org-mks-pretty) ;; FIXME Gives wrong number of arguments
+      ))
   )
 
 ;;;; Org-fancy-priorities
@@ -374,9 +375,8 @@
   (use-package pretty-code
     :config
     (progn
+      (pre)
       (pretty-code-add-hook 'emacs-lisp-mode-hook '((:def "defun")))
-      (pretty-code-add-hook 'hy-mode-hook         '((:def "defn")
-                                                    (:lambda "fn")))
       (pretty-code-add-hook 'python-mode-hook     '((:def "def")
                                                     (:lambda "lambda"))))))
 
