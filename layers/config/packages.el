@@ -26,7 +26,6 @@
 
         ;; Owned Packages
         auto-dim-other-buffers
-        dash-functional
         faceup
         outshine  ; also configures `outline-mode'
         s
@@ -549,13 +548,6 @@
   (use-package auto-dim-other-buffers
     :config
     (auto-dim-other-buffers-mode)))
-
-
-;;;; Dash functional
-(defun config/init-dash-functional ()
-  ;; The spacemacs core file `core-documentation' requires dash.
-  ;; So we only have to use-pkg dash-functional to have all of dash around.
-  (use-package dash-functional))
 
 ;;;; Faceup
 (defun config/init-faceup ()

@@ -3,7 +3,6 @@
 (require 'ivy)
 (require 'outshine)
 (require 'dash)
-(require 'dash-functional)
 (require 's)
 
 (provide 'outline-ivy)
