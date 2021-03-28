@@ -31,7 +31,7 @@
               fixed-pitch    fixed-pitch
               headline       headline))
 
-(setq solarized-use-variable-pitch t)
+(setq solarized-use-variable-pitch nil)
 (setq face-remapping-alist '(;; Headers - outlines match org
                              (outline-1 org-level-1)
                              (outline-2 org-level-2)

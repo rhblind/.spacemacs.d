@@ -3,7 +3,7 @@
 (provide 'personal)
 
 ;;; Globals
-(global-company-mode)                                     ;; Enable company-mode globally
+(global-company-mode)                                     ;; Enable company-mode(autocomplete) globally
 (global-unset-key [down-mouse-1])                         ;; No dragging nonsense
 (global-set-key [down-mouse-1] 'mouse-select-window)      ;; Select window with mouse click
 (rainbow-mode)                                            ;; Display color in buffer for color identifiers

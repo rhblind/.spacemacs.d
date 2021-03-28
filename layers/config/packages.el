@@ -174,6 +174,9 @@
   (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir")
                                                      dash-at-point-docset "elixir")))
   (add-hook 'elixir-mode-hook (lambda () (untabify (point-min) (point-max))))
+
+  ;; https://elixirforum.com/t/emacs-elixir-setup-configuration-wiki/19196/189?u=rhblind
+  (add-hook 'lsp-after-initialize-hook (lambda () (lsp-register-custom-settings '(("elixirLS.projectDir" lsp-elixir-project-dir)))))
   (add-hook 'lsp-mode-hook (lambda ()
                              (dolist (ignore-pattern '("[/\\\\]\\.elixir_ls$" "[/\\\\]\\.log$" "[/\\\\]_build$" "[/\\\\]deps$"))
                                (add-to-list 'lsp-file-watch-ignored ignore-pattern)))))
@@ -600,6 +603,7 @@
         (progn
           (bind-keys :map org-mode-map
                      ("C-j"                 . counsel-outline)
+                     ;; ("C-j"                 . oi-jump)
                      ([(meta return)]       . org-meta-return)
                      ([(meta shift return)] . org-insert-subheading))
           (advice-add 'org-insert-heading    :before 'org-fix-heading-pos)
