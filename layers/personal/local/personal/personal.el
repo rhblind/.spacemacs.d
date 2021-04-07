@@ -26,8 +26,8 @@
       layouts-autosave-delay 1800                         ;; Save layouts every 30 minutes
       lsp-ui-doc-enable nil                               ;; Disable ui-doc popup. Toggle help with ,hh
       pixel-scroll-mode nil                               ;; Disable pixel scrolling - veeeeeeery slow
-      mac-mouse-wheel-smooth-scroll nil                   ;; Also disable this to prevent sloooow pixel scrolling on mac
       mouse-wheel-follow-mouse t                          ;; Scroll window under mouse
+      mac-mouse-wheel-smooth-scroll nil                   ;; Also disable this to prevent sloooow pixel scrolling on mac
       mouse-wheel-progressive-speed nil                   ;; Don't accelerate scrolling
       mouse-wheel-scroll-amount '(1 ((shift) . 1)         ;; Mouse scroll 1 line at a time
                                     ((control) . nil))    ;; Hold ctrl to scroll to top/end of buffer

@@ -13,7 +13,6 @@
         evil
         evil-mc
         evil-string-inflection
-        flycheck
         flyspell
         ivy
         magit
@@ -134,7 +133,7 @@
   (add-hook 'dap-stopped-hook (lambda (arg) (call-interactively #'dap-hydra))))  ;; Open a Hydra debug menu whenever hitting a breakpoint
 
 ;;;; Drag-stuff
-(defun config/init-drag-stuff ()
+(defun config/post-init-drag-stuff ()
   (drag-stuff-global-mode t)
   (global-set-key (kbd "<C-up>") 'drag-stuff-up)
   (global-set-key (kbd "<C-down>") 'drag-stuff-down))
@@ -145,6 +144,16 @@
 
 ;;;; Elixir
 (defun config/post-init-elixir-mode ()
+
+;;;;; Error handling
+
+  (spacemacs|use-package-add-hook flycheck-credo
+    :config (flycheck-credo-setup)
+    (with-eval-after-load 'lsp-ui
+      (lambda () (flycheck-add-next-checker 'lsp-ui 'elixir-credo))))
+
+;;;;; Keybindings
+
   (with-eval-after-load 'elixir-mode
     (spacemacs/declare-prefix-for-mode 'elixir-mode
       "mt" "test" "testing related functionality")
@@ -157,11 +166,13 @@
       "hd" 'dash-at-point
       "hD" 'dash-at-point-with-docset))
 
+;;;;; Debugging
+
   ;; Register your debug run configurations here
   ;; (see dap-elixir for defaults injected into the "Elixir" type)
   (require 'dap-elixir)
   (with-eval-after-load 'dap-mode
-    (dap-register-debug-template "Phoenix Run Configuration"
+    (dap-register-debug-template "Elixir :: Phoenix Server"
                                  (list :type "Elixir"
                                        :cwd (lsp-workspace-root)
                                        :request "launch"
@@ -169,6 +180,8 @@
                                        :projectDir (lsp-workspace-root)
                                        :name "Elixir::Phoenix Server"
                                        :task "phx.server")))
+
+;;;;; Mode hooks
 
   (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir")
                                                      dash-at-point-docset "elixir")))
@@ -212,14 +225,6 @@
   ;; Toggle between snake case, camel case and pascal case
   (use-package evil-string-inflection :ensure t)
   (define-key evil-normal-state-map "gC" 'evil-operator-string-inflection))
-
-;;;; Flycheck
-(defun config/post-init-flycheck ()
-  (use-package flycheck-credo
-    :config
-    (flycheck-credo-setup)
-    (with-eval-after-load 'lsp-ui
-      (lambda () (flycheck-add-next-checker 'lsp-ui 'elixir-credo)))))
 
 ;;;; Flyspell
 (defun config/post-init-flyspell ()
