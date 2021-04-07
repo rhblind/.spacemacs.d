@@ -65,6 +65,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-elpa-subdirectory          nil
    dotspacemacs-enable-server              server?
    dotspacemacs-fullscreen-at-startup      nil
+   dotspacemacs-folding-method             'origami
    dotspacemacs-large-file-size            5
    dotspacemacs-helm-use-fuzzy             'always
    dotspacemacs-line-numbers               '(

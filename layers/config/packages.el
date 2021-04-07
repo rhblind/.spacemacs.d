@@ -14,6 +14,7 @@
         evil-mc
         evil-string-inflection
         flyspell
+        lsp-mode
         ivy
         magit
         ob org org-roam org-projectile
@@ -30,6 +31,7 @@
         s
 
         ;; Local Packages
+        (dap-shell :location local) ; provides shell tasks for dap mode
         ;; (redo-spacemacs :location local)
         (ivy-todo :location local)
         ))
@@ -132,6 +134,9 @@
 (defun config/post-init-dap ()
   (add-hook 'dap-stopped-hook (lambda (arg) (call-interactively #'dap-hydra))))  ;; Open a Hydra debug menu whenever hitting a breakpoint
 
+(defun config/init-dap-shell ()
+  (use-package dap-shell))
+
 ;;;; Drag-stuff
 (defun config/post-init-drag-stuff ()
   (drag-stuff-global-mode t)
@@ -154,6 +159,7 @@
 
 ;;;;; Keybindings
 
+  ;; Set up some custom keybindings that's not automatically configured using elixir-mode
   (with-eval-after-load 'elixir-mode
     (spacemacs/declare-prefix-for-mode 'elixir-mode
       "mt" "test" "testing related functionality")
@@ -172,23 +178,42 @@
   ;; (see dap-elixir for defaults injected into the "Elixir" type)
   (require 'dap-elixir)
   (with-eval-after-load 'dap-mode
-    (dap-register-debug-template "Elixir :: Phoenix Server"
-                                 (list :type "Elixir"
-                                       :cwd (lsp-workspace-root)
+    ;; (dap--put-if-absent :type "shell")
+    ;; Task for running a Phoenix Server
+    (dap-register-debug-template "Elixir Phoenix Server"
+                                 (list :name "Elixir::Phoenix Server"
+                                       :type "Elixir"
+                                       :task "phx.server"
                                        :request "launch"
                                        :program nil
-                                       :projectDir (lsp-workspace-root)
-                                       :name "Elixir::Phoenix Server"
-                                       :task "phx.server")))
+                                       :cwd nil  ;; defaults to lsp-workspace-root
+                                       ))
+
+    ;; Task for running an interactive mix session
+    (dap-register-debug-template "Elixir Interactive Shell"
+                                 (list :name "Elixir::Interactive Shell"
+                                       :type "shell"
+                                       :command "iex"
+                                       :taskArgs (list "-S")
+                                       :task "mix"
+                                       :request "launch"
+                                       :program nil
+                                       :cwd nil)))
+
 
 ;;;;; Mode hooks
 
+  ;; Enable Dash documentation
   (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir")
                                                      dash-at-point-docset "elixir")))
+
+  ;; Try to delete all tabs - NOTE does not quite work as intended
   (add-hook 'elixir-mode-hook (lambda () (untabify (point-min) (point-max))))
 
-  ;; https://elixirforum.com/t/emacs-elixir-setup-configuration-wiki/19196/189?u=rhblind
+  ;; Set custom settings for elixir-ls language server
   (add-hook 'lsp-after-initialize-hook (lambda () (lsp-register-custom-settings '(("elixirLS.projectDir" lsp-elixir-project-dir)))))
+
+  ;; Add some ignore patterns for stuff I don't care about
   (add-hook 'lsp-mode-hook (lambda ()
                              (dolist (ignore-pattern '("[/\\\\]\\.elixir_ls$" "[/\\\\]\\.log$" "[/\\\\]_build$" "[/\\\\]deps$"))
                                (add-to-list 'lsp-file-watch-ignored ignore-pattern)))))
@@ -234,14 +259,9 @@
 
   (global-set-key (kbd "<f8>") 'cycle-ispell-languages))
 
-;;;; HTML
-;; (defun config/post-init-html ()
-;;   ;; TODO: https://gist.github.com/CodyReichert/9dbc8bd2a104780b64891d8736682cea
-;;   ;; 2 space indent also for element's attributes, concatenations and contiguous function calls
-;;   (with-eval-after-load 'web-mode
-;;     (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
-;;     (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
-;;     (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil))))
+;;;; LSP-mode
+(defun config/post-init-lsp-mode ()
+  (spacemacs|use-package-add-hook lsp-after-open-hook #'lsp-origami-try-enable))
 
 ;;;; Ivy
 (defun config/pre-init-ivy ()
@@ -456,10 +476,14 @@
 
 ;;;; Python
 (defun config/pre-init-python ()
+
+;;;;; Debugging
+
   (require 'dap-python)
   (add-hook 'python-mode-hook #'lsp-deferred)
   (add-hook 'python-mode-hook (lambda () (setq-local counsel-dash-docsets '("Python"))))
 
+;;;;; Generic after loading python
 
   (with-eval-after-load 'python
     (setq python-shell-interpreter "python3")
