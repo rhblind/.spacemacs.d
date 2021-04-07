@@ -37,7 +37,7 @@
       (add-to-list 'comp-deferred-compilation-black-list blacklist))
   (message "Library 'comp not found."))
 
-(defvar server? t
+(defvar server? nil
   "Alias `dotspacemacs-enable-server'. Set true if running emacs as a daemon")
 
 ;;; Spacemacs/
