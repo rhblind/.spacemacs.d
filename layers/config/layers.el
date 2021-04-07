@@ -20,7 +20,11 @@
                      multiple-cursors-backend 'evil-mc)
    dap
    (lsp :variables
-        lsp-prefer-flymake nil)  ;; lsp prefer flymake over flycheck, but it's poorly supported in spacemacs
+        lsp-use-lsp-ui t
+        lsp-lens-enable t
+        lsp-headerline-breadcrumb-enable nil
+        lsp-ui-remap-xref-keybindings t
+        lsp-navigation `peek')
    git
    (ivy :variables
         ivy-extra-directories nil)
