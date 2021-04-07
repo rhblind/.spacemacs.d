@@ -115,7 +115,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            org-fancy-priorities
                                            org-super-agenda
                                            org-superstar
-	                                         pinentry
+                                           pinentry
                                            poetry
                                            rainbow-mode
                                            posframe

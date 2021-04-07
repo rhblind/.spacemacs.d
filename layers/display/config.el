@@ -175,7 +175,8 @@
          :inherit company-tooltip)
         (company-tooltip-common-selection
          ,@display/company/common
-         :inherit company-tooltip-selection)))
+         :inherit company-tooltip-selection))
+      )
 
 ;;;;; Mode-line
 (setq display/mode-line/common '(:box nil :underline nil))
