@@ -24,7 +24,7 @@
         lsp-lens-enable t
         lsp-headerline-breadcrumb-enable nil
         lsp-ui-remap-xref-keybindings t
-        lsp-navigation `peek')
+        lsp-navigation 'peek)
    git
    (ivy :variables
         ivy-extra-directories nil)
