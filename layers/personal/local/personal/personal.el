@@ -7,7 +7,6 @@
 (global-unset-key [down-mouse-1])                         ;; No dragging nonsense
 (global-set-key [down-mouse-1] 'mouse-select-window)      ;; Select window with mouse click
 (smartparens-global-mode)                                 ;; Set global smart parenthesis mode
-(rainbow-mode)                                            ;; Display color in buffer for color identifiers
 (treemacs-resize-icons 14)                                ;; Treemacs icon size
 (keychain-refresh-environment)                            ;; Refresh keychain information on start
 
@@ -40,7 +39,7 @@
       ws-butler-global-mode t                             ;; Enable ws-butler globally
       projectile-enable-caching t                         ;; Let projectile cache files
       projectile-project-search-path '("~/workspace")
-      ;; projectile-globally-ignored-files '()
+      projectile-globally-ignored-files '(".DS_Store")
       ;; projectile-globally-ignored-file-suffixes '()
       projectile-globally-ignored-directories '(
                                                 ".git"

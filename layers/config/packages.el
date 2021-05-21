@@ -515,7 +515,7 @@
     (bind-keys :map ranger-mode-map
                ("n"   . dired-create-directory)
                ("E"   . wdired-change-to-wdired-mode)
-               ("C-j" . ranger-travel)
+               ("C-t" . ranger-travel)
                ("C-e" . ranger-pop-eshell)
                ("M-1" . winum-select-window-1)
                ("M-2" . winum-select-window-2)

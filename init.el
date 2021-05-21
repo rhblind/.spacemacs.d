@@ -40,7 +40,7 @@
 (defvar server? nil
   "Alias `dotspacemacs-enable-server'. Set true if running emacs as a daemon")
 
-;;; Spacemacs/
+;;; Spacemacs
 ;;;; Spacemacs/init
 
 (defun dotspacemacs/init ()
@@ -75,8 +75,9 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-persistent-server          server?
    dotspacemacs-pretty-docs                t
    dotspacemacs-search-tools               '("rg" "ag" "pt" "ack" "grep")
+   dotspacemacs-activate-smartparens-mode  t
    dotspacemacs-smartparens-strict-mode    t
-   dotspacemacs-smart-closing-parenthesis  nil
+   dotspacemacs-smart-closing-parenthesis  t
    dotspacemacs-remap-Y-to-y$              nil
    dotspacemacs-scratch-mode               'org-mode
    dotspacemacs-startup-banner             nil
@@ -95,8 +96,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 (defun dotspacemacs/layers ()
   "Instantiate Spacemacs layers declarations and package configurations."
   (setq-default
-   dotspacemacs-configuration-layers     '(sql
-                                           (config   :location local)
+   dotspacemacs-configuration-layers     '((config   :location local)
                                            (display  :location local)
                                            (personal :location local))
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
@@ -110,6 +110,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            exunit
                                            forge
                                            gcmh
+                                           k8s-mode
                                            keychain-environment
                                            live-py-mode
                                            lsp-ui

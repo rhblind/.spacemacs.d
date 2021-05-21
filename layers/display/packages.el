@@ -4,7 +4,7 @@
       '(;; Owned packages
         all-the-icons
         all-the-icons-ivy
-        all-the-icons-dired
+        ;; all-the-icons-dired  ;; This cause double icons in ranger
         ;; pretty-mode
 
         ;; org-mode visuals
@@ -60,10 +60,12 @@
       (all-the-icons-ivy-setup))))
 
 ;;;; All-the-icons-dired
+;; NOTE This cause double icons inside ranger, as ranger brings its own icons.
+;; I don't ever use dired anyways, so it doesn't matter
 
-(defun display/init-all-the-icons-dired ()
-  (use-package all-the-icons-dired
-    :hook (dired-mode . all-the-icons-dired-mode)))
+;; (defun display/init-all-the-icons-dired ()
+;;   (use-package all-the-icons-dired
+;;     :hook (dired-mode . all-the-icons-dired-mode)))
 
 ;;;; Declarative Org Capture Templates (DOCT)
 

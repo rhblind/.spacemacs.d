@@ -83,7 +83,7 @@ Redone bindings are disabled by default. Turn on with ~redo-bindings?~ in
 
 | Key Binding | Function                     |
 |-------------+------------------------------|
-| ~n~         | dired-create-directory       |
-| ~E~         | wdired-change-to-wdired-mode |
-| ~C-j~       | ranger-travel                |
-| ~C-e~       | ranger-pop-eshell            |
+| ~n~           | dired-create-directory       |
+| ~E~           | wdired-change-to-wdired-mode |
+| C-t         | ranger-travel                |
+| ~C-e~         | ranger-pop-eshell            |
