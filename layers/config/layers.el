@@ -100,6 +100,8 @@
            erlang-backend 'lsp)
    (fsharp :variables
            fsharp-backend 'lsp)
+   (go :variables
+       go-backend 'lsp)
    prettier
    ruby
    (typescript :variables
