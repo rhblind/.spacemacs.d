@@ -206,6 +206,8 @@
   ;; Enable Dash documentation
   (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir")
                                                      dash-at-point-docset "elixir")))
+  ;; Format buffer on save
+  (add-hook 'elixir-mode-hook (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
 
   ;; Try to delete all tabs - NOTE does not quite work as intended
   (add-hook 'elixir-mode-hook (lambda () (untabify (point-min) (point-max))))
