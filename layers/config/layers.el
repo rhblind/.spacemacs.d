@@ -31,6 +31,7 @@
    (org :variables
         org-enable-valign t
         org-enable-roam-support t
+        org-enable-roam-protocol t
         org-enable-github-support t
         org-enable-reveal-js-support t
         org-want-todo-bindings t)

@@ -58,7 +58,8 @@
 
 ;;; Org config
 (setq org-directory                 "~/Dropbox/org")
-(setq org-roam-directory            (concat (file-name-as-directory org-directory) "roam"))
+(setq org-roam-directory            (concat (file-name-as-directory org-directory) "roam")
+      org-roam-v2-ack               t)
 (setq org-default-notes-file        (concat (file-name-as-directory org-directory) "misc.org")
       org-work-notes-file           (concat (file-name-as-directory org-directory) "work.org")
       org-projects-file             (concat (file-name-as-directory org-directory) "projects.org")

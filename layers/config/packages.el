@@ -202,6 +202,8 @@
 
 
 ;;;;; Mode hooks
+  ;; Auto-highlight symbols
+  (add-hook 'elixir-mode-hook 'auto-highlight-symbol-mode)
 
   ;; Enable Dash documentation
   (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir")
@@ -221,26 +223,26 @@
                                (add-to-list 'lsp-file-watch-ignored ignore-pattern)))))
 
 ;;;; Eshell
-(defun config/pre-init-eshell ()
-  (spacemacs|use-package-add-hook eshell
-    :post-init
-    (evil-define-key '(normal insert) 'global (kbd "C-e") 'eshell-pop-eshell)))
+  (defun config/pre-init-eshell ()
+    (spacemacs|use-package-add-hook eshell
+      :post-init
+      (evil-define-key '(normal insert) 'global (kbd "C-e") 'eshell-pop-eshell)))
 
 ;;;; Evil
-(defun config/post-init-evil ()
-  (setq evil-escape-key-sequence "jk")
-  (setq evil-escape-unordered-key-sequence nil)
+  (defun config/post-init-evil ()
+    (setq evil-escape-key-sequence "jk")
+    (setq evil-escape-unordered-key-sequence nil)
 
-  (evil-global-set-key 'normal "Q" 'evil-execute-q-macro)
-  (define-key evil-normal-state-map (kbd "C-S-u") 'evil-scroll-other-window-interactive)
-  (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-other-window-down-interactive)
-  (evil-define-key '(normal visual motion) 'global
-    "H"  'evil-first-non-blank
-    "L"  'evil-end-of-line-interactive
-    "0"  'evil-jump-item)
+    (evil-global-set-key 'normal "Q" 'evil-execute-q-macro)
+    (define-key evil-normal-state-map (kbd "C-S-u") 'evil-scroll-other-window-interactive)
+    (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-other-window-down-interactive)
+    (evil-define-key '(normal visual motion) 'global
+      "H"  'evil-first-non-blank
+      "L"  'evil-end-of-line-interactive
+      "0"  'evil-jump-item)
 
-  (advice-add 'evil-ex-search-next     :after 'evil-scroll-to-center-advice)
-  (advice-add 'evil-ex-search-previous :after 'evil-scroll-to-center-advice))
+    (advice-add 'evil-ex-search-next     :after 'evil-scroll-to-center-advice)
+    (advice-add 'evil-ex-search-previous :after 'evil-scroll-to-center-advice))
 
 ;;;; Evil-MC
 (defun config/post-init-evil-mc ()
@@ -437,31 +439,41 @@
 
 ;;;;; Org-roam
 (defun config/post-init-org-roam ()
-  (use-package org-roam
-    :defer t
-    :hook (after-init . org-roam-mode)
-    :init
-    (progn
-      (spacemacs/declare-prefix "aoR" "org-roam")
-      (spacemacs/set-leader-keys
-        ;; org-roam
-        "aoRl" 'org-roam
-        "aoRf" 'org-roam-find-file
-        "aoRg" 'org-roam-graph-show
-        )
+  ;; (cl-defmethod org-roam-node-filetitle ((node org-roam-node))
+  ;;   "Return the file TITLE for the node."
+  ;;   (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
 
-      (spacemacs/declare-prefix-for-mode 'org-mode "mR" "org-roam")
-      (spacemacs/set-leader-keys-for-major-mode 'org-mode
-        "R!" 'org-roam-jump-to-index
-        "Rl" 'org-roam
-        "Rd" 'org-roam-doctor
-        "Rf" 'org-roam-find-file
-        "Rg" 'org-roam-graph-show
-        "Ri" 'org-roam-insert
-        "RI" 'org-roam-insert-immediate)
-      )
-    :config (require 'org-roam-protocol)
-    )
+  ;; (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
+  ;;   "Return the hierarchy for the node."
+  ;;   (let ((title (org-roam-node-title node))
+  ;;         (olp (org-roam-node-olp node))
+  ;;         (level (org-roam-node-level node))
+  ;;         (filetitle (org-roam-node-filetitle node)))
+  ;;     (concat
+  ;;      (if (> level 0) (concat filetitle " > "))
+  ;;      (if (> level 1) (concat (string-join olp " > ") " > "))
+  ;;      title))
+  ;;   )
+
+  ;; (use-package org-roam
+  ;;   :defer t
+  ;;   :hook (after-init . org-roam-mode)
+  ;;   :init
+  ;;   (progn
+  ;;     ;; Displays the hierarchy of nodes when using `org-roam-find-node'
+  ;;     (setq org-roam-node-display-template "${hierarchy:*} ${tags:20}")
+
+  ;;     ;; Display the backlink buffer in a side window, instead of a normal window (like in v1)
+  ;;     (add-to-list 'display-buffer-alist
+  ;;                  '("\\*org-roam\\*"
+  ;;                    (display-buffer-in-side-window)
+  ;;                    (side . right)
+  ;;                    (slot . 0)
+  ;;                    (window-width . 0.25)
+  ;;                    (preserve-size . (t nil))
+  ;;                    (window-parameters . ((no-other-window . t)
+  ;;                                          (no-delete-other-windows . t)))))
+  ;;     ))
   )
 
 ;;;;; Org-projectile
@@ -621,17 +633,18 @@
 
       ;; Fix the new bindings in outline-minor-mode overwriting org-mode-map
       ;; I also add advice here because it mirrors outshine modifications
-      (spacemacs|use-package-add-hook org
-        :post-config
-        (progn
-          (bind-keys :map org-mode-map
-                     ("C-j"                 . counsel-outline)
-                     ;; ("C-j"                 . oi-jump)
-                     ([(meta return)]       . org-meta-return)
-                     ([(meta shift return)] . org-insert-subheading))
-          (advice-add 'org-insert-heading    :before 'org-fix-heading-pos)
-          (advice-add 'org-insert-heading    :after 'evil-insert-advice)
-          (advice-add 'org-insert-subheading :after 'evil-insert-advice))))))
+      ;; (spacemacs|use-package-add-hook org
+      ;;   :post-config
+      ;;   (progn
+      ;;     (bind-keys :map org-mode-map
+      ;;                ("C-j"                 . counsel-outline)
+      ;;                ;; ("C-j"                 . oi-jump)
+      ;;                ([(meta return)]       . org-meta-return)
+      ;;                ([(meta shift return)] . org-insert-subheading))
+      ;;     (advice-add 'org-insert-heading    :before 'org-fix-heading-pos)
+      ;;     (advice-add 'org-insert-heading    :after 'evil-insert-advice)
+      ;;     (advice-add 'org-insert-subheading :after 'evil-insert-advice)))
+      )))
 
 ;;;; Strings
 (defun config/init-s ()

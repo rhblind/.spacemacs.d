@@ -245,9 +245,11 @@
         (font-lock-doc-face :foreground "#2aa198"
                             ,@(alist-get 'font-lock-doc-face
                                          display/font-locks))
-
+        (ahs-plugin-default-face :foreground "#d33682"
+                                 ,@(alist-get 'ahs-plugin-default-face
+					                                    display/font-locks))
         ;; Extra
-        (sp-show-pair-match-face :background  "CadetBlue3")
+        (sp-show-pair-match-face :background "CadetBlue3")
         (auto-dim-other-buffers-face :background "#fcf4df")
 
         ;; ... Experiments ...
