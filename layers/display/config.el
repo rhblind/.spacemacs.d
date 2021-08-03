@@ -248,6 +248,9 @@
         (ahs-plugin-default-face :foreground "#d33682"
                                  ,@(alist-get 'ahs-plugin-default-face
 					                                    display/font-locks))
+        (ahs-plugin-default-face-unfocused :foreground "#d33682"
+                                           ,@(alist-get 'ahs-plugin-default-face-unfocused
+					                                              display/font-locks))
         ;; Extra
         (sp-show-pair-match-face :background "CadetBlue3")
         (auto-dim-other-buffers-face :background "#fcf4df")

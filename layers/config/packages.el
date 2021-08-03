@@ -437,43 +437,40 @@
   ;;   (push '("\\.x?html?\\'" . "open %s") org-file-apps-macos))
   )
 
-;;;;; Org-roam
+;;;;; Org-Roam
 (defun config/post-init-org-roam ()
-  ;; (cl-defmethod org-roam-node-filetitle ((node org-roam-node))
-  ;;   "Return the file TITLE for the node."
-  ;;   (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
+  (with-eval-after-load 'org-roam
+    (cl-defmethod org-roam-node-filetitle ((node org-roam-node))
+      "Return the file TITLE for the node."
+      (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
 
-  ;; (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
-  ;;   "Return the hierarchy for the node."
-  ;;   (let ((title (org-roam-node-title node))
-  ;;         (olp (org-roam-node-olp node))
-  ;;         (level (org-roam-node-level node))
-  ;;         (filetitle (org-roam-node-filetitle node)))
-  ;;     (concat
-  ;;      (if (> level 0) (concat filetitle " > "))
-  ;;      (if (> level 1) (concat (string-join olp " > ") " > "))
-  ;;      title))
-  ;;   )
+    (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
+      "Return the hierarchy for the node."
+      (let ((title (org-roam-node-title node))
+            (olp (org-roam-node-olp node))
+            (level (org-roam-node-level node))
+            (filetitle (org-roam-node-filetitle node)))
+        (concat
+         (if (> level 0) (concat filetitle " -> "))
+         (if (> level 1) (concat (string-join olp " -> ") " -> "))
+         title))
+      )
 
-  ;; (use-package org-roam
-  ;;   :defer t
-  ;;   :hook (after-init . org-roam-mode)
-  ;;   :init
-  ;;   (progn
-  ;;     ;; Displays the hierarchy of nodes when using `org-roam-find-node'
-  ;;     (setq org-roam-node-display-template "${hierarchy:*} ${tags:20}")
+    (setq org-roam-node-display-template "${hierarchy:*} ${tags:20}")
 
-  ;;     ;; Display the backlink buffer in a side window, instead of a normal window (like in v1)
-  ;;     (add-to-list 'display-buffer-alist
-  ;;                  '("\\*org-roam\\*"
-  ;;                    (display-buffer-in-side-window)
-  ;;                    (side . right)
-  ;;                    (slot . 0)
-  ;;                    (window-width . 0.25)
-  ;;                    (preserve-size . (t nil))
-  ;;                    (window-parameters . ((no-other-window . t)
-  ;;                                          (no-delete-other-windows . t)))))
-  ;;     ))
+    ;; Allow mouse navigation in backlink buffer
+    (define-key org-roam-mode-map [mouse-1] #'org-roam-visit-thing))
+
+  ;; Use side window for backlink buffer
+  (add-to-list 'display-buffer-alist
+               '("\\*org-roam\\*"
+                 (display-buffer-in-side-window)
+                 (side . right)
+                 (slot . 0)
+                 (window-width . 0.25)
+                 (preserve-size . (t nil))
+                 (window-parameters . ((no-other-window . t)
+                                       (no-delete-other-windows . t)))))
   )
 
 ;;;;; Org-projectile
@@ -633,17 +630,17 @@
 
       ;; Fix the new bindings in outline-minor-mode overwriting org-mode-map
       ;; I also add advice here because it mirrors outshine modifications
-      ;; (spacemacs|use-package-add-hook org
-      ;;   :post-config
-      ;;   (progn
-      ;;     (bind-keys :map org-mode-map
-      ;;                ("C-j"                 . counsel-outline)
-      ;;                ;; ("C-j"                 . oi-jump)
-      ;;                ([(meta return)]       . org-meta-return)
-      ;;                ([(meta shift return)] . org-insert-subheading))
-      ;;     (advice-add 'org-insert-heading    :before 'org-fix-heading-pos)
-      ;;     (advice-add 'org-insert-heading    :after 'evil-insert-advice)
-      ;;     (advice-add 'org-insert-subheading :after 'evil-insert-advice)))
+      (spacemacs|use-package-add-hook org
+        :post-config
+        (progn
+          (bind-keys :map org-mode-map
+                     ("C-j"                 . counsel-outline)
+                     ;; ("C-j"                 . oi-jump)
+                     ([(meta return)]       . org-meta-return)
+                     ([(meta shift return)] . org-insert-subheading))
+          (advice-add 'org-insert-heading    :before 'org-fix-heading-pos)
+          (advice-add 'org-insert-heading    :after 'evil-insert-advice)
+          (advice-add 'org-insert-subheading :after 'evil-insert-advice)))
       )))
 
 ;;;; Strings
