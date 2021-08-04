@@ -456,7 +456,13 @@
          title))
       )
 
+    ;; Display node hierarchy in the org-roam-node-find list
     (setq org-roam-node-display-template "${hierarchy:*} ${tags:20}")
+
+    ;; Encrypt org-roam files by default (NOTE does currently not work good with `org-roam-node-find' in v2)
+    ;; (setq org-roam-capture-templates '(("d" "default" plain "%?"
+    ;;                                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
+    ;;                                     :unnarrowed t)))
 
     ;; Allow mouse navigation in backlink buffer
     (define-key org-roam-mode-map [mouse-1] #'org-roam-visit-thing))
