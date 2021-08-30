@@ -80,9 +80,11 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-smart-closing-parenthesis  t
    dotspacemacs-remap-Y-to-y$              nil
    dotspacemacs-scratch-mode               'org-mode
-   dotspacemacs-startup-banner             nil
+   dotspacemacs-startup-banner             'official
    dotspacemacs-startup-lists              nil
    dotspacemacs-whitespace-cleanup         'trailing
+   dotspacemacs-distinguish-gui-tab        t
+   dotspacemacs-install-packages           'used-only
 
    ;; The following are unchanged but are still required for reloading via
    ;; 'SPC f e R' `dotspacemacs/sync-configuration-layers' to not throw warnings
@@ -108,6 +110,8 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            evil-string-inflection
                                            exec-path-from-shell
                                            exunit
+                                           flycheck-credo
+                                           flycheck-dialyxir
                                            forge
                                            gcmh
                                            k8s-mode
@@ -118,6 +122,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            org-super-agenda
                                            org-superstar
                                            pinentry
+                                           polymode
                                            poetry
                                            rainbow-mode
                                            posframe

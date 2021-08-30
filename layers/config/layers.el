@@ -28,6 +28,7 @@
    git
    (ivy :variables
         ivy-extra-directories nil)
+   imenu-list
    (org :variables
         org-enable-valign t
         org-enable-roam-support t
@@ -80,6 +81,7 @@
          web-mode-css-indent-offset 2
          web-mode-code-indent-offset 2
          web-mode-attr-indent-offset 2)
+   web-beautify
    (latex :variables
           latex-build-command "LaTex"
           latex-enable-folding t
@@ -99,8 +101,6 @@
    emacs-lisp
    (erlang :variables
            erlang-backend 'lsp)
-   (fsharp :variables
-           fsharp-backend 'lsp)
    (go :variables
        go-backend 'lsp)
    prettier

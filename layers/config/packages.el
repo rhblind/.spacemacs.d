@@ -2,6 +2,7 @@
 (setq config-packages
       '(;; Unowned Packages
         aggressive-indent
+        auto-highlight-symbol
         avy
         csharp-mode
         company
@@ -40,6 +41,11 @@
 ;;;; Aggressive indent
 (defun config/pre-init-aggressive-indent ()
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
+
+;;;; Auto-highlight-symbol
+(defun config/pre-init-auto-highlight-symbol ()
+  (add-hook 'prog-mode 'auto-highlight-symbol-mode)
+  (add-hook 'text-mode 'auto-highlight-symbol-mode))
 
 ;;;; Avy
 (defun config/pre-init-avy ()
@@ -152,10 +158,13 @@
 
 ;;;;; Error handling
 
-  (spacemacs|use-package-add-hook flycheck-credo
-    :config (flycheck-credo-setup)
-    (with-eval-after-load 'lsp-ui
-      (lambda () (flycheck-add-next-checker 'lsp-ui 'elixir-credo))))
+  (with-eval-after-load 'flycheck
+    '(flycheck-credo-setup)
+    '(flycheck-dialyxir-setup))
+  (with-eval-after-load 'lsp-ui
+    '(flycheck-add-next-checker 'lsp-ui 'elixir-credo))
+  (with-eval-after-load 'elixir-mode
+    (add-hook 'elixir-mode-hook 'flycheck-mode))
 
 ;;;;; Keybindings
 
@@ -200,6 +209,41 @@
                                        :program nil
                                        :cwd nil)))
 
+;;;;; Polymode (using web-mode for inline html)
+
+  ;; Use polymode to enable web mode for inline live view templates
+  ;; https://blog.evalcode.com/phoenix-liveview-inline-syntax-highlighting-for-emacs/
+  ;; TODO: Make it work for a list of sigils (~L, ~F)
+  ;; FIXME: How to enable auto-complete for web mode while editing html blocks??
+  ;; FIXME this seems to fuck up lsp-auto formatting?
+  ;; (use-package polymode
+  ;;   :mode ("\.ex$" . poly-elixir-web-mode)
+  ;;   :config
+  ;;   (define-hostmode poly-elixir-hostmode :mode 'elixir-mode)
+  ;;   (define-innermode poly-liveview-expr-elixir-innermode
+  ;;     :mode 'web-mode
+  ;;     :head-matcher (rx line-start (* space) "~L" (= 3 (char "\"'")) line-end)
+  ;;     :tail-matcher (rx line-start (* space) (= 3 (char "\"'")) line-end)
+  ;;     :head-mode 'host
+  ;;     :tail-mode 'host
+  ;;     :allow-nested nil
+  ;;     :keep-in-mode 'host
+  ;;     :fallback-mode 'host)
+  ;;   (define-innermode poly-liveview-surfaceui-expr-elixir-innermode
+  ;;     :mode 'web-mode
+  ;;     :head-matcher (rx line-start (* space) "~F" (= 3 (char "\"'")) line-end)
+  ;;     :tail-matcher (rx line-start (* space) (= 3 (char "\"'")) line-end)
+  ;;     :head-mode 'host
+  ;;     :tail-mode 'host
+  ;;     :allow-nested nil
+  ;;     :keep-in-mode 'host
+  ;;     :fallback-mode 'host)
+  ;;   (define-polymode poly-elixir-web-mode
+  ;;     :hostmode 'poly-elixir-hostmode
+  ;;     :innermodes '(poly-liveview-expr-elixir-innermode
+  ;;                   poly-liveview-surfaceui-expr-elixir-innermode)))
+  ;; (add-to-list 'web-mode-engines-alist ("elixir" . "\\.ex\\"))
+
 
 ;;;;; Mode hooks
   ;; Auto-highlight symbols
@@ -223,26 +267,26 @@
                                (add-to-list 'lsp-file-watch-ignored ignore-pattern)))))
 
 ;;;; Eshell
-  (defun config/pre-init-eshell ()
-    (spacemacs|use-package-add-hook eshell
-      :post-init
-      (evil-define-key '(normal insert) 'global (kbd "C-e") 'eshell-pop-eshell)))
+(defun config/pre-init-eshell ()
+  (spacemacs|use-package-add-hook eshell
+    :post-init
+    (evil-define-key '(normal insert) 'global (kbd "C-e") 'eshell-pop-eshell)))
 
 ;;;; Evil
-  (defun config/post-init-evil ()
-    (setq evil-escape-key-sequence "jk")
-    (setq evil-escape-unordered-key-sequence nil)
+(defun config/post-init-evil ()
+  (setq evil-escape-key-sequence "jk")
+  (setq evil-escape-unordered-key-sequence nil)
 
-    (evil-global-set-key 'normal "Q" 'evil-execute-q-macro)
-    (define-key evil-normal-state-map (kbd "C-S-u") 'evil-scroll-other-window-interactive)
-    (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-other-window-down-interactive)
-    (evil-define-key '(normal visual motion) 'global
-      "H"  'evil-first-non-blank
-      "L"  'evil-end-of-line-interactive
-      "0"  'evil-jump-item)
+  (evil-global-set-key 'normal "Q" 'evil-execute-q-macro)
+  (define-key evil-normal-state-map (kbd "C-S-u") 'evil-scroll-other-window-interactive)
+  (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-other-window-down-interactive)
+  (evil-define-key '(normal visual motion) 'global
+    "H"  'evil-first-non-blank
+    "L"  'evil-end-of-line-interactive
+    "0"  'evil-jump-item)
 
-    (advice-add 'evil-ex-search-next     :after 'evil-scroll-to-center-advice)
-    (advice-add 'evil-ex-search-previous :after 'evil-scroll-to-center-advice))
+  (advice-add 'evil-ex-search-next     :after 'evil-scroll-to-center-advice)
+  (advice-add 'evil-ex-search-previous :after 'evil-scroll-to-center-advice))
 
 ;;;; Evil-MC
 (defun config/post-init-evil-mc ()
@@ -287,7 +331,7 @@
              ("C-SPC"      . ivy-dispatching-done)
              ("C-S-SPC"    . ivy-dispatching-call)))
 
-;;;; Ivy-todo
+;;;;; Ivy-todo
 (defun config/init-ivy-todo ()
   (use-package ivy-todo
     :init (progn (spacemacs/set-leader-keys "pO" 'ivy-todo/task-list))))
@@ -546,28 +590,28 @@
 
   ;; Workaround for emacs lockfiles causing node to crash
   ;; https://github.com/facebook/create-react-app/issues/9056#issuecomment-633540572
-  (dolist (hook '(web-mode-hook
-                  css-mode-hook
-                  scss-mode-hook
-                  rjsx-mode-hook
-                  typescript-mode-hook
-                  javascript-mode-hook))
-    (add-hook hook (lambda () (setq-local create-lockfiles nil))))
+  (dolist (mode-hook '(web-mode-hook
+                       css-mode-hook
+                       scss-mode-hook
+                       rjsx-mode-hook
+                       typescript-mode-hook
+                       javascript-mode-hook))
+    (add-hook mode-hook (lambda () (setq-local create-lockfiles nil))))
 
   ;; Enable sgml-electric-tag-pair-mode for some minor modes
-  (dolist (hook '(html-mode-hook
-                  rjsx-mode-hook
-                  typescript-tsx-mode-hook
-                  xml-mode))
-    (add-hook hook 'sgml-electric-tag-pair-mode))
+  (dolist (mode-hook '(html-mode-hook
+                       rjsx-mode-hook
+                       typescript-tsx-mode-hook
+                       xml-mode))
+    (add-hook mode-hook 'sgml-electric-tag-pair-mode))
 
   ;; Disable smartparens strict mode in order to be able to write out
   ;; arrow functions like ie. `() => {...}'
-  (dolist (hook '(rjsx-mode-hook
-                  typescript-mode-hook
-                  typescript-tsx-mode-hook
-                  javascript-mode-hook))
-    (add-hook hook 'turn-off-smartparens-strict-mode)))
+  (dolist (mode-hook '(rjsx-mode-hook
+                       typescript-mode-hook
+                       typescript-tsx-mode-hook
+                       javascript-mode-hook))
+    (add-hook mode-hook 'turn-off-smartparens-strict-mode)))
 
 ;;;; Writeroom-mode
 (defun config/post-init-writeroom-mode ()
@@ -640,8 +684,8 @@
         :post-config
         (progn
           (bind-keys :map org-mode-map
-                     ("C-j"                 . counsel-outline)
-                     ;; ("C-j"                 . oi-jump)
+                     ;; ("C-j"                 . counsel-outline)
+                     ("C-j"                 . oi-jump)
                      ([(meta return)]       . org-meta-return)
                      ([(meta shift return)] . org-insert-subheading))
           (advice-add 'org-insert-heading    :before 'org-fix-heading-pos)
