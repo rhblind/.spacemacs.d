@@ -80,6 +80,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-smart-closing-parenthesis  t
    dotspacemacs-remap-Y-to-y$              nil
    dotspacemacs-scratch-mode               'org-mode
+   dotspacemacs-scroll-bar-while-scrolling nil
    dotspacemacs-startup-banner             'official
    dotspacemacs-startup-lists              nil
    dotspacemacs-whitespace-cleanup         'trailing
