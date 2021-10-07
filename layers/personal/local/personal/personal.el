@@ -82,5 +82,8 @@
                                       (:tangle  . "no")
                                       (:comment . "link")))
 
+;; Make sure org-roam is available on start
+(org-roam-db-autosync-mode)
+
 ;;; Newsticker
 (setq newsticker-dir "~/.emacs.d/.cache/newsticker")

@@ -18,7 +18,10 @@
         lsp-mode
         ivy
         magit
-        ob org org-roam org-projectile
+        ob
+        org
+        org-roam
+        org-projectile
         python
         ranger
         writeroom-mode
@@ -60,7 +63,8 @@
 ;;;; Csharp
 (defun config/post-init-csharp-mode ()
   (add-hook 'csharp-mode-hook (lambda () (setq-local counsel-dash-docsets '("NET_Framework")
-                                                     dash-at-point-docset "NET_Framework"))))
+                                                     dash-at-point-docset "NET_Framework")))
+  (add-hook 'csharp-mode-hook (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t))))
 
 ;;;; Company
 (defun config/post-init-company ()

@@ -30,7 +30,7 @@
 (add-hook 'eshell-exit-hook
           (lambda () (setq pretty-eshell-prompt-num 0)))
 (advice-add 'eshell-send-input :before
-            (lambda (&rest args) (incf pretty-eshell-prompt-num)))
+            (lambda (&rest args) (cl-incf pretty-eshell-prompt-num)))
 
 ;;; Core
 

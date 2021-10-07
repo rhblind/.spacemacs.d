@@ -102,6 +102,8 @@
    (erlang :variables
            erlang-backend 'lsp)
    (go :variables
+       go-format-before-save t
+       go-use-golangci-lint t
        go-backend 'lsp)
    prettier
    ruby

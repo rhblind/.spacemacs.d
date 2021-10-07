@@ -86,41 +86,23 @@
         (org-level-8
          ,@display/headers/common)))
 
-;; https://en.wikipedia.org/wiki/Solarized_(color_scheme)
 ;;;;;; Solarized-Light
-;; https://github.com/sellout/emacs-color-theme-solarized
-;; ((base03  "#002b36" "#042028" "#1c1c1c" "brightblack"   "black")
-;;  (base02  "#073642" "#0a2832" "#262626" "black"         "black")
-;;  (base01  "#586e75" "#465a61" "#585858" "brightgreen"   "green")
-;;  (base00  "#657b83" "#52676f" "#626262" "brightyellow"  "yellow")
-;;  (base0   "#839496" "#708183" "#808080" "brightblue"    "blue")
-;;  (base1   "#93a1a1" "#81908f" "#8a8a8a" "brightcyan"    "cyan")
-;;  (base2   "#eee8d5" "#e9e2cb" "#e4e4e4" "white"         "white")
-;;  (base3   "#fdf6e3" "#fcf4dc" "#ffffd7" "brightwhite"   "white")
-;;  (yellow  "#b58900" "#a57705" "#af8700" "yellow"        "yellow")
-;;  (orange  "#cb4b16" "#bd3612" "#d75f00" "brightred"     "red")
-;;  (red     "#dc322f" "#c60007" "#d70000" "red"           "red")
-;;  (magenta "#d33682" "#c61b6e" "#af005f" "magenta"       "magenta")
-;;  (violet  "#6c71c4" "#5859b7" "#5f5faf" "brightmagenta" "magenta")
-;;  (blue    "#268bd2" "#2075c7" "#0087ff" "blue"          "blue")
-;;  (cyan    "#2aa198" "#259185" "#00afaf" "cyan"          "cyan")
-;;  (green   "#859900" "#728a05" "#5f8700" "green"         "green"))
-
 (setq display/headers/solarized-light
       `((org-document-title
          ,@display/headers/common
-         :height 2.0)
+         :height 1.5
+         :foreground "#d33682")
         (org-level-1
-         ,@display/headers/common
-         :height 1.75
-         :foreground "#586e75")
-        (org-level-2
          ,@display/headers/common
          :height 1.5
          :foreground "#586e75")
+        (org-level-2
+         ,@display/headers/common
+         :height 1.3
+         :foreground "#586e75")
         (org-level-3
          ,@display/headers/common
-         :height 1.25
+         :height 1.2
          :foreground "#657b83")
         (org-level-4
          ,@display/headers/common
@@ -140,9 +122,9 @@
          :foreground "#93a1a1")))
 
 ;;;;; Org
-(setq display/org-code/common                  '(:inherit (shadow fixed-pitch)))
+(setq display/org-code/common                  '(:inherit (shadow fixed-pitch :weight normal)))
 (setq display/org-code                         `((org-code ,@display/org-code/common)))
-(setq display/org-blocks/common                '(:inherit fixed-pitch :italic nil :underline nil :box t))
+(setq display/org-blocks/common                '(:inherit fixed-pitch :italic nil :underline nil :overline nil :box nil))
 (setq display/org-blocks                       `((org-block            ,@display/org-code/common)
                                                  (org-block-begin-line ,@display/org-blocks/common)
                                                  (org-block-end-line   ,@display/org-blocks/common)))
@@ -251,12 +233,27 @@
         (ahs-plugin-default-face-unfocused :foreground "#d33682"
                                            ,@(alist-get 'ahs-plugin-default-face-unfocused
 					                                              display/font-locks))
+
+        (org-block            :background "#faf1d9" ,@display/org-code/common)
+        (org-block-begin-line :background "#f7edd0" ,@display/org-blocks/common)
+        (org-block-end-line   :background "#f7edd0" ,@display/org-blocks/common)
+
         ;; Extra
         (sp-show-pair-match-face :background "CadetBlue3")
         (auto-dim-other-buffers-face :background "#fcf4df")
 
         ;; ... Experiments ...
         ))
+
+;;;;; Doom Solarized-light
+(setq display/doom-solarized-light-theming
+      `(;; Overwrites
+        (ahs-plugin-default-face :foreground "#d33682"
+                                 ,@(alist-get 'ahs-plugin-default-face
+					                                    display/font-locks))
+        (ahs-plugin-default-face-unfocused :foreground "#d33682"
+                                           ,@(alist-get 'ahs-plugin-default-face-unfocused
+					                                              display/font-locks))))
 
 ;;;;; Zenburn
 (setq display/zenburn-theming
@@ -286,4 +283,5 @@
                          ,@display/zenburn-theming)
         (solarized-light ,@display/common-theming
                          ,@display/headers/solarized-light
-                         ,@display/solarized-light-theming)))
+                         ,@display/solarized-light-theming)
+        (doom-solarized-light ,@display/doom-solarized-light-theming)))

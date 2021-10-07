@@ -55,7 +55,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-default-font `("Fira Code",
                                :size ,(if (= 1440 (display-pixel-height)) 15 13))
    dotspacemacs-themes       '(solarized-light
-                               solarized-zenburn)
+                               doom-one)
    ;; General
    dotspacemacs-auto-generate-layout-names t
    dotspacemacs-auto-resume-layouts        t
@@ -64,6 +64,8 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-elpa-https                 t
    dotspacemacs-elpa-subdirectory          nil
    dotspacemacs-enable-server              server?
+   dotspacemacs-server-socket-dir          nil
+   dotspacemacs-persistent-server          t
    dotspacemacs-fullscreen-at-startup      nil
    dotspacemacs-folding-method             'origami
    dotspacemacs-large-file-size            5
@@ -105,6 +107,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
    dotspacemacs-additional-packages      '(counsel-dash
                                            doct
+                                           doom-themes
                                            drag-stuff
                                            dtrt-indent
                                            evil-mc
