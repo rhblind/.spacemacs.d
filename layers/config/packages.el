@@ -62,9 +62,17 @@
 
 ;;;; Csharp
 (defun config/post-init-csharp-mode ()
+  (setq omnisharp-server-executable-path "/usr/local/bin/omnisharp")
+
+  (add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
+
+;;;;; Mode hooks
+
   (add-hook 'csharp-mode-hook (lambda () (setq-local counsel-dash-docsets '("NET_Framework")
                                                      dash-at-point-docset "NET_Framework")))
-  (add-hook 'csharp-mode-hook (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t))))
+  (add-hook 'csharp-mode-hook (lambda ()
+                                (add-hook 'before-save-hook #'lsp-format-buffer nil t)
+                                (add-hook 'before-save-hook #'delete-trailing-crlf))))
 
 ;;;; Company
 (defun config/post-init-company ()
@@ -168,7 +176,7 @@
   (with-eval-after-load 'lsp-ui
     '(flycheck-add-next-checker 'lsp-ui 'elixir-credo))
   (with-eval-after-load 'elixir-mode
-    (add-hook 'elixir-mode-hook 'flycheck-mode))
+    (add-hook 'elixir-mode-hook #'flycheck-mode))
 
 ;;;;; Keybindings
 
@@ -375,7 +383,7 @@
   (setq org-agenda-skip-unavailable-files t
         org-catch-invisible-edits t
         org-ellipsis ""
-        org-export-in-background t
+        org-export-in-background nil ;; Async export not working when ox is bytecompiled?
         org-fontify-whole-heading-line t
         org-fontify-done-headline nil
         org-fontify-quote-and-verse-blocks t
@@ -385,7 +393,9 @@
         org-log-state-notes-into-drawer t
         org-log-done-with-time t
         ;; org-refile-targets '((org-agenda-files . (:maxlevel . 6)))  ;; TODO https://sachachua.com/blog/2015/02/learn-take-notes-efficiently-org-mode/
-        org-re-reveal-root "https://revealjs.com/"
+        org-re-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.9.2"
+        org-re-reveal-revealjs-version "3.8"
+        org-re-reveal-title-slide "<h1>%t</h1><h2>%s</h2><h4>%e</h4>"
         org-startup-indented t
         org-pretty-entities t
         org-priority-faces '((65 :inherit org-priority :foreground "red")
@@ -407,60 +417,110 @@
 
   ;; Org LaTeX, templates (also for PDF exports)
   (with-eval-after-load 'ox-latex
-    ;; (add-to-list 'org-latex-classes
-    ;;'("org-article"
-                                        ;                    "\\documentclass[11pt,a4paper]{article}
-    ;; \\usepackage[utf8]{inputenc}
-    ;; \\usepackage[T1]{fontenc}
-    ;; \\usepackage{fixltx2e}
-    ;; \\usepackage{graphicx}
-    ;; \\usepackage{longtable}
-    ;; \\usepackage{float}
-    ;; \\usepackage{wrapfig}
-    ;; \\usepackage{rotating}
-    ;; \\usepackage[normalem]{ulem}
-    ;; \\usepackage{amsmath}
-    ;; \\usepackage{textcomp}
-    ;; \\usepackage{marvosym}
-    ;; \\usepackage{wasysym}
-    ;; \\usepackage{amssymb}
-    ;; \\usepackage{hyperref}
-    ;; \\usepackage{mathpazo}
-    ;; \\usepackage{color}
-    ;; \\usepackage{enumerate}
-    ;; \\definecolor{bg}{rgb}{0.95,0.95,0.95}
-    ;; \\tolerance=1000
-    ;;       [NO-DEFAULT-PACKAGES]
-    ;;       [PACKAGES]
-    ;;       [EXTRA]
-    ;; \\linespread{1.1}
-    ;; \\hypersetup{pdfborder=0 0 0}"
-    ;;                    ("\\section{%s}" . "\\section*{%s}")
-    ;;                    ("\\subsection{%s}" . "\\subsection*{%s}")
-    ;;                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-    ;;                    ("\\paragraph{%s}" . "\\paragraph*{%s}"))
+    (setq org-latex-listings 'minted
+          org-latex-packages-alist '(("" "minted"))
+          org-latex-minted-options '(("breaklines" "true")
+                                     ("breakanywhere" "true")))
+    (setq org-latex-pdf-process
+          (list (concat "latexmk "
+                        "-xelatex "
+                        "-recorder -synctex=1 -bibtex-cond %b")))
+    (setq org-latex-classes
+          '(("article"
+             "\\RequirePackage{fix-cm}
+\\PassOptionsToPackage{svgnames}{xcolor}
+\\documentclass[11pt]{article}
+\\usepackage{fontspec}
+\\setmainfont{ETBembo RomanOSF}
+\\setsansfont[Scale=MatchLowercase]{Raleway}
+\\setmonofont[Scale=MatchLowercase]{ETBembo}
+\\usepackage{sectsty}
+\\allsectionsfont{\\sffamily}
+\\usepackage{enumitem}
+\\setlist[description]{style=unboxed,font=\\sffamily\\bfseries}
+\\usepackage{listings}
+\\lstset{frame=single,aboveskip=1em,
+	framesep=.5em,backgroundcolor=\\color{AliceBlue},
+	rulecolor=\\color{LightSteelBlue},framerule=1pt}
+\\usepackage{xcolor}
+\\newcommand\\basicdefault[1]{\\scriptsize\\color{Black}\\ttfamily#1}
+\\lstset{basicstyle=\\basicdefault{\\spaceskip1em}}
+\\lstset{literate=
+	    {§}{{\\S}}1
+	    {©}{{\\raisebox{.125ex}{\\copyright}\\enspace}}1
+	    {«}{{\\guillemotleft}}1
+	    {»}{{\\guillemotright}}1
+	    {Á}{{\\'A}}1
+	    {Ä}{{\\\"A}}1
+	    {É}{{\\'E}}1
+	    {Í}{{\\'I}}1
+	    {Ó}{{\\'O}}1
+	    {Ö}{{\\\"O}}1
+	    {Ú}{{\\'U}}1
+	    {Ü}{{\\\"U}}1
+	    {ß}{{\\ss}}2
+	    {à}{{\\`a}}1
+	    {á}{{\\'a}}1
+	    {ä}{{\\\"a}}1
+	    {é}{{\\'e}}1
+	    {í}{{\\'i}}1
+	    {ó}{{\\'o}}1
+	    {ö}{{\\\"o}}1
+	    {ú}{{\\'u}}1
+	    {ü}{{\\\"u}}1
+	    {¹}{{\\textsuperscript1}}1
+            {²}{{\\textsuperscript2}}1
+            {³}{{\\textsuperscript3}}1
+	    {ı}{{\\i}}1
+	    {—}{{---}}1
+	    {’}{{'}}1
+	    {…}{{\\dots}}1
+            {⮠}{{$\\hookleftarrow$}}1
+	    {␣}{{\\textvisiblespace}}1,
+	    keywordstyle=\\color{DarkGreen}\\bfseries,
+	    identifierstyle=\\color{DarkRed},
+	    commentstyle=\\color{Gray}\\upshape,
+	    stringstyle=\\color{DarkBlue}\\upshape,
+	    emphstyle=\\color{Chocolate}\\upshape,
+	    showstringspaces=false,
+	    columns=fullflexible,
+	    keepspaces=true}
+\\usepackage[a4paper,margin=1in,left=1.5in]{geometry}
+\\usepackage{parskip}
+\\makeatletter
+\\renewcommand{\\maketitle}{%
+  \\begingroup\\parindent0pt
+  \\sffamily
+  \\Huge{\\bfseries\\@title}\\par\\bigskip
+  \\LARGE{\\bfseries\\@author}\\par\\medskip
+  \\normalsize\\@date\\par\\bigskip
+  \\endgroup\\@afterindentfalse\\@afterheading}
+\\makeatother
+[DEFAULT-PACKAGES]
+\\hypersetup{linkcolor=Blue,urlcolor=DarkBlue,
+  citecolor=DarkRed,colorlinks=true}
+\\AtBeginDocument{\\renewcommand{\\UrlFont}{\\ttfamily}}
+[PACKAGES]
+[EXTRA]"
+             ("\\section{%s}" . "\\section*{%s}")
+             ("\\subsection{%s}" . "\\subsection*{%s}")
+             ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+             ("\\paragraph{%s}" . "\\paragraph*{%s}")
+             ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
 
+            ("report" "\\documentclass[11pt]{report}"
+             ("\\part{%s}" . "\\part*{%s}")
+             ("\\chapter{%s}" . "\\chapter*{%s}")
+             ("\\section{%s}" . "\\section*{%s}")
+             ("\\subsection{%s}" . "\\subsection*{%s}")
+             ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
 
-    ;; )
-
-    ;; (add-to-list 'org-latex-classes
-    ;;              '("org-article"
-    ;;                "\\documentclass[10pt,article,oneside]{memoir}"
-    ;;                ("\\section{%s}" . "\\section*{%s}")
-    ;;                ("\\subsection{%s}" . "\\subsection*{%s}")
-    ;;                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-    ;;                ("\\paragraph{%s}" . "\\paragraph*{%s}")
-    ;;                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-    ;;              )
-
-    ;; ;; Settings to export code with `minted' instead of `verbatim'.
-    ;; (setq org-export-latex-listings t)
-    ;; (setq org-latex-listings 'minted
-    ;;       org-latex-packages-alist '(("" "minted")
-    ;;                                  ("" "memoir"))
-    ;;       ;; org-latex-pdf-process '("pdflatex -shell-escape -intera")
-    ;;       )
-
+            ("book" "\\documentclass[11pt]{book}"
+             ("\\part{%s}" . "\\part*{%s}")
+             ("\\chapter{%s}" . "\\chapter*{%s}")
+             ("\\section{%s}" . "\\section*{%s}")
+             ("\\subsection{%s}" . "\\subsection*{%s}")
+             ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
     ))
 
 (defun config/post-init-org ()

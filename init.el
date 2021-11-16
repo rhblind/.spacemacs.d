@@ -155,7 +155,10 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 
   (setq epa-pinentry-mode 'loopback)  ;; Allows unlocking gpg keys using the Emacs minibuffer (gpg --> gpg-agent --> pinentry --> Emacs)
   (when (spacemacs/system-is-mac)
-    (custom-set-variables '(epg-gpg-program "/usr/local/bin/gpg")))
+    (custom-set-variables '(epg-gpg-program "/usr/local/bin/gpg"))
+    ;; (shell-command "gpg-connect-agent /bye")
+    (setenv "SSH_AUTH_SOCK" (shell-command-to-string "gpgconf --list-dirs agent-ssh-socket"))
+    )
   (epa-file-enable)
 
   (setq auto-resume-layers t

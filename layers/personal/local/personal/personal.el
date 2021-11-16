@@ -6,7 +6,6 @@
 (global-company-mode)                                     ;; Enable company-mode(autocomplete) globally
 (global-unset-key [down-mouse-1])                         ;; No dragging nonsense
 (global-set-key [down-mouse-1] 'mouse-select-window)      ;; Select window with mouse click
-(smartparens-global-mode)                                 ;; Set global smart parenthesis mode
 (treemacs-resize-icons 14)                                ;; Treemacs icon size
 (keychain-refresh-environment)                            ;; Refresh keychain information on start
 
@@ -14,6 +13,7 @@
 (global-set-key (kbd "<C-return>") 'newline-below)
 (global-set-key (kbd "<S-return>") 'newline-above)
 (global-set-key (kbd "<C-backspace>") 'backward-kill-word)
+
 
 ;; (define-key text-mode-map (kbd "<tab>") 'indent-for-tab-command)  ;; Not quite working
 
@@ -71,7 +71,6 @@
                                                 "DONE" "NEVERMIND"))
       org-use-property-inheritance  t
       org-log-done-with-time        t
-      org-export-in-background      t
       org-catch-invisible-edits     'smart
       org-babel-default-header-args '((:session . "none")
                                       (:results . "replace")

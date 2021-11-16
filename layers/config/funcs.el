@@ -95,7 +95,9 @@ subheading level already exists within the buffer."
       (outline-demote 'region))))
 
 ;;; Misc
+
 ;;;; Utilities
+
 (defun align-whitespace (start end)
   "Align columns by whitespace
 https://www.emacswiki.org/emacs/AlignCommands"
@@ -119,7 +121,20 @@ See `sort-words'."
   (interactive "*P\nr")
   (sort-regexp-fields reverse "\\(\\sw\\|\\s_\\)+" "\\&" start end))
 
+(defun delete-trailing-crlf ()
+  "Remove trailing crlf (^M) end-of-line in the current buffer"
+  (interactive)
+  (save-match-data
+    (save-excursion
+      (let ((remove-count 0))
+        (goto-char (point-min))
+        (while (re-search-forward (concat (char-to-string 13) "$") (point-max) t)
+          (setq remove-count (+ remove-count 1))
+          (replace-match "" nil nil))
+        (message (format "%d ^M removed from buffer." remove-count))))))
+
 ;;;; Overrides
+
 (defun sp-react--after-equals-p (_id action _context)
   "Allow ES6 arrow '=>' in react-mode"
   (when (memq action '(insert navigate))
