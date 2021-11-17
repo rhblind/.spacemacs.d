@@ -41,6 +41,7 @@
           ;; shell-default-shell 'vterm
           shell-default-shell 'eshell
           shell-default-term-shell "/usr/local/bin/zsh"
+          shell-environment-variable-completion t
           )
    (spell-checking :variables
                    spell-checking-enable-by-default t

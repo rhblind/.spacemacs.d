@@ -402,7 +402,7 @@
        esh-dir
        "\xf07c"  ; 
        (abbreviate-file-name (eshell/pwd))
-       '(:foreground "#268bd2" :bold bold :underline t))
+       '(:foreground "#268bd2" :weight bold :underline t))
 
       ;; Git Branch
       (pretty-eshell-section

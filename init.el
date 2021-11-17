@@ -119,7 +119,6 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            forge
                                            gcmh
                                            k8s-mode
-                                           keychain-environment
                                            live-py-mode
                                            lsp-ui
                                            org-fancy-priorities
@@ -154,11 +153,23 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
   (require 'epa-file)    ;; Load library for decrypting the `secrets.el.gpg' file
 
   (setq epa-pinentry-mode 'loopback)  ;; Allows unlocking gpg keys using the Emacs minibuffer (gpg --> gpg-agent --> pinentry --> Emacs)
+
+;;;;; MacOS specifics
+
   (when (spacemacs/system-is-mac)
-    (custom-set-variables '(epg-gpg-program "/usr/local/bin/gpg"))
-    ;; (shell-command "gpg-connect-agent /bye")
-    (setenv "SSH_AUTH_SOCK" (shell-command-to-string "gpgconf --list-dirs agent-ssh-socket"))
-    )
+    (setq shell-file-name "/usr/local/bin/zsh")
+    (setq dired-listing-switches "-aBhl --group-directories-first"
+          helm-locate-command "glocate %s -e -A --regex %s"
+          helm-locate-recursive-dirs-command "glocate -i -e -A --regex '^%s' '%s.*$'"
+          insert-directory-program "/usr/local/bin/gls")
+
+    (custom-set-variables '(epg-gpg-program "/usr/local/bin/gpg")))
+
+;;;;; Linux specifics
+
+  (when (spacemacs/system-is-linux)
+    (setq shell-file-name "/bin/bash"))
+
   (epa-file-enable)
 
   (setq auto-resume-layers t
@@ -167,19 +178,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
         secrets-file "~/.spacemacs.d/secrets.el.gpg")
 
   ;; This file keeps secrets for emacs configurations
-  (load-file secrets-file)
-
-
-  (when (spacemacs/system-is-mac)
-    (setq shell-file-name "/bin/bash")
-    (setq dired-listing-switches "-aBhl --group-directories-first"
-          helm-locate-command "glocate %s -e -A --regex %s"
-          helm-locate-recursive-dirs-command "glocate -i -e -A --regex '^%s' '%s.*$'"
-          insert-directory-program "/usr/local/bin/gls"
-          ))
-  (when (spacemacs/system-is-linux)
-    (setq shell-file-name "/bin/bash"))
-  )
+  (load-file secrets-file))
 
 ;;;; Spacemacs/user-config
 ;;;;; Post Layer Load
@@ -191,11 +190,16 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
     (redo-spacemacs-bindings))
 
   (when (spacemacs/system-is-mac)
+    (require 'exec-path-from-shell)
     (setq exec-path-from-shell-check-startup-files nil)  ;; Don't complain about putting thing in the wrong files
-    (exec-path-from-shell-initialize)))
+    (dolist (var '("LANG" "LC_TYPE" "GPG_AGENT_INFO" "SSH_AUTH_SOCK"))
+      (add-to-list 'exec-path-from-shell-variables var))
+    (exec-path-from-shell-initialize)
+    ;; (setenv "SSH_AUTH_SOCK" (shell-command-to-string "gpgconf --list-dirs agent-ssh-socket"))
+    (shell-command "gpg-connect-agent updatestartuptty /bye >/dev/null")
+    ))
 
 ;;;;; Core
 (defun dotspacemacs/user-config ()
   "Configuration that cannot be delegated to layers."
-  (require 'window-purpose) ;; Workaround until https://github.com/bmag/emacs-purpose/issues/158 is fixed
   (dotspacemacs/user-config/post-layer-load-config))

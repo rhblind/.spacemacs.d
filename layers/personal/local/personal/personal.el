@@ -7,7 +7,6 @@
 (global-unset-key [down-mouse-1])                         ;; No dragging nonsense
 (global-set-key [down-mouse-1] 'mouse-select-window)      ;; Select window with mouse click
 (treemacs-resize-icons 14)                                ;; Treemacs icon size
-(keychain-refresh-environment)                            ;; Refresh keychain information on start
 
 ;;;; Keybindings
 (global-set-key (kbd "<C-return>") 'newline-below)
