@@ -37,7 +37,7 @@
       (add-to-list 'comp-deferred-compilation-black-list blacklist))
   (message "Library 'comp not found."))
 
-(defvar server? nil
+(defvar server? t
   "Alias `dotspacemacs-enable-server'. Set true if running emacs as a daemon")
 
 ;;; Spacemacs
@@ -65,7 +65,6 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
    dotspacemacs-elpa-subdirectory          nil
    dotspacemacs-enable-server              server?
    dotspacemacs-server-socket-dir          nil
-   dotspacemacs-persistent-server          t
    dotspacemacs-fullscreen-at-startup      nil
    dotspacemacs-folding-method             'origami
    dotspacemacs-large-file-size            5
@@ -195,9 +194,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
     (dolist (var '("LANG" "LC_TYPE" "GPG_AGENT_INFO" "SSH_AUTH_SOCK"))
       (add-to-list 'exec-path-from-shell-variables var))
     (exec-path-from-shell-initialize)
-    ;; (setenv "SSH_AUTH_SOCK" (shell-command-to-string "gpgconf --list-dirs agent-ssh-socket"))
-    (shell-command "gpg-connect-agent updatestartuptty /bye >/dev/null")
-    ))
+    (shell-command "gpg-connect-agent updatestartuptty /bye >/dev/null")))
 
 ;;;;; Core
 (defun dotspacemacs/user-config ()

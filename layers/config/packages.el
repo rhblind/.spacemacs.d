@@ -24,6 +24,7 @@
         org-projectile
         python
         ranger
+        vterm
         writeroom-mode
         web-mode
         yasnippet-snippets
@@ -662,13 +663,6 @@
                        javascript-mode-hook))
     (add-hook mode-hook (lambda () (setq-local create-lockfiles nil))))
 
-  ;; Enable sgml-electric-tag-pair-mode for some minor modes
-  (dolist (mode-hook '(html-mode-hook
-                       rjsx-mode-hook
-                       typescript-tsx-mode-hook
-                       xml-mode))
-    (add-hook mode-hook 'sgml-electric-tag-pair-mode))
-
   ;; Disable smartparens strict mode in order to be able to write out
   ;; arrow functions like ie. `() => {...}'
   (dolist (mode-hook '(rjsx-mode-hook
@@ -676,6 +670,9 @@
                        typescript-tsx-mode-hook
                        javascript-mode-hook))
     (add-hook mode-hook 'turn-off-smartparens-strict-mode)))
+
+;;;; Vterm
+(defun config/post-init-vterm ())
 
 ;;;; Writeroom-mode
 (defun config/post-init-writeroom-mode ()

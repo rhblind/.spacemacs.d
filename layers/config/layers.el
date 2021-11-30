@@ -38,8 +38,7 @@
         org-want-todo-bindings t)
    (shell :variables
           close-window-with-terminal t
-          ;; shell-default-shell 'vterm
-          shell-default-shell 'eshell
+          shell-default-shell 'vterm
           shell-default-term-shell "/usr/local/bin/zsh"
           shell-environment-variable-completion t
           )
