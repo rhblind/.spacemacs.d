@@ -602,6 +602,21 @@
 
 ;;;; Python
 (defun config/pre-init-python ()
+  (setenv "WORKON_HOME" "~/.local/share/virtualenvs")
+
+  (spacemacs|use-package-add-hook pyenv
+    :post-config
+    (setq pyvenv-post-activate-hooks
+          (list (lambda ()
+                  (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python")))))
+    (setq pyvenv-post-deactivate-hooks
+          (list (lambda ()
+                  (setq python-shell-interpreter "python3")))))
+
+  (spacemacs|use-package-add-hook lsp-pyright
+    :post-config
+    (setq lsp-pyright-venv-directory (getenv "WORKON_HOME")))
+
 
 ;;;;; Debugging
 

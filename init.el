@@ -156,7 +156,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
 ;;;;; MacOS specifics
 
   (when (spacemacs/system-is-mac)
-    (setq shell-file-name "/usr/local/bin/zsh")
+    (setq shell-file-name "/bin/bash")
     (setq dired-listing-switches "-aBhl --group-directories-first"
           helm-locate-command "glocate %s -e -A --regex %s"
           helm-locate-recursive-dirs-command "glocate -i -e -A --regex '^%s' '%s.*$'"

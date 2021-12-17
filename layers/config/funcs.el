@@ -133,6 +133,32 @@ See `sort-words'."
           (replace-match "" nil nil))
         (message (format "%d ^M removed from buffer." remove-count))))))
 
+(defun pyvenv-projectile-workon-venv ()
+  "Call pyenv-workon with the current projectile project name.
+This will return the full path of the associated virtual
+environment found in $WORKON_HOME, or nil if the environment does
+not exist."
+  (let ((pname (projectile-project-name)))
+    (pyvenv-workon pname)
+    (if (file-directory-p pyvenv-virtual-env)
+        pyvenv-virtual-env
+      (pyvenv-deactivate))))
+
+;; (defun pyvenv-auto-lsp ()
+;;   "Turn on lsp mode in a Python project with some automated logic.
+;; Try to automatically determine which pyenv virtual environment to
+;; activate based on the project name, using
+;; `pyvenv-projectile-workon-venv'. If successful, call `lsp'. If we
+;; cannot determine the virtualenv automatically, first call the
+;; interactive `pyvenv-workon' function before `lsp'"
+;;   (interactive)
+;;   (let ((pvenv (pyvenv-projectile-workon-venv)))
+;;     (if pvenv
+;;         (lsp)
+;;       (progn
+;;         (call-interactively #'pyvenv-workon)
+;;         (lsp)))))
+
 ;;;; Overrides
 
 (defun sp-react--after-equals-p (_id action _context)
