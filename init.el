@@ -121,6 +121,7 @@ Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
                                            live-py-mode
                                            lsp-ui
                                            org-fancy-priorities
+                                           org-roam-ui
                                            org-super-agenda
                                            org-superstar
                                            pinentry
