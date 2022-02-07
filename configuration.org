@@ -1,0 +1,249 @@
+
+* Setup
+This is an attempt at migrating my Emacs config to a literate config.
+
+Ligatures and icons require installation - see README.
+Layers are declared in `layers/config/layers.el'.
+** Constants
+
+We declare some "friendly named" constants to determine what operating system
+we're currently on.
+
+#+begin_src emacs-lisp
+(defconst linux?   (eq system-type 'gnu/linux)                   "Are we on a linux machine?")
+(defconst mac?     (eq system-type 'darwin)                      "Are we on a macOS machine?")
+(defconst windows? (eq system-type 'windows-nt)                  "Are we on a windows machine?")
+(defconst wsl?     (and (not (eq (getenv "WSLENV") nil)) linux?) "Are we on a wsl environment?")
+#+end_src
+
+** Sneaky Garbage Collection
+
+For some reason, my GC'ing cause Emacs to freeze a lot while I'm working.
+Found this little gem somewhere on the internet which seems to work quite good.
+
+#+begin_src emacs-lisp
+;; Defer garbage collection further back in the startup process.
+;; This is reset by spacemacs (dotspacemacs-gc-cons) after spacemacs
+;; has completed loading.
+(setq gc-cons-threshold most-positive-fixnum)
+
+;; Adopt a sneaky garbage collection strategy of waiting until idle time to
+;; collect; staving off the collector while the user is working.
+(add-hook 'emacs-startup-hook #'(lambda ()
+                                  (setq gcmh-idle-delay 5
+                                        gcmh-high-cons-threshold (* 16 1024 1024)  ;; 16mb
+                                        gcmh-verbose nil)))
+#+end_src
+
+** Byte compilation (blacklist)
+
+Gotta go fast! The native-comp branch of Emacs (will probably be merged in
+Emacs 28) naively compiles lisp code once loaded. Not all libraries work too
+well with this feature still, so we'll have a blacklist for where we can add
+stuff that shouldn't be compiled.
+
+#+begin_src emacs-lisp
+(if (require 'comp nil t)
+    (dolist (blacklist '(;; Add packages to this list to blacklist them from native compilation
+                         ))
+      (add-to-list 'comp-bootstrap-black-list blacklist)
+      (add-to-list 'comp-deferred-compilation-black-list blacklist))
+  (message "Library 'comp not found."))
+#+end_src
+
+** Emacs Daemon
+
+Set ~true~ if you want to run the emacs daemon after starting up.
+
+#+begin_src emacs-lisp
+(defvar server? t
+  "Alias `dotspacemacs-enable-server'. Set true if running emacs as a daemon")
+#+end_src
+
+* Spacemacs
+
+This part of the configuration is specific for Spacemacs
+
+** Init
+
+#+begin_src emacs-lisp
+(defun dotspacemacs/init ()
+  "Instantiate Spacemacs core settings.
+
+  All `dotspacemacs-' variables with values set different than their defaults.
+They are all defined in `~/.emacs.d/core/core-dotspacemacs.el'.
+Check `dotspacemacs/get-variable-string-list' for all vars you can configure."
+
+  (setq-default
+   ;; Display
+   dotspacemacs-default-font `("Fira Code",
+                               :size ,(if (= 1440 (display-pixel-height)) 15 13))
+   dotspacemacs-themes       '(solarized-light
+                               doom-one)
+   ;; General
+   dotspacemacs-auto-generate-layout-names t
+   dotspacemacs-auto-resume-layouts        t
+   dotspacemacs-editing-style              '(vim :variables
+                                                 vim-style-visual-feedback t)
+   dotspacemacs-elpa-https                 t
+   dotspacemacs-elpa-subdirectory          nil
+   dotspacemacs-enable-server              server?
+   dotspacemacs-server-socket-dir          nil
+   dotspacemacs-fullscreen-at-startup      nil
+   dotspacemacs-folding-method             'origami
+   dotspacemacs-large-file-size            5
+   dotspacemacs-helm-use-fuzzy             'always
+   dotspacemacs-line-numbers               '(
+                                             :relative t
+                                             :disabled-for-modes dired-mode doc-view-mode markdown-mode org-mode pdf-view-mode
+                                             :size-limit-kb 5000)
+   dotspacemacs-persistent-server          server?
+   dotspacemacs-pretty-docs                t
+   dotspacemacs-search-tools               '("rg" "ag" "pt" "ack" "grep")
+   dotspacemacs-activate-smartparens-mode  t
+   dotspacemacs-smartparens-strict-mode    t
+   dotspacemacs-smart-closing-parenthesis  t
+   dotspacemacs-remap-Y-to-y$              nil
+   dotspacemacs-scratch-mode               'org-mode
+   dotspacemacs-scroll-bar-while-scrolling nil
+   dotspacemacs-startup-banner             'official
+   dotspacemacs-startup-lists              nil
+   dotspacemacs-whitespace-cleanup         'trailing
+   dotspacemacs-distinguish-gui-tab        t
+   dotspacemacs-install-packages           'used-only
+
+   ;; The following are unchanged but are still required for reloading via
+   ;; 'SPC f e R' `dotspacemacs/sync-configuration-layers' to not throw warnings
+   dotspacemacs-emacs-leader-key  "M-m"
+   dotspacemacs-emacs-command-key "SPC"
+   dotspacemacs-leader-key        "SPC"
+   dotspacemacs-mode-line-theme   'all-the-icons))
+#+end_src
+
+** Layers
+
+#+begin_src emacs-lisp
+(defun dotspacemacs/layers ()
+  "Instantiate Spacemacs layers declarations and package configurations."
+  (setq-default
+   dotspacemacs-configuration-layers     '((config   :location local)
+                                           (display  :location local)
+                                           (personal :location local))
+   dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
+   dotspacemacs-additional-packages      '(counsel-dash
+                                           doct
+                                           doom-themes
+                                           drag-stuff
+                                           dtrt-indent
+                                           evil-mc
+                                           evil-string-inflection
+                                           exec-path-from-shell
+                                           exunit
+                                           flycheck-credo
+                                           flycheck-dialyxir
+                                           forge
+                                           gcmh
+                                           k8s-mode
+                                           live-py-mode
+                                           lsp-ui
+                                           org-fancy-priorities
+                                           org-roam-ui
+                                           org-super-agenda
+                                           org-superstar
+                                           pinentry
+                                           polymode
+                                           poetry
+                                           rainbow-mode
+                                           posframe
+                                           yasnippet-snippets)
+   dotspacemacs-frozen-packages          '()
+   dotspacemacs-excluded-packages
+   '(;; Must Exclude (for styling, functionality, bug-fixing reasons)
+     fringe importmagic scss-mode vi-tilde-fringe
+
+     ;; Packages I don't use (non-exhaustive)
+     anzu centered-cursor-mode column-enforce-mode company-statistics
+     doom-modeline eshell-prompt-extras evil-anzu evil-tutor
+     fancy-battery fill-column-indicator gnuplot golden-ratio indent-guide
+     iedit live-py-mode multi-term mwim neotree org-bullets paradox py-isort
+
+     ;; Packages that is installed as a dependency of others, but I don't want installed
+     alchemist)))
+#+end_src
+
+** User init
+#+begin_src emacs-lisp
+(defun dotspacemacs/user-init ()
+  "Package independent settings to run before `dotspacemacs/user-config'."
+  (fringe-mode 0)
+  (require 'iso-transl)  ;; Enables "dead keys" for non-english keyboards
+  (require 'epa-file)    ;; Load library for decrypting the `secrets.el.gpg' file
+
+  ;; (setq epa-pinentry-mode 'loopback)  ;; Allows unlocking gpg keys using the Emacs minibuffer (gpg --> gpg-agent --> pinentry --> Emacs)
+
+;;;;; MacOS specifics
+
+  (when (spacemacs/system-is-mac)
+    (setq shell-file-name "/bin/bash")
+    (setq dired-listing-switches "-aBhl --group-directories-first"
+          helm-locate-command "glocate %s -e -A --regex %s"
+          helm-locate-recursive-dirs-command "glocate -i -e -A --regex '^%s' '%s.*$'"
+          insert-directory-program "/usr/local/bin/gls")
+
+    (custom-set-variables '(epg-gpg-program "/usr/local/bin/gpg")))
+
+;;;;; Linux specifics
+
+  (when (spacemacs/system-is-linux)
+    (setq shell-file-name "/bin/bash"))
+
+  (epa-file-enable)
+
+  (setq auto-resume-layers t
+        auth-source-debug nil  ;; Enable logging of authentication related stuff to the `*Messages' buffer. Disable when not needed!
+        custom-file "~/.spacemacs.d/.custom-settings.el"
+        secrets-file "~/.spacemacs.d/secrets.el.gpg")
+
+  ;; This file keeps secrets for emacs configurations
+  (load-file secrets-file))
+#+end_src
+
+** User config
+
+This is the user config section. This should be re-written.
+
+Defines a function that will be loaded in the ~post-layer-load~.
+
+#+begin_src emacs-lisp
+(defun dotspacemacs/user-config/post-layer-load-config ()
+  "Configuration to take place *after all* layers/pkgs are instantiated."
+  (when (and (boundp 'redo-bindings?) redo-bindings?
+             (configuration-layer/package-used-p 'redo-spacemacs))
+    (redo-spacemacs-bindings))
+
+  (when (spacemacs/system-is-mac)
+    (require 'exec-path-from-shell)
+    (setq exec-path-from-shell-check-startup-files nil)  ;; Don't complain about putting thing in the wrong files
+    (dolist (var '("LANG" "LC_TYPE" "GPG_AGENT_INFO" "SSH_AUTH_SOCK"))
+      (add-to-list 'exec-path-from-shell-variables var))
+    (exec-path-from-shell-initialize)
+    (shell-command "gpg-connect-agent updatestartuptty /bye >/dev/null")))
+#+end_src
+
+** Post Layer Load
+
+#+begin_src emacs-lisp
+(defun dotspacemacs/user-config ()
+  "Configuration that cannot be delegated to layers."
+  (dotspacemacs/user-config/post-layer-load-config))
+#+end_src
+
+#+begin_src emacs-lisp
+;;; Spacemacs
+;;;; Spacemacs/init
+;;;; Spacemacs/layers
+;;;; Spacemacs/user-init
+;;;; Spacemacs/user-config
+;;;;; Post Layer Load
+;;;;; Core
+#+end_src
