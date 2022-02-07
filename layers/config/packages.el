@@ -198,6 +198,7 @@
 
   ;; Register your debug run configurations here
   ;; (see dap-elixir for defaults injected into the "Elixir" type)
+  (require 'dap-hydra)
   (require 'dap-elixir)
   (with-eval-after-load 'dap-mode
     ;; (dap--put-if-absent :type "shell")
@@ -221,42 +222,6 @@
                                        :request "launch"
                                        :program nil
                                        :cwd nil)))
-
-;;;;; Polymode (using web-mode for inline html)
-
-  ;; Use polymode to enable web mode for inline live view templates
-  ;; https://blog.evalcode.com/phoenix-liveview-inline-syntax-highlighting-for-emacs/
-  ;; TODO: Make it work for a list of sigils (~L, ~F)
-  ;; FIXME: How to enable auto-complete for web mode while editing html blocks??
-  ;; FIXME this seems to fuck up lsp-auto formatting?
-  ;; (use-package polymode
-  ;;   :mode ("\.ex$" . poly-elixir-web-mode)
-  ;;   :config
-  ;;   (define-hostmode poly-elixir-hostmode :mode 'elixir-mode)
-  ;;   (define-innermode poly-liveview-expr-elixir-innermode
-  ;;     :mode 'web-mode
-  ;;     :head-matcher (rx line-start (* space) "~L" (= 3 (char "\"'")) line-end)
-  ;;     :tail-matcher (rx line-start (* space) (= 3 (char "\"'")) line-end)
-  ;;     :head-mode 'host
-  ;;     :tail-mode 'host
-  ;;     :allow-nested nil
-  ;;     :keep-in-mode 'host
-  ;;     :fallback-mode 'host)
-  ;;   (define-innermode poly-liveview-surfaceui-expr-elixir-innermode
-  ;;     :mode 'web-mode
-  ;;     :head-matcher (rx line-start (* space) "~F" (= 3 (char "\"'")) line-end)
-  ;;     :tail-matcher (rx line-start (* space) (= 3 (char "\"'")) line-end)
-  ;;     :head-mode 'host
-  ;;     :tail-mode 'host
-  ;;     :allow-nested nil
-  ;;     :keep-in-mode 'host
-  ;;     :fallback-mode 'host)
-  ;;   (define-polymode poly-elixir-web-mode
-  ;;     :hostmode 'poly-elixir-hostmode
-  ;;     :innermodes '(poly-liveview-expr-elixir-innermode
-  ;;                   poly-liveview-surfaceui-expr-elixir-innermode)))
-  ;; (add-to-list 'web-mode-engines-alist ("elixir" . "\\.ex\\"))
-
 
 ;;;;; Mode hooks
   ;; Auto-highlight symbols
@@ -630,6 +595,7 @@
 
 ;;;;; Debugging
 
+  (require 'dap-hydra)
   (require 'dap-python)
   (add-hook 'python-mode-hook #'lsp-deferred)
   (add-hook 'python-mode-hook (lambda () (setq-local counsel-dash-docsets '("Python"))))
@@ -695,6 +661,27 @@
                        typescript-tsx-mode-hook
                        javascript-mode-hook))
     (add-hook mode-hook 'turn-off-smartparens-strict-mode)))
+
+(defun config/post-init-web-mode ()
+
+;;;;; Typescript debugging
+
+  (add-hook 'typescript-mode-hook (lambda ()
+                                    (require 'dap-hydra)
+                                    (require 'dap-node)
+                                    (require 'dap-chrome)
+                                    (dap-node-setup)))
+
+  (with-eval-after-load 'dap-mode
+    ;; (dap-register-debug-template "React Debugging (Chrome)"
+    ;;                              (list :name "Chrome::React Debugging"
+    ;;                                    :type "pwa-chrome"
+    ;;                                    :request "launch"
+    ;;                                    :url "http://localhost:3000"
+    ;;                                    :webRoot "${workspaceFolder}"
+    ;;                                    :program nil
+    ;;                                    :cwd nil))
+    ))
 
 ;;;; Vterm
 (defun config/post-init-vterm ())

@@ -254,6 +254,20 @@
         (ahs-plugin-default-face-unfocused :foreground "#d33682"
                                            ,@(alist-get 'ahs-plugin-default-face-unfocused
 					                                              display/font-locks))))
+;;;;; Doom One
+(setq display/doom-one-theming
+      `(;; Overwrites
+        (ahs-plugin-default-face :foreground "#d33682"
+                                 ,@(alist-get 'ahs-plugin-default-face
+					                                    display/font-locks))
+        (ahs-plugin-default-face-unfocused :foreground "#d33682"
+                                           ,@(alist-get 'ahs-plugin-default-face-unfocused
+					                                              display/font-locks))
+        (ahs-plugin-whole-buffer-face :foreground "White"
+                                      :background "#d33682"
+                                      ,@(alist-get 'ahs-plugin-whole-buffer-face
+                                                   display/font-locks))
+        ))
 
 ;;;;; Zenburn
 (setq display/zenburn-theming
@@ -284,4 +298,5 @@
         (solarized-light ,@display/common-theming
                          ,@display/headers/solarized-light
                          ,@display/solarized-light-theming)
+        (doom-one        ,@display/doom-one-theming)
         (doom-solarized-light ,@display/doom-solarized-light-theming)))
