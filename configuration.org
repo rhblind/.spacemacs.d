@@ -4,6 +4,29 @@ My "personal" ([[https://github.com/ekaschalk/.spacemacs.d][stolen]] from Eric K
 I should probably move to Doom as everybody else, but Spacemacs has grown on me
 and now I can't move away :)
 
+* Table of Contents :TOC_3:
+- [[#prerequisites][Prerequisites]]
+  - [[#ligatures][Ligatures]]
+  - [[#icons][Icons]]
+  - [[#server][Server]]
+- [[#setup][Setup]]
+  - [[#constants][Constants]]
+  - [[#sneaky-garbage-collection][Sneaky Garbage Collection]]
+  - [[#byte-compilation-blacklist][Byte Compilation (blacklist)]]
+  - [[#emacs-daemon][Emacs Daemon]]
+- [[#spacemacs][Spacemacs]]
+  - [[#init][Init]]
+  - [[#layers][Layers]]
+  - [[#user-init][User Init]]
+  - [[#user-config][User Config]]
+  - [[#post-layer-load][Post Layer Load]]
+- [[#personal-preferences---the-random-config-dumping-ground][Personal Preferences - The random config dumping ground]]
+  - [[#scrolling][Scrolling]]
+  - [[#globals][Globals]]
+  - [[#keybindings][Keybindings]]
+- [[#project-management][Project Management]]
+- [[#org-mode][Org Mode]]
+
 * Prerequisites
 ** Ligatures
 
