@@ -2,7 +2,7 @@
 .DS_Store
 .spacemacs.env
 .custom-settings.el
-configuration.el
+spacemacs.el
 
 # Transitory
 .#*

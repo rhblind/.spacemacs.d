@@ -116,13 +116,13 @@ Set ~true~ if you want to run the emacs daemon after starting up.
 This part of the configuration is specific for Spacemacs
 
 ** Init
-Instantiate Spacemacs core settings.
-All ~dotspacemacs-~ variables with values set different than their defaults.
-They are all defined in ~~/.emacs.d/core/core-dotspacemacs.el~.
-Check ~dotspacemacs/get-variable-string-list~ for all vars you can configure.
 
 #+begin_src emacs-lisp
 (defun dotspacemacs/init ()
+  """ All dotspacemacs- variables with values set different than their defaults.
+They are all defined in ~/.emacs.d/core/core-dotspacemacs.el.
+Check dotspacemacs/get-variable-string-list for all vars you can configure.
+"""
   (setq-default
    ;; Display
    dotspacemacs-default-font `("Fira Code",
@@ -261,7 +261,6 @@ Check ~dotspacemacs/get-variable-string-list~ for all vars you can configure.
 ** User Config
 
 This is the user config section. This should be re-written.
-
 Defines a function that will be loaded in the ~post-layer-load~.
 
 #+begin_src emacs-lisp
