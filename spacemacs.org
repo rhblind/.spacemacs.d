@@ -1,10 +1,19 @@
+:DOC-CONFIG:
+# Tangle by default to spacemacs.el, which is the most common case
+#+property: header-args:emacs-lisp :tangle spacemacs.el
+#+property: header-args: :mkdirp yes :comments no
+#+startup: headlines
+#+startup: nohideblocks
+#+startup: noindent
+#+options: toc:3 h:3
+:END:
 
-My "personal" ([[https://github.com/ekaschalk/.spacemacs.d][stolen]] from Eric Kaschalk) Spacemacs configuration.
+#+title: Spacemacs Literate Configuration
+#+author: Rolf Håvard Blindheim
+#+email: rhblind@gmail.com
 
-I should probably move to Doom as everybody else, but Spacemacs has grown on me
-and now I can't move away :)
-
-* Table of Contents :TOC_3:
+* Table of Contents :TOC_3:noexport:
+- [[#references][References]]
 - [[#prerequisites][Prerequisites]]
   - [[#ligatures][Ligatures]]
   - [[#icons][Icons]]
@@ -26,6 +35,18 @@ and now I can't move away :)
   - [[#keybindings][Keybindings]]
 - [[#project-management][Project Management]]
 - [[#org-mode][Org Mode]]
+- [[#local-variables][Local Variables]]
+
+* References
+
+Emacs configuration is mostly (for my part) stealing other peoples
+configurations, mashing them together, crossing fingers and hoping that it
+works. Here are some resources I have learnt a lot from.
+
+- [[https://github.com/ekaschalk/.spacemacs.d][GitHub - ekaschalk/.spacemacs.d: My spacemacs configuration.]]
+- [[https://github.com/zzamboni/dot-doom/blob/master/doom.org][dot-doom/doom.org at master · zzamboni/dot-doom · GitHub]]
+
+Also, I should probably learn some elisp soon...
 
 * Prerequisites
 ** Ligatures
@@ -417,3 +438,12 @@ Make sure org-roam is available on startup
 #+begin_src emacs-lisp
 ;; (org-roam-db-autosync-mode)
 #+end_src
+
+* Local Variables :ARCHIVE:
+
+This little block will cause the ~org-bable-tangle()~ function to run after this
+file is saved.
+
+# Local Variables:
+# eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)
+# End:
