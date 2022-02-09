@@ -6,6 +6,7 @@
 #+startup: headlines
 #+startup: nohideblocks
 #+startup: noindent
+#+startup: fold
 #+options: toc:3 h:3
 :END:
 
@@ -37,6 +38,10 @@
   - [[#keyboard-and-bindings][Keyboard and bindings]]
 - [[#packages][Packages]]
   - [[#org-mode][Org Mode]]
+    - [[#exporting][Exporting]]
+    - [[#org-babel][Org Babel]]
+    - [[#org-projectile][Org Projectile]]
+    - [[#org-roam][Org Roam]]
     - [[#declarative-org-capture-templates][Declarative Org Capture Templates]]
   - [[#outline-ivy][Outline-Ivy]]
   - [[#projectile][Projectile]]
@@ -454,13 +459,208 @@ files?
 Finally some other tweaks
 
 #+begin_src emacs-lisp
-(setq org-todo-keywords             '((sequence "TODO" "IN PROGRESS"
-                                                "|"
-                                                "DONE" "NEVERMIND"))
-      org-use-property-inheritance  t
-      org-log-done-with-time        t
-      org-catch-invisible-edits     'smart
-      org-babel-default-header-args '((:session . "none")
+(setq-default org-display-custom-times t)
+(setq org-todo-keywords              '((sequence "TODO" "IN PROGRESS"
+                                                  "|"
+                                                  "DONE" "NEVERMIND"))
+  org-use-property-inheritance       t
+  org-log-done-with-time             t
+  org-catch-invisible-edits          'smart
+  org-agenda-skip-unavailable-files  t
+  org-ellipsis                       ""
+  org-export-in-background           nil ;; Async export not working when ox is bytecompiled?
+  org-fontify-whole-heading-line     t
+  org-fontify-done-headline          nil
+  org-fontify-quote-and-verse-blocks t
+  org-hide-emphasis-markers          t
+  org-hide-leading-stars             t
+  org-indent-indentation-per-level   1
+  org-log-state-notes-into-drawer    t
+  org-log-done-with-time             t
+  org-startup-indented               t
+  org-pretty-entities                t
+  org-priority-faces                 '((65 :inherit org-priority :foreground "red")
+                                        (66 :inherit org-priority :foreground "brown")
+                                        (67 :inherit org-priority :foreground "blue"))
+  org-time-stamp-custom-formats      '("<%a %d.%m.%Y>" . "<%a %d.%m.%Y %H:%M>"))
+#+end_src
+
+*Mode Hooks*
+
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+(add-hook 'org-mode-hook 'turn-on-flyspell)
+(add-hook 'org-mode-hook 'visual-line-mode)
+(add-hook 'org-mode-hook 'variable-pitch-mode)
+(add-hook 'org-mode-hook 'org-indent-mode)
+(add-hook 'org-mode-hook (lambda () (progn
+                                      (require 'org-tempo)  ;; Required for new org templating system to work
+                                      (setq line-spacing 0.2
+                                            header-line-format " "
+                                            left-margin-width 2
+                                            right-margin-width 2))))
+#+end_src
+
+*Some custom keybindings*
+
+#+begin_src emacs-lisp :tangle user-config.el
+(spacemacs|use-package-add-hook org
+  :post-init (evil-define-key '(normal visual motion) org-mode-map
+               "gh" 'outline-up-heading
+               "gj" 'outline-forward-same-level
+               "gk" 'outline-backward-same-level
+               "gl" 'outline-next-visible-heading
+               "gu" 'outline-previous-visible-heading))
+
+(spacemacs/set-leader-keys-for-major-mode 'org-mode
+  "o"   'counsel-outline
+  "r"   'org-refile
+  "g"   'org-mark-ring-goto
+  "h"   'org-metaleft                    ;; Because of MacOS's damned, indestructable M-h binding...
+  "d o" 'org-toggle-time-stamp-overlays  ;; Required to toggle off before changing time when using custom formats
+  "s p" 'org-sort-entries-priorities)
+#+end_src
+
+Make sure org-roam is available on startup
+
+#+begin_src emacs-lisp :tangle user-config.el
+(org-roam-db-autosync-mode)
+#+end_src
+
+*** Exporting
+
+I'm not really exporting too many org files, but occasionally I like to make
+presentations using ~org-re-reveal~.
+
+#+begin_src emacs-lisp
+(setq org-re-reveal-root                 "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.9.2"
+      org-re-reveal-revealjs-version     "3.8"
+      org-re-reveal-title-slide          "<h1>%t</h1><h2>%s</h2><h4>%e</h4>")
+#+end_src
+
+This is mostly an experiment, but apparently you can get some nice LaTex exports
+using a good template. This is not a good template :)
+
+#+begin_src emacs-lisp
+(with-eval-after-load 'ox-latex
+    (setq org-latex-listings 'minted
+          org-latex-packages-alist '(("" "minted"))
+          org-latex-minted-options '(("breaklines" "true")
+                                     ("breakanywhere" "true")))
+    (setq org-latex-pdf-process
+          (list (concat "latexmk "
+                        "-xelatex "
+                        "-recorder -synctex=1 -bibtex-cond %b")))
+    (setq org-latex-classes
+          '(("article"
+             "\\RequirePackage{fix-cm}
+\\PassOptionsToPackage{svgnames}{xcolor}
+\\documentclass[11pt]{article}
+\\usepackage{fontspec}
+\\setmainfont{ETBembo RomanOSF}
+\\setsansfont[Scale=MatchLowercase]{Raleway}
+\\setmonofont[Scale=MatchLowercase]{ETBembo}
+\\usepackage{sectsty}
+\\allsectionsfont{\\sffamily}
+\\usepackage{enumitem}
+\\setlist[description]{style=unboxed,font=\\sffamily\\bfseries}
+\\usepackage{listings}
+\\lstset{frame=single,aboveskip=1em,
+	framesep=.5em,backgroundcolor=\\color{AliceBlue},
+	rulecolor=\\color{LightSteelBlue},framerule=1pt}
+\\usepackage{xcolor}
+\\newcommand\\basicdefault[1]{\\scriptsize\\color{Black}\\ttfamily#1}
+\\lstset{basicstyle=\\basicdefault{\\spaceskip1em}}
+\\lstset{literate=
+	    {§}{{\\S}}1
+	    {©}{{\\raisebox{.125ex}{\\copyright}\\enspace}}1
+	    {«}{{\\guillemotleft}}1
+	    {»}{{\\guillemotright}}1
+	    {Á}{{\\'A}}1
+	    {Ä}{{\\\"A}}1
+	    {É}{{\\'E}}1
+	    {Í}{{\\'I}}1
+	    {Ó}{{\\'O}}1
+	    {Ö}{{\\\"O}}1
+	    {Ú}{{\\'U}}1
+	    {Ü}{{\\\"U}}1
+	    {ß}{{\\ss}}2
+	    {à}{{\\`a}}1
+	    {á}{{\\'a}}1
+	    {ä}{{\\\"a}}1
+	    {é}{{\\'e}}1
+	    {í}{{\\'i}}1
+	    {ó}{{\\'o}}1
+	    {ö}{{\\\"o}}1
+	    {ú}{{\\'u}}1
+	    {ü}{{\\\"u}}1
+	    {¹}{{\\textsuperscript1}}1
+            {²}{{\\textsuperscript2}}1
+            {³}{{\\textsuperscript3}}1
+	    {ı}{{\\i}}1
+	    {—}{{---}}1
+	    {’}{{'}}1
+	    {…}{{\\dots}}1
+            {⮠}{{$\\hookleftarrow$}}1
+	    {␣}{{\\textvisiblespace}}1,
+	    keywordstyle=\\color{DarkGreen}\\bfseries,
+	    identifierstyle=\\color{DarkRed},
+	    commentstyle=\\color{Gray}\\upshape,
+	    stringstyle=\\color{DarkBlue}\\upshape,
+	    emphstyle=\\color{Chocolate}\\upshape,
+	    showstringspaces=false,
+	    columns=fullflexible,
+	    keepspaces=true}
+\\usepackage[a4paper,margin=1in,left=1.5in]{geometry}
+\\usepackage{parskip}
+\\makeatletter
+\\renewcommand{\\maketitle}{%
+  \\begingroup\\parindent0pt
+  \\sffamily
+  \\Huge{\\bfseries\\@title}\\par\\bigskip
+  \\LARGE{\\bfseries\\@author}\\par\\medskip
+  \\normalsize\\@date\\par\\bigskip
+  \\endgroup\\@afterindentfalse\\@afterheading}
+\\makeatother
+[DEFAULT-PACKAGES]
+\\hypersetup{linkcolor=Blue,urlcolor=DarkBlue,
+  citecolor=DarkRed,colorlinks=true}
+\\AtBeginDocument{\\renewcommand{\\UrlFont}{\\ttfamily}}
+[PACKAGES]
+[EXTRA]"
+             ("\\section{%s}" . "\\section*{%s}")
+             ("\\subsection{%s}" . "\\subsection*{%s}")
+             ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+             ("\\paragraph{%s}" . "\\paragraph*{%s}")
+             ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+
+            ("report" "\\documentclass[11pt]{report}"
+             ("\\part{%s}" . "\\part*{%s}")
+             ("\\chapter{%s}" . "\\chapter*{%s}")
+             ("\\section{%s}" . "\\section*{%s}")
+             ("\\subsection{%s}" . "\\subsection*{%s}")
+             ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+
+            ("book" "\\documentclass[11pt]{book}"
+             ("\\part{%s}" . "\\part*{%s}")
+             ("\\chapter{%s}" . "\\chapter*{%s}")
+             ("\\section{%s}" . "\\section*{%s}")
+             ("\\subsection{%s}" . "\\subsection*{%s}")
+             ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+    )
+#+end_src
+
+*** Org Babel
+
+Org babel is used to evaluate code blocks in org files.
+
+#+begin_src emacs-lisp
+(setq org-confirm-babel-evaluate   nil)
+(setq org-src-fontify-natively     t)
+(setq org-src-tab-acts-natively    t)
+(setq org-src-preserve-indentation t)
+(setq org-src-window-setup         'current-window)
+(setq org-babel-default-header-args '((:session . "none")
                                       (:results . "replace")
                                       (:exports . "code")
                                       (:cache   . "no")
@@ -468,12 +668,77 @@ Finally some other tweaks
                                       (:hlines  . "no")
                                       (:tangle  . "no")
                                       (:comment . "link")))
+(spacemacs|use-package-add-hook org
+  :post-config (add-to-list 'org-babel-load-languages '(dot . t)))
 #+end_src
 
-Make sure org-roam is available on startup
+*** Org Projectile
 
 #+begin_src emacs-lisp :tangle user-config.el
-(org-roam-db-autosync-mode)
+(use-package org-projectile
+  :defer t
+  :after org
+  :config
+  (progn (setq org-projectile-per-project-filepath "TODO.org"
+               org-projectile-capture-template "* TODO %? %^G\n%i\n%a"
+               org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+         (org-projectile-per-project)))
+#+end_src
+
+*** Org Roam
+
+Pretty graphs and lots of fun!
+
+#+begin_src emacs-lisp :tangle user-config.el
+(use-package org-roam-ui
+  :after org-roam
+  :config (setq org-roam-ui-sync-theme t
+                  org-roam-ui-follow t
+                  org-roam-ui-update-on-save t
+                  org-roam-ui-open-on-start t))
+#+end_src
+
+A little hack I found somewhere to better display node hierarchy when searching
+for nodes using ~org-roam-node-find()~.
+
+#+begin_src emacs-lisp
+(with-eval-after-load 'org-roam
+  (cl-defmethod org-roam-node-filetitle ((node org-roam-node))
+    "Return the file TITLE for the node."
+    (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
+
+  (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
+    "Return the hierarchy for the node."
+    (let ((title (org-roam-node-title node))
+          (olp (org-roam-node-olp node))
+          (level (org-roam-node-level node))
+          (filetitle (org-roam-node-filetitle node)))
+      (concat
+       (if (> level 0) (concat filetitle " -> "))
+       (if (> level 1) (concat (string-join olp " -> ") " -> "))
+       title))
+    )
+
+  ;; Display node hierarchy in the org-roam-node-find list
+  (setq org-roam-node-display-template "${hierarchy:*} ${tags:20}")
+
+
+  ;; Allow mouse navigation in backlink buffer
+  (define-key org-roam-mode-map [mouse-1] #'org-roam-visit-thing))
+#+end_src
+
+Also, use a side window for back-link buffer
+
+#+begin_src emacs-lisp
+(add-to-list 'display-buffer-alist
+             '("\\*org-roam\\*"
+               (display-buffer-in-side-window)
+               (side . right)
+               (slot . 0)
+               (window-width . 0.25)
+               (preserve-size . (t nil))
+               (window-parameters . ((no-other-window . t)
+                                     (no-delete-other-windows . t)))))
 #+end_src
 
 *** Declarative Org Capture Templates
