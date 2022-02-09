@@ -460,9 +460,9 @@ Finally some other tweaks
 
 #+begin_src emacs-lisp
 (setq-default org-display-custom-times t)
-    (setq org-todo-keywords              '((sequence "TODO" "IN PROGRESS"
-                                                      "|"
-                                                      "DONE" "NEVERMIND"))
+(setq org-todo-keywords                  '((sequence "TODO" "IN PROGRESS"
+                                                     "|"
+                                                     "DONE" "NEVERMIND"))
       org-use-property-inheritance       t
       org-log-done-with-time             t
       org-catch-invisible-edits          'smart
