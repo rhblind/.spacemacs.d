@@ -2,7 +2,8 @@
 
 (setq personal-packages
       '((outline-ivy :location local)
-        (personal    :location local)))
+        ;; (personal    :location local)
+        ))
 
 ;;; Outline-ivy
 
@@ -15,5 +16,5 @@
 
 ;;; Personal
 
-(defun personal/init-personal ()
-  (use-package personal))
+;; (defun personal/init-personal ()
+;;   (use-package personal))
