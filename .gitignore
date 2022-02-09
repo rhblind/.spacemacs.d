@@ -2,7 +2,11 @@
 .DS_Store
 .spacemacs.env
 .custom-settings.el
+
+# org-babel-tangle generated files
 spacemacs.el
+user-init.el
+user-config.el
 
 # Transitory
 .#*

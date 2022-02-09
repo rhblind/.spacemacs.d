@@ -8,7 +8,8 @@
 #+options: toc:3 h:3
 :END:
 
-#+title: Spacemacs Literate Configuration
+#+title: Emacs Configuration
+#+subtitle: A life-long project
 #+author: Rolf Håvard Blindheim
 #+email: rhblind@gmail.com
 
@@ -28,11 +29,11 @@
   - [[#layers][Layers]]
   - [[#user-init][User Init]]
   - [[#user-config][User Config]]
-  - [[#post-layer-load][Post Layer Load]]
 - [[#personal-preferences---the-random-config-dumping-ground][Personal Preferences - The random config dumping ground]]
   - [[#scrolling][Scrolling]]
   - [[#globals][Globals]]
-  - [[#keybindings][Keybindings]]
+    - [[#shell-gpg-ssh-and-encryption][Shell, GPG, SSH and Encryption]]
+  - [[#keyboard-and-bindings][Keyboard and bindings]]
 - [[#project-management][Project Management]]
 - [[#org-mode][Org Mode]]
 - [[#local-variables][Local Variables]]
@@ -43,6 +44,7 @@ Emacs configuration is mostly (for my part) stealing other peoples
 configurations, mashing them together, crossing fingers and hoping that it
 works. Here are some resources I have learnt a lot from.
 
+- [[https://github.com/ralesi/spacemacs.org][GitHub - ralesi/spacemacs.org: Template for spacemacs config utilizing a stru...]]
 - [[https://github.com/ekaschalk/.spacemacs.d][GitHub - ekaschalk/.spacemacs.d: My spacemacs configuration.]]
 - [[https://github.com/zzamboni/dot-doom/blob/master/doom.org][dot-doom/doom.org at master · zzamboni/dot-doom · GitHub]]
 
@@ -193,121 +195,96 @@ Check dotspacemacs/get-variable-string-list for all vars you can configure.
 ** Layers
 
 #+begin_src emacs-lisp
-  (defun dotspacemacs/layers ()
-    "Instantiate Spacemacs layers declarations and package configurations."
-    (setq-default
-     dotspacemacs-configuration-layers     '((config   :location local)
-                                             (display  :location local)
-                                             (personal :location local))
-     dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
-     dotspacemacs-additional-packages      '(counsel-dash
-                                             doct
-                                             doom-themes
-                                             drag-stuff
-                                             dtrt-indent
-                                             evil-mc
-                                             evil-string-inflection
-                                             exec-path-from-shell
-                                             exunit
-                                             flycheck-credo
-                                             flycheck-dialyxir
-                                             forge
-                                             gcmh
-                                             k8s-mode
-                                             live-py-mode
-                                             lsp-ui
-                                             org-fancy-priorities
-                                             org-roam-ui
-                                             org-super-agenda
-                                             org-superstar
-                                             pinentry
-                                             polymode
-                                             poetry
-                                             rainbow-mode
-                                             posframe
-                                             yasnippet-snippets)
-     dotspacemacs-frozen-packages          '()
-     dotspacemacs-excluded-packages
-     '(;; Must Exclude (for styling, functionality, bug-fixing reasons)
-       fringe importmagic scss-mode vi-tilde-fringe
+(defun dotspacemacs/layers ()
+  "Instantiate Spacemacs layers declarations and package configurations."
+  (setq-default
+    dotspacemacs-configuration-layers     '((config   :location local)
+                                            (display  :location local)
+                                            (personal :location local))
+    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
+    dotspacemacs-additional-packages      '(counsel-dash
+                                            doct
+                                            doom-themes
+                                            drag-stuff
+                                            dtrt-indent
+                                            evil-mc
+                                            evil-string-inflection
+                                            exec-path-from-shell
+                                            exunit
+                                            flycheck-credo
+                                            flycheck-dialyxir
+                                            forge
+                                            gcmh
+                                            k8s-mode
+                                            live-py-mode
+                                            lsp-ui
+                                            org-fancy-priorities
+                                            org-roam-ui
+                                            org-super-agenda
+                                            org-superstar
+                                            pinentry
+                                            polymode
+                                            poetry
+                                            rainbow-mode
+                                            posframe
+                                            yasnippet-snippets)
+    dotspacemacs-frozen-packages          '()
+    dotspacemacs-excluded-packages
+    '(;; Must Exclude (for styling, functionality, bug-fixing reasons)
+      fringe importmagic scss-mode vi-tilde-fringe
 
-       ;; Packages I don't use (non-exhaustive)
-       anzu centered-cursor-mode column-enforce-mode company-statistics
-       doom-modeline eshell-prompt-extras evil-anzu evil-tutor
-       fancy-battery fill-column-indicator gnuplot golden-ratio indent-guide
-       iedit live-py-mode multi-term mwim neotree org-bullets paradox py-isort
+      ;; Packages I don't use (non-exhaustive)
+      anzu centered-cursor-mode column-enforce-mode company-statistics
+      doom-modeline eshell-prompt-extras evil-anzu evil-tutor
+      fancy-battery fill-column-indicator gnuplot golden-ratio indent-guide
+      iedit live-py-mode multi-term mwim neotree org-bullets paradox py-isort
 
-       ;; Packages that is installed as a dependency of others, but I don't want installed
-       alchemist)))
+      ;; Packages that is installed as a dependency of others, but I don't want installed
+      alchemist)))
 #+end_src
 
 ** User Init
 
+For any functionality that should be loaded before layers are initialized, use
+~:tangle user-init.el~. It will then be written to ~user-init.el~ and loaded by
+this function.
+
 #+begin_src emacs-lisp
 (defun dotspacemacs/user-init ()
-  "Package independent settings to run before `dotspacemacs/user-config'."
-  (fringe-mode 0)
-  (require 'iso-transl)  ;; Enables "dead keys" for non-english keyboards
-  (require 'epa-file)    ;; Load library for decrypting the `secrets.el.gpg' file
-
-  ;; (setq epa-pinentry-mode 'loopback)  ;; Allows unlocking gpg keys using the Emacs minibuffer (gpg --> gpg-agent --> pinentry --> Emacs)
-
-;;;;; MacOS specifics
-
-  (when (spacemacs/system-is-mac)
-    (setq shell-file-name "/bin/bash")
-    (setq dired-listing-switches "-aBhl --group-directories-first"
-          helm-locate-command "glocate %s -e -A --regex %s"
-          helm-locate-recursive-dirs-command "glocate -i -e -A --regex '^%s' '%s.*$'"
-          insert-directory-program "/usr/local/bin/gls")
-
-    (custom-set-variables '(epg-gpg-program "/usr/local/bin/gpg")))
-
-;;;;; Linux specifics
-
-  (when (spacemacs/system-is-linux)
-    (setq shell-file-name "/bin/bash"))
-
-  (epa-file-enable)
-
-  (setq auto-resume-layers t
-        auth-source-debug nil  ;; Enable logging of authentication related stuff to the `*Messages' buffer. Disable when not needed!
-        custom-file "~/.spacemacs.d/.custom-settings.el"
-        secrets-file "~/.spacemacs.d/secrets.el.gpg")
-
-  ;; This file keeps secrets for emacs configurations
-  (load-file secrets-file))
+  "Initialization for user code:
+This function is called immediately after `dotspacemacs/init', before layer
+configuration.
+It is mostly for variables that should be set before packages are loaded.
+If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  ;; tangle without actually loading org
+  (let ((src (concat dotspacemacs-directory "spacemacs.org"))
+        (ui (concat dotspacemacs-directory "user-init.el"))
+        (uc (concat dotspacemacs-directory "user-config.el")))
+    (when (or (file-newer-than-file-p src ui)
+              (file-newer-than-file-p src uc))
+      (call-process
+       (concat invocation-directory invocation-name)
+       nil nil t
+       "-q" "--batch" "--eval" "(require 'ob-tangle)"
+       "--eval" (format "(org-babel-tangle-file \"%s\")" src)))
+    (if (file-exists-p ui) (load-file ui))))
 #+end_src
 
 ** User Config
 
-This is the user config section. This should be re-written.
-Defines a function that will be loaded in the ~post-layer-load~.
-
-#+begin_src emacs-lisp
-(defun dotspacemacs/user-config/post-layer-load-config ()
-  "Configuration to take place *after all* layers/pkgs are instantiated."
-  (when (and (boundp 'redo-bindings?) redo-bindings?
-             (configuration-layer/package-used-p 'redo-spacemacs))
-    (redo-spacemacs-bindings))
-
-  (when (spacemacs/system-is-mac)
-    (require 'exec-path-from-shell)
-    (setq exec-path-from-shell-check-startup-files nil)  ;; Don't complain about putting thing in the wrong files
-    (dolist (var '("LANG" "LC_TYPE" "GPG_AGENT_INFO" "SSH_AUTH_SOCK"))
-      (add-to-list 'exec-path-from-shell-variables var))
-    (exec-path-from-shell-initialize)
-    (shell-command "gpg-connect-agent updatestartuptty /bye >/dev/null")))
-#+end_src
-
-** Post Layer Load
-
-Just executes the function defined in User Config
+For any functionality that should be loaded after layers are initialized, use
+~:tangle user-config.el~. It will then be written to ~user-config.el~ and loaded by
+this function.
 
 #+begin_src emacs-lisp
 (defun dotspacemacs/user-config ()
-  "Configuration that cannot be delegated to layers."
-  (dotspacemacs/user-config/post-layer-load-config))
+  "Configuration for user code:
+This function is called at the very end of Spacemacs startup, after layer
+configuration.
+Put your configuration code here, except for variables that should be set
+before packages are loaded."
+  (let ((uc (concat dotspacemacs-directory "user-config.el")))
+    (if (file-exists-p uc) (load-file uc))))
 #+end_src
 
 * Personal Preferences - The random config dumping ground
@@ -350,6 +327,7 @@ Random stuff that doesn't fit into any particular category
 Random stuff I want enabled no matter what!
 
 #+begin_src emacs-lisp
+(fringe-mode 0)                                           ;; I don't like fringes
 ;; (global-company-mode)                                     ;; Enable company-mode(autocomplete) globally
 (global-unset-key [down-mouse-1])                         ;; No dragging nonsense
 (global-set-key [down-mouse-1] 'mouse-select-window)      ;; Select window with mouse click
@@ -359,11 +337,76 @@ Random stuff I want enabled no matter what!
 
 Please don't quit Emacs every time I accidentally type ~:q~
 
-#+begin_src emacs-lisp
-;; (evil-ex-define-cmd "q[uit]" 'evil-delete-buffer)         ;; Redefine :q to delete buffer instead of exiting emacs
+#+begin_src emacs-lisp :tangle user-config.el
+(evil-ex-define-cmd "q[uit]" 'evil-delete-buffer)         ;; Redefine :q to delete buffer instead of exiting emacs
 #+end_src
 
-** Keybindings
+*** Shell, GPG, SSH and Encryption
+
+#+begin_src emacs-lisp :tangle user-init.el
+(require 'epa-file)    ;; Load library for decrypting the `secrets.el.gpg' file
+;; (setq epa-pinentry-mode 'loopback)  ;; Allows unlocking gpg keys using the Emacs minibuffer (gpg --> gpg-agent --> pinentry --> Emacs)
+#+end_src
+
+I'm usually on MacOS
+
+#+begin_src emacs-lisp :tangle user-init.el
+(when (eq system-type 'darwin)
+  (setq shell-file-name "/bin/bash")
+  (setq dired-listing-switches "-aBhl --group-directories-first"
+        helm-locate-command "glocate %s -e -A --regex %s"
+        helm-locate-recursive-dirs-command "glocate -i -e -A --regex '^%s' '%s.*$'"
+        insert-directory-program "/usr/local/bin/gls")
+
+  (custom-set-variables '(epg-gpg-program "/usr/local/bin/gpg")))
+#+end_src
+
+#+begin_src emacs-lisp :tangle user-config.el
+(when (eq system-type 'darwin)
+  (require 'exec-path-from-shell)
+  (setq exec-path-from-shell-check-startup-files nil)  ;; Don't complain about putting thing in the wrong files
+  (dolist (var '("LANG" "LC_TYPE" "GPG_AGENT_INFO" "SSH_AUTH_SOCK"))
+    (add-to-list 'exec-path-from-shell-variables var))
+  (exec-path-from-shell-initialize)
+  (shell-command "gpg-connect-agent updatestartuptty /bye >/dev/null"))
+#+end_src
+
+
+But I used to be on Linux
+
+#+begin_src emacs-lisp :tangle user-init.el
+(when (eq system-type 'gnu/linux)
+  (setq shell-file-name "/bin/bash"))
+#+end_src
+
+Either way, there's some things that always has to be done
+
+#+begin_src emacs-lisp :tangle user-init.el
+(epa-file-enable)
+(setq auto-resume-layers t
+      auth-source-debug  nil  ;; Enable logging of authentication related stuff to the `*Messages' buffer. Disable when not needed!
+      custom-file        "~/.spacemacs.d/.custom-settings.el"
+      secrets-file       "~/.spacemacs.d/secrets.el.gpg")
+
+;; This file keeps secrets for emacs configurations
+(load-file secrets-file)
+#+end_src
+
+** Keyboard and bindings
+
+I need weird characters
+
+#+begin_src emacs-lisp :tangle user-init.el
+(require 'iso-transl)  ;; Enables "dead keys" for non-english keyboards
+#+end_src
+
+I don't really use this, but I'll just keep around for "later inspection"
+
+#+begin_src emacs-lisp :tangle user-config.el
+(when (and (boundp 'redo-bindings?) redo-bindings?
+          (configuration-layer/package-used-p 'redo-spacemacs))
+  (redo-spacemacs-bindings))
+#+end_src
 
 Some old habits are hard to unlearn. Got some keybindings that are too
 hard-wired in my brains to even bother to change.
