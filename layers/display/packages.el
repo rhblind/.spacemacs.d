@@ -13,7 +13,7 @@
         org-super-agenda
         org-superstar
 
-        solarized-theme
+        ;; solarized-theme
         (prettify-utils :location (recipe :fetcher github
                                           :repo "Ilazki/prettify-utils.el"))
 
@@ -301,8 +301,8 @@
 
 ;;;; Solarized-theme
 
-(defun display/init-solarized-theme ()
-  (use-package solarized-theme))
+;; (defun display/init-solarized-theme ()
+;;   (use-package solarized-theme))
 
 ;;; Unowned Packages
 ;;;; Which-key
