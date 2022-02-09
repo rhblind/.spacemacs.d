@@ -35,8 +35,11 @@
   - [[#globals][Globals]]
     - [[#shell-gpg-ssh-and-encryption][Shell, GPG, SSH and Encryption]]
   - [[#keyboard-and-bindings][Keyboard and bindings]]
-- [[#project-management][Project Management]]
-- [[#org-mode][Org Mode]]
+- [[#packages][Packages]]
+  - [[#org-mode][Org Mode]]
+    - [[#declarative-org-capture-templates][Declarative Org Capture Templates]]
+  - [[#outline-ivy][Outline-Ivy]]
+  - [[#projectile][Projectile]]
 - [[#local-variables][Local Variables]]
 
 * References
@@ -194,6 +197,13 @@ Check dotspacemacs/get-variable-string-list for all vars you can configure.
 #+end_src
 
 ** Layers
+
+Spacemacs relies heavily on layers. I'm not quite sure what's the best way to
+migrate layer-specific packages out to a literate config, so here's a link to
+the [[https://develop.spacemacs.org/doc/LAYERS.html][Spacemacs layer documentation]].
+
+For the time being, I'll try to initialize layer packages and then maybe use the
+~spacemacs|use-package-add-hook~ macro for configurations.
 
 #+begin_src emacs-lisp
 (defun dotspacemacs/layers ()
@@ -418,25 +428,8 @@ hard-wired in my brains to even bother to change.
 (global-set-key (kbd "<C-backspace>") 'backward-kill-word)  ;; Ctrl-Backspace deletes previous word
 #+end_src
 
-* Project Management
-
-#+begin_src emacs-lisp
-(setq projectile-enable-caching               t
-      projectile-project-search-path          '("~/workspace")  ;; A relic directory from when I used Eclipse back in the days
-      projectile-globally-ignored-files       '(".DS_Store")    ;; Super annoying files
-      projectile-globally-ignored-directories '(".git"
-                                                ".idea"
-                                                ".import"
-                                                ".elixir_ls"
-                                                ".htmlcov"
-                                                ".pytest_cache"
-                                                "_build"
-                                                "__pycache__"
-                                                "deps"
-                                                "node_modules"))
-#+end_src
-
-* Org Mode
+* Packages
+** Org Mode
 
 I keep all my Org mode files in a Dropbox directory for easy sync and backup.
 
@@ -481,6 +474,134 @@ Make sure org-roam is available on startup
 
 #+begin_src emacs-lisp :tangle user-config.el
 (org-roam-db-autosync-mode)
+#+end_src
+
+*** Declarative Org Capture Templates
+
+#+begin_src emacs-lisp :tangle user-config.el
+(use-package doct
+    :ensure t
+    :commands (doct)
+    :after (org-capture)
+    :init
+    (setq org-capture-templates
+          ;; https://github.com/progfolio/doct#manual
+          ;; https://orgmode.org/manual/Template-expansion.html#Template-expansion
+          (doct `(
+                  (,(format "%s\tTasks" (all-the-icons-octicon "inbox" :face 'all-the-icons-yellow :v-adjust 0.01))
+                   :keys "k"
+                   :headline "Tasks"
+                   :prepend t
+                   :type entry
+                   :file org-default-notes-file
+                   :children ((,(format "%s\tGeneral task" (all-the-icons-octicon "checklist" :face 'all-the-icons-yellow :v-adjust 0.01))
+                               :keys "k"
+                               :template ("* TODO %? %^G"
+                                          "%i"))
+                              (,(format "%s\tCapture point task" (all-the-icons-octicon "checklist" :face 'all-the-icons-green :v-adjust 0.01))
+                               :keys "c"
+                               :template ("* TODO %? %^G"
+                                          "%i %a"))
+                              (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))
+                               :keys "d"
+                               :template ("* TODO %? %^G%{extra}"
+                                          "%i")
+                               :extra "\nDEADLINE: %^{Due date:}T")
+                              (,(format "%s\tScheduled task" (all-the-icons-octicon "calendar" :face 'all-the-icons-red :v-adjust 0.01))
+                               :keys "s"
+                               :template ("* TODO %? %^G%{extra}"
+                                          "%i")
+                               :extra "\nSCHEDULED: %^{Task date}t")
+                              ))
+                  (,(format "%s\tWork" (all-the-icons-faicon "building" :face 'all-the-icons-purple :v-adjust 0.01))
+                   :keys "w"
+                   :headline "Work"
+                   :prepend t
+                   :type entry
+                   :file org-work-notes-file
+                   :children ((,(format "%s\tMiscellaneous task" (all-the-icons-octicon "checklist" :face 'all-the-icons-yellow :v-adjust 0.01))
+                               :keys "k"
+                               :headline "Tasks"
+                               :template ("* TODO [#C] %? %^G:work:"
+                                          "%i"))
+                              (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))
+                               :keys "d"
+                               :headline "Tasks"
+                               :template ("* TODO [#B] %? %^G:work:%{extra}"
+                                          "%i")
+                               :extra "\nDEADLINE: %^{Due date:}T")
+                              (,(format "%s\tScheduled task" (all-the-icons-octicon "calendar" :face 'all-the-icons-red :v-adjust 0.01))
+                               :keys "s"
+                               :headline "Tasks"
+                               :template ("* TODO [#C] %? %^G:work:%{extra}"
+                                          "%i")
+                               :extra "\nSCHEDULED: %^{Task date}t")
+                              (,(format "%s\tWork note" (all-the-icons-faicon "sticky-note-o" :face 'all-the-icons-green :v-adjust 0.01))
+                               :keys "n"
+                               :headline "Notes"
+                               :template ("* %? :work:"
+                                          "%i"))))
+                  (,(format "%s\tInteresting" (all-the-icons-faicon "eye" :face 'all-the-icons-lcyan :v-adjust 0.01))
+                   :keys "i"
+                   :headline "Interesting"
+                   :prepend t
+                   :type entry
+                   :file org-default-notes-file
+                   :template ("* %{desc}%? :%{i-type}:%^G"
+                              "%i")
+                   :children ((,(format "%s\tWebpage" (all-the-icons-faicon "globe" :face 'all-the-icons-green :v-adjust 0.01))
+                               :keys "w"
+                               :desc "%(org-cliplink-capture) "
+                               :i-type "read:web"
+                               )
+                              (,(format "%s\tArticle" (all-the-icons-octicon "file-text" :face 'all-the-icons-yellow :v-adjust 0.01))
+                               :keys "a"
+                               :desc ""
+                               :i-type "read:research"
+                               )
+                              (,(format "%s\tInformation" (all-the-icons-faicon "info-circle" :face 'all-the-icons-blue :v-adjust 0.01))
+                               :keys "i"
+                               :desc ""
+                               :i-type "read:info"
+                               )
+                              (,(format "%s\tIdea" (all-the-icons-material "bubble_chart" :face 'all-the-icons-silver :v-adjust 0.01))
+                               :keys "I"
+                               :desc ""
+                               :i-type "idea"
+                               )))
+                  )
+                ))
+    :config
+    (progn
+      (advice-add 'org-capture-select-template :override #'org-capture-select-template-prettier)
+      ;; (advice-add 'org-mks :override #'org-mks-pretty) ;; FIXME Gives wrong number of arguments
+      ))
+#+end_src
+
+** Outline-Ivy
+
+#+begin_src emacs-lisp :tangle user-config.el
+(use-package outline-ivy
+  :defer t
+  :bind (:map outline-minor-mode-map ("C-j" . oi-jump)))
+#+end_src
+
+** Projectile
+
+#+begin_src emacs-lisp
+(setq projectile-enable-caching               t
+      projectile-project-search-path          '("~/workspace")  ;; A relic directory from when I used Eclipse back in the days
+      projectile-globally-ignored-files       '(".DS_Store")    ;; Super annoying files
+      projectile-globally-ignored-directories '(".git"
+                                                ".idea"
+                                                ".import"
+                                                ".elixir_ls"
+                                                ".htmlcov"
+                                                ".pytest_cache"
+                                                "_build"
+                                                "__pycache__"
+                                                "deps"
+                                                "node_modules"))
 #+end_src
 
 * Local Variables :ARCHIVE:

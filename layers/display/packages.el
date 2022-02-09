@@ -8,7 +8,7 @@
         ;; pretty-mode
 
         ;; org-mode visuals
-        doct
+        ;; doct
         org-fancy-priorities
         org-super-agenda
         org-superstar
@@ -69,105 +69,105 @@
 
 ;;;; Declarative Org Capture Templates (DOCT)
 
-(defun display/init-doct ()
-  (use-package doct
-    :ensure t
-    :commands (doct)
-    :after (org-capture)
-    :init
-    (setq org-capture-templates
-          ;; https://github.com/progfolio/doct#manual
-          ;; https://orgmode.org/manual/Template-expansion.html#Template-expansion
-          (doct `(
-                  (,(format "%s\tTasks" (all-the-icons-octicon "inbox" :face 'all-the-icons-yellow :v-adjust 0.01))
-                   :keys "k"
-                   :headline "Tasks"
-                   :prepend t
-                   :type entry
-                   :file org-default-notes-file
-                   :children ((,(format "%s\tGeneral task" (all-the-icons-octicon "checklist" :face 'all-the-icons-yellow :v-adjust 0.01))
-                               :keys "k"
-                               :template ("* TODO %? %^G"
-                                          "%i"))
-                              (,(format "%s\tCapture point task" (all-the-icons-octicon "checklist" :face 'all-the-icons-green :v-adjust 0.01))
-                               :keys "c"
-                               :template ("* TODO %? %^G"
-                                          "%i %a"))
-                              (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))
-                               :keys "d"
-                               :template ("* TODO %? %^G%{extra}"
-                                          "%i")
-                               :extra "\nDEADLINE: %^{Due date:}T")
-                              (,(format "%s\tScheduled task" (all-the-icons-octicon "calendar" :face 'all-the-icons-red :v-adjust 0.01))
-                               :keys "s"
-                               :template ("* TODO %? %^G%{extra}"
-                                          "%i")
-                               :extra "\nSCHEDULED: %^{Task date}t")
-                              ))
-                  (,(format "%s\tWork" (all-the-icons-faicon "building" :face 'all-the-icons-purple :v-adjust 0.01))
-                   :keys "w"
-                   :headline "Work"
-                   :prepend t
-                   :type entry
-                   :file org-work-notes-file
-                   :children ((,(format "%s\tMiscellaneous task" (all-the-icons-octicon "checklist" :face 'all-the-icons-yellow :v-adjust 0.01))
-                               :keys "k"
-                               :headline "Tasks"
-                               :template ("* TODO [#C] %? %^G:work:"
-                                          "%i"))
-                              (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))
-                               :keys "d"
-                               :headline "Tasks"
-                               :template ("* TODO [#B] %? %^G:work:%{extra}"
-                                          "%i")
-                               :extra "\nDEADLINE: %^{Due date:}T")
-                              (,(format "%s\tScheduled task" (all-the-icons-octicon "calendar" :face 'all-the-icons-red :v-adjust 0.01))
-                               :keys "s"
-                               :headline "Tasks"
-                               :template ("* TODO [#C] %? %^G:work:%{extra}"
-                                          "%i")
-                               :extra "\nSCHEDULED: %^{Task date}t")
-                              (,(format "%s\tWork note" (all-the-icons-faicon "sticky-note-o" :face 'all-the-icons-green :v-adjust 0.01))
-                               :keys "n"
-                               :headline "Notes"
-                               :template ("* %? :work:"
-                                          "%i"))))
-                  (,(format "%s\tInteresting" (all-the-icons-faicon "eye" :face 'all-the-icons-lcyan :v-adjust 0.01))
-                   :keys "i"
-                   :headline "Interesting"
-                   :prepend t
-                   :type entry
-                   :file org-default-notes-file
-                   :template ("* %{desc}%? :%{i-type}:%^G"
-                              "%i")
-                   :children ((,(format "%s\tWebpage" (all-the-icons-faicon "globe" :face 'all-the-icons-green :v-adjust 0.01))
-                               :keys "w"
-                               :desc "%(org-cliplink-capture) "
-                               :i-type "read:web"
-                               )
-                              (,(format "%s\tArticle" (all-the-icons-octicon "file-text" :face 'all-the-icons-yellow :v-adjust 0.01))
-                               :keys "a"
-                               :desc ""
-                               :i-type "read:research"
-                               )
-                              (,(format "%s\tInformation" (all-the-icons-faicon "info-circle" :face 'all-the-icons-blue :v-adjust 0.01))
-                               :keys "i"
-                               :desc ""
-                               :i-type "read:info"
-                               )
-                              (,(format "%s\tIdea" (all-the-icons-material "bubble_chart" :face 'all-the-icons-silver :v-adjust 0.01))
-                               :keys "I"
-                               :desc ""
-                               :i-type "idea"
-                               )))
-                  )
-                ))
-    :config
-    (progn
-      (advice-add 'org-capture-select-template :override #'org-capture-select-template-prettier)
-      ;; (advice-add 'org-mks :override #'org-mks-pretty) ;; FIXME Gives wrong number of arguments
-      ))
-  )
+;; (defun display/init-doct ()
+;;   (use-package doct
+;;     :ensure t
+;;     :commands (doct)
+;;     :after (org-capture)
+;;     :init
+;;     (setq org-capture-templates
+;;           ;; https://github.com/progfolio/doct#manual
+;;           ;; https://orgmode.org/manual/Template-expansion.html#Template-expansion
+;;           (doct `(
+;;                   (,(format "%s\tTasks" (all-the-icons-octicon "inbox" :face 'all-the-icons-yellow :v-adjust 0.01))
+;;                    :keys "k"
+;;                    :headline "Tasks"
+;;                    :prepend t
+;;                    :type entry
+;;                    :file org-default-notes-file
+;;                    :children ((,(format "%s\tGeneral task" (all-the-icons-octicon "checklist" :face 'all-the-icons-yellow :v-adjust 0.01))
+;;                                :keys "k"
+;;                                :template ("* TODO %? %^G"
+;;                                           "%i"))
+;;                               (,(format "%s\tCapture point task" (all-the-icons-octicon "checklist" :face 'all-the-icons-green :v-adjust 0.01))
+;;                                :keys "c"
+;;                                :template ("* TODO %? %^G"
+;;                                           "%i %a"))
+;;                               (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))
+;;                                :keys "d"
+;;                                :template ("* TODO %? %^G%{extra}"
+;;                                           "%i")
+;;                                :extra "\nDEADLINE: %^{Due date:}T")
+;;                               (,(format "%s\tScheduled task" (all-the-icons-octicon "calendar" :face 'all-the-icons-red :v-adjust 0.01))
+;;                                :keys "s"
+;;                                :template ("* TODO %? %^G%{extra}"
+;;                                           "%i")
+;;                                :extra "\nSCHEDULED: %^{Task date}t")
+;;                               ))
+;;                   (,(format "%s\tWork" (all-the-icons-faicon "building" :face 'all-the-icons-purple :v-adjust 0.01))
+;;                    :keys "w"
+;;                    :headline "Work"
+;;                    :prepend t
+;;                    :type entry
+;;                    :file org-work-notes-file
+;;                    :children ((,(format "%s\tMiscellaneous task" (all-the-icons-octicon "checklist" :face 'all-the-icons-yellow :v-adjust 0.01))
+;;                                :keys "k"
+;;                                :headline "Tasks"
+;;                                :template ("* TODO [#C] %? %^G:work:"
+;;                                           "%i"))
+;;                               (,(format "%s\tTask with deadline" (all-the-icons-material "timer" :face 'all-the-icons-red :v-adjust -0.1))
+;;                                :keys "d"
+;;                                :headline "Tasks"
+;;                                :template ("* TODO [#B] %? %^G:work:%{extra}"
+;;                                           "%i")
+;;                                :extra "\nDEADLINE: %^{Due date:}T")
+;;                               (,(format "%s\tScheduled task" (all-the-icons-octicon "calendar" :face 'all-the-icons-red :v-adjust 0.01))
+;;                                :keys "s"
+;;                                :headline "Tasks"
+;;                                :template ("* TODO [#C] %? %^G:work:%{extra}"
+;;                                           "%i")
+;;                                :extra "\nSCHEDULED: %^{Task date}t")
+;;                               (,(format "%s\tWork note" (all-the-icons-faicon "sticky-note-o" :face 'all-the-icons-green :v-adjust 0.01))
+;;                                :keys "n"
+;;                                :headline "Notes"
+;;                                :template ("* %? :work:"
+;;                                           "%i"))))
+;;                   (,(format "%s\tInteresting" (all-the-icons-faicon "eye" :face 'all-the-icons-lcyan :v-adjust 0.01))
+;;                    :keys "i"
+;;                    :headline "Interesting"
+;;                    :prepend t
+;;                    :type entry
+;;                    :file org-default-notes-file
+;;                    :template ("* %{desc}%? :%{i-type}:%^G"
+;;                               "%i")
+;;                    :children ((,(format "%s\tWebpage" (all-the-icons-faicon "globe" :face 'all-the-icons-green :v-adjust 0.01))
+;;                                :keys "w"
+;;                                :desc "%(org-cliplink-capture) "
+;;                                :i-type "read:web"
+;;                                )
+;;                               (,(format "%s\tArticle" (all-the-icons-octicon "file-text" :face 'all-the-icons-yellow :v-adjust 0.01))
+;;                                :keys "a"
+;;                                :desc ""
+;;                                :i-type "read:research"
+;;                                )
+;;                               (,(format "%s\tInformation" (all-the-icons-faicon "info-circle" :face 'all-the-icons-blue :v-adjust 0.01))
+;;                                :keys "i"
+;;                                :desc ""
+;;                                :i-type "read:info"
+;;                                )
+;;                               (,(format "%s\tIdea" (all-the-icons-material "bubble_chart" :face 'all-the-icons-silver :v-adjust 0.01))
+;;                                :keys "I"
+;;                                :desc ""
+;;                                :i-type "idea"
+;;                                )))
+;;                   )
+;;                 ))
+;;     :config
+;;     (progn
+;;       (advice-add 'org-capture-select-template :override #'org-capture-select-template-prettier)
+;;       ;; (advice-add 'org-mks :override #'org-mks-pretty) ;; FIXME Gives wrong number of arguments
+;;       ))
+;;   )
 
 ;;;; Org-fancy-priorities
 
@@ -185,23 +185,6 @@
                                       (?A . "⬆")   ;; High
                                       (?B . "■")   ;; Medium
                                       (?C . "⬇"))) ;; Low
-
-    ;; FIXME Cannot make org-priority work with more than three priorities..
-    ;; (setq org-priority-faces '((?A . all-the-icons-red)
-    ;;                            (?B . all-the-icons-orange)
-    ;;                            (?C . all-the-icons-yellow)
-    ;;                            (?D . all-the-icons-green)
-    ;;                            (?E . all-the-icons-blue))
-    ;;       org-priority-highest ?A
-    ;;       org-priority-default ?D
-    ;;       org-priority-lowest ?E)
-    ;; (setq org-fancy-priorities-list '((?A . "⚑")     ;; ASAP
-    ;;                                   (?B . "⬆")     ;; High
-    ;;                                   (?C . "■")     ;; Medium
-    ;;                                   (?D . "⬇")     ;; Low
-    ;;                                   (?E . "❓")))  ;; Optional
-    ;; (unless (char-displayable-p ?❓)
-    ;;   (setq org-fancy-priorities-list '("ASAP" "HIGH" "MID" "LOW" "OPTIONAL")))
     ))
 
 ;;;; Org-super-agenda
