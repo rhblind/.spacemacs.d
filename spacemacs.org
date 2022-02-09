@@ -460,29 +460,29 @@ Finally some other tweaks
 
 #+begin_src emacs-lisp
 (setq-default org-display-custom-times t)
-(setq org-todo-keywords              '((sequence "TODO" "IN PROGRESS"
-                                                  "|"
-                                                  "DONE" "NEVERMIND"))
-  org-use-property-inheritance       t
-  org-log-done-with-time             t
-  org-catch-invisible-edits          'smart
-  org-agenda-skip-unavailable-files  t
-  org-ellipsis                       ""
-  org-export-in-background           nil ;; Async export not working when ox is bytecompiled?
-  org-fontify-whole-heading-line     t
-  org-fontify-done-headline          nil
-  org-fontify-quote-and-verse-blocks t
-  org-hide-emphasis-markers          t
-  org-hide-leading-stars             t
-  org-indent-indentation-per-level   1
-  org-log-state-notes-into-drawer    t
-  org-log-done-with-time             t
-  org-startup-indented               t
-  org-pretty-entities                t
-  org-priority-faces                 '((65 :inherit org-priority :foreground "red")
-                                        (66 :inherit org-priority :foreground "brown")
-                                        (67 :inherit org-priority :foreground "blue"))
-  org-time-stamp-custom-formats      '("<%a %d.%m.%Y>" . "<%a %d.%m.%Y %H:%M>"))
+    (setq org-todo-keywords              '((sequence "TODO" "IN PROGRESS"
+                                                      "|"
+                                                      "DONE" "NEVERMIND"))
+      org-use-property-inheritance       t
+      org-log-done-with-time             t
+      org-catch-invisible-edits          'smart
+      org-agenda-skip-unavailable-files  t
+      org-ellipsis                       ""
+      org-export-in-background           nil ;; Async export not working when ox is bytecompiled?
+      org-fontify-whole-heading-line     t
+      org-fontify-done-headline          nil
+      org-fontify-quote-and-verse-blocks t
+      org-hide-emphasis-markers          t
+      org-hide-leading-stars             t
+      org-indent-indentation-per-level   1
+      org-log-state-notes-into-drawer    t
+      org-log-done-with-time             t
+      org-startup-indented               t
+      org-pretty-entities                t
+      org-priority-faces                 '((65 :inherit org-priority :foreground "red")
+                                            (66 :inherit org-priority :foreground "brown")
+                                            (67 :inherit org-priority :foreground "blue"))
+      org-time-stamp-custom-formats      '("<%a %d.%m.%Y>" . "<%a %d.%m.%Y %H:%M>"))
 #+end_src
 
 *Mode Hooks*
