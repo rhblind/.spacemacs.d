@@ -1,6 +1,7 @@
 :DOC-CONFIG:
 # Tangle by default to spacemacs.el, which is the most common case
 #+property: header-args:emacs-lisp :tangle spacemacs.el
+#+property: header-args:emacs-lisp :results silent
 #+property: header-args: :mkdirp yes :comments no
 #+startup: headlines
 #+startup: nohideblocks
@@ -13,7 +14,7 @@
 #+author: Rolf Håvard Blindheim
 #+email: rhblind@gmail.com
 
-* Table of Contents :TOC_3:noexport:
+* Table of Contents                                          :TOC_3:noexport:
 - [[#references][References]]
 - [[#prerequisites][Prerequisites]]
   - [[#ligatures][Ligatures]]
@@ -326,13 +327,13 @@ Random stuff that doesn't fit into any particular category
 
 Random stuff I want enabled no matter what!
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle user-config.el
 (fringe-mode 0)                                           ;; I don't like fringes
-;; (global-company-mode)                                     ;; Enable company-mode(autocomplete) globally
+(global-company-mode)                                     ;; Enable company-mode(autocomplete) globally
 (global-unset-key [down-mouse-1])                         ;; No dragging nonsense
 (global-set-key [down-mouse-1] 'mouse-select-window)      ;; Select window with mouse click
-;; (treemacs-resize-icons 14)                                ;; Slightly bigger Treemacs icons
-;; (ws-butler-global-mode)                                   ;; Unobtrusive way to trim spaces on end of lines
+(treemacs-resize-icons 14)                                ;; Slightly bigger Treemacs icons
+(ws-butler-global-mode)                                   ;; Unobtrusive way to trim spaces on end of lines
 #+end_src
 
 Please don't quit Emacs every time I accidentally type ~:q~
@@ -478,8 +479,8 @@ Finally some other tweaks
 
 Make sure org-roam is available on startup
 
-#+begin_src emacs-lisp
-;; (org-roam-db-autosync-mode)
+#+begin_src emacs-lisp :tangle user-config.el
+(org-roam-db-autosync-mode)
 #+end_src
 
 * Local Variables :ARCHIVE:
