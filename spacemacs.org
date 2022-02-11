@@ -29,6 +29,8 @@
 - [[#spacemacs][Spacemacs]]
   - [[#init][Init]]
   - [[#layers][Layers]]
+    - [[#config-layer][Config Layer]]
+    - [[#display-layer][Display Layer]]
   - [[#user-init][User Init]]
   - [[#user-config][User Config]]
 - [[#personal-preferences---the-random-config-dumping-ground][Personal Preferences - The random config dumping ground]]
@@ -228,8 +230,7 @@ For the time being, I'll try to initialize layer packages and then maybe use the
   "Instantiate Spacemacs layers declarations and package configurations."
   (setq-default
     dotspacemacs-configuration-layers     '((config   :location local)
-                                            (display  :location local)
-                                            (personal :location local))
+                                            (display  :location local))
     dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
     dotspacemacs-additional-packages      '(counsel-dash
                                             doct
@@ -270,6 +271,1392 @@ For the time being, I'll try to initialize layer packages and then maybe use the
 
       ;; Packages that is installed as a dependency of others, but I don't want installed
       alchemist)))
+#+end_src
+
+Spacemacs relies heavily on the layers concept. I currently got two layers; one
+for general stuff, and one for visual stuff.
+
+These configurations are tangled to ~layers.el~ and ~packages.el~ in their
+respective layer directories.
+
+*** Config Layer
+
+Configure Config layer. Break up in smaller sections.
+
+**** Layers
+
+#+begin_src emacs-lisp :tangle layers/config/layers.el
+;;; -*- lexical-binding: t; -*-
+
+(configuration-layer/declare-layers
+ '(;; Core
+   (auto-completion :variables
+                    auto-completion-return-key-behavior 'complete
+                    auto-completion-tab-key-behavior 'complete
+                    auto-completion-idle-delay 0.2
+                    auto-completion-private-snippets-directory nil
+                    auto-completion-enable-snippets-in-popup t
+                    auto-completion-enable-help-tooltip nil
+                    auto-completion-use-company-box t
+                    auto-completion-enable-sort-by-usage t)
+   better-defaults
+   (dash :variables
+         dash-docs-docset-newpath (cond ((eq system-type 'gnu/linux) "~/.local/share/Zeal/Zeal/docsets")
+                                        ((eq system-type 'darwin) "~/Library/Application Support/Dash/DocSets")))
+   docker
+   (multiple-cursors :variables
+                     multiple-cursors-backend 'evil-mc)
+   dap
+   (lsp :variables
+        lsp-use-lsp-ui t
+        lsp-lens-enable t
+        lsp-headerline-breadcrumb-enable nil
+        lsp-ui-remap-xref-keybindings t
+        lsp-navigation 'peek)
+   git
+   (ivy :variables
+        ivy-extra-directories nil)
+   imenu-list
+   (org :variables
+        org-enable-valign t
+        org-enable-roam-support t
+        org-enable-roam-protocol t
+        org-enable-github-support t
+        org-enable-reveal-js-support t
+        org-want-todo-bindings t)
+   (shell :variables
+          close-window-with-terminal t
+          shell-default-shell 'vterm
+          shell-default-term-shell "/usr/local/bin/zsh"
+          shell-environment-variable-completion t
+          )
+   (spell-checking :variables
+                   spell-checking-enable-by-default t
+                   enable-flyspell-auto-completion nil)
+   (syntax-checking :variables
+                    syntax-checking-enable-by-default t)
+   (version-control :variables
+                    version-control-diff-side 'left
+                    version-control-global-margin t
+                    version-control-diff-tool 'git-gutter+)
+
+   ;; Misc
+   graphviz
+   nginx
+   (ranger :variables
+           ranger-show-preview t
+           ranger-show-literal nil
+           ranger-show-hidded t
+           ranger-cleanup-eagerly t
+           ranger-ignored-extensions '("mkv" "iso" "mp4" "flv"))
+   (ibuffer :variables
+            ibuffer-group-buffers-by 'projects)
+   (osx :variables
+        osx-option-as 'meta
+        osx-right-option-as 'none)
+   (unicode-fonts :variables unicode-fonts-force-multi-color-on-mac t)
+
+   ;; Markups
+   csv
+   (html :variables
+         css-enable-lsp t
+         css-indent-offset 2
+         less-enable-lsp t
+         scss-enable-lsp t
+         html-enable-lsp t
+         web-fmt-tool 'prettier
+         web-mode-markup-indent-offset 2
+         web-mode-css-indent-offset 2
+         web-mode-code-indent-offset 2
+         web-mode-attr-indent-offset 2)
+   web-beautify
+   (latex :variables
+          latex-build-command "LaTex"
+          latex-enable-folding t
+          latex-enable-magic t)
+   (markdown :variables
+             markdown-command "/usr/local/bin/pandoc"
+             markdown-live-preview-engine 'vmd)
+   yaml
+   (evil-snipe :variables evil-snipe-enable-alternate-f-and-t-behaviors t)
+   ;; Languages
+   (csharp :variables
+           csharp-backend 'lsp)
+   dotnet
+   (elixir :variables
+           elixir-backend 'lsp
+           elixir-ls-path "~/.local/opt/elixir-ls")
+   emacs-lisp
+   (erlang :variables
+           erlang-backend 'lsp)
+   (go :variables
+       go-format-before-save t
+       go-use-golangci-lint t
+       go-backend 'lsp)
+   prettier
+   ruby
+   (typescript :variables
+               typescript-backend 'lsp
+               typescript-fmt-on-save t
+               typescript-fmt-tool 'prettier
+               typescript-indent-level 2
+               typescript-linter 'eslint
+               typescript-lsp-linter nil)
+   (javascript :variables
+               javascript-backend 'lsp
+               javascript-lsp-linter nil
+               javascript-disable-tern-port-files nil
+               javascript-fmt-tool 'prettier
+               javascript-fmt-on-save t
+               javascript-repl `nodejs
+               js-indent-level 2
+               js2-basic-offset 2
+               js2-include-node-externs t
+               js2-mode-show-strict-warnings nil ;; js2-mode is sometimes confused by the type syntax when using lsp backend
+               js2-mode-show-parse-errors nil    ;; js2-mode is sometimes confused by the type syntax when using lsp backend
+               node-add-modules-path t)
+   django
+   (python :variables
+           python-backend 'lsp
+           python-lsp-server 'pyright
+           python-pipenv-activate nil ;; using poetry.el for python
+           python-test-runner '(pytest nose)
+           python-save-before-test t
+           python-formatter 'lsp
+           python-spacemacs-indent-guess t)
+   react
+   ;; rust
+   sql
+   windows-scripts
+   ))
+#+end_src
+
+**** Packages
+
+#+begin_src emacs-lisp :tangle layers/config/packages.el
+;;; Config Layer -*- lexical-binding: t; -*-
+(setq config-packages
+      '(;; Unowned Packages
+        aggressive-indent
+        auto-highlight-symbol
+        avy
+        csharp-mode
+        company
+        dap
+        drag-stuff
+        dtrt-indent
+        elixir-mode
+        eshell
+        evil
+        evil-mc
+        evil-string-inflection
+        flyspell
+        lsp-mode
+        ivy
+        magit
+        ;; org-roam
+        ;; org-projectile
+        python
+        ranger
+        vterm
+        writeroom-mode
+        web-mode
+        yasnippet-snippets
+
+        ;; Owned Packages
+        auto-dim-other-buffers
+        faceup
+        outshine  ; also configures `outline-mode'
+        s
+
+        ;; Local Packages
+        (dap-shell :location local) ; provides shell tasks for dap mode
+        ;; (redo-spacemacs :location local)
+        (ivy-todo :location local)
+        (outline-ivy :location local)
+        ))
+
+(defun personal/init-outline-ivy ())
+
+;;;; Aggressive indent
+(defun config/pre-init-aggressive-indent ()
+  (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
+
+;;;; Auto-highlight-symbol
+(defun config/pre-init-auto-highlight-symbol ()
+  (add-hook 'prog-mode 'auto-highlight-symbol-mode)
+  (add-hook 'text-mode 'auto-highlight-symbol-mode))
+
+;;;; Avy
+(defun config/pre-init-avy ()
+  (setq avy-timeout-seconds 0.35)
+
+  ;; Trying out evil-snipe, which conflicts with this shortcut. Use C-j-j to trigger avy-goto-char-timer
+  ;; (evil-global-set-key 'normal "s" 'avy-goto-char-timer)
+  (bind-keys ("C-l" . evil-avy-goto-line)
+             ("C-h" . avy-pop-mark)))
+
+
+;;;; Csharp
+(defun config/post-init-csharp-mode ()
+  (setq omnisharp-server-executable-path "/usr/local/bin/omnisharp")
+
+  (add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
+
+;;;;; Mode hooks
+
+  (add-hook 'csharp-mode-hook (lambda () (setq-local counsel-dash-docsets '("NET_Framework")
+                                                     dash-at-point-docset "NET_Framework")))
+  (add-hook 'csharp-mode-hook (lambda ()
+                                (add-hook 'before-save-hook #'lsp-format-buffer nil t)
+                                (add-hook 'before-save-hook #'delete-trailing-crlf))))
+
+;;;; Company
+(defun config/post-init-company ()
+  (add-hook 'after-init-hook 'global-company-mode)
+
+  (with-eval-after-load 'company
+    (define-key company-active-map (kbd "C-d") #'company-next-page)
+    (define-key company-active-map (kbd "C-u") #'company-previous-page)
+
+    (setq company-dabbrev-other-buffers nil
+          company-dabbrev-ignore-case   nil
+          company-dabbrev-downcase      nil))
+
+
+;;;;; Company-box
+  (use-package company-box
+    :diminish
+    :if (display-graphic-p)
+    :defines company-box-icons-all-the-icons
+    :hook (company-mode . company-box-mode)
+    :custom
+    (company-box-backends-colors nil)
+    :config
+    (with-no-warnings
+      ;; Prettify icons
+      (defun +company-box-icons--elisp-fn (candidate)
+        (when (derived-mode-p 'emacs-lisp-mode)
+          (let ((sym (intern candidate)))
+            (cond ((fboundp  sym) 'ElispFunction)
+                  ((featurep sym) 'ElispFeature)
+                  ((facep    sym) 'ElispFace)
+                  ((boundp   sym) 'ElispVariable)
+                  ((symbolp  sym) 'Text)
+                  (t .       nil)))))
+      (advice-add #'company-box-icons--elisp :override #'+company-box-icons--elisp-fn))
+
+    (when (and (display-graphic-p)
+               (require 'all-the-icons nil t))
+      (declare-function all-the-icons-faicon 'all-the-icons)
+      (declare-function all-the-icons-material 'all-the-icons)
+      (declare-function all-the-icons-octicon 'all-the-icons)
+      (setq company-box-icons-all-the-icons
+            `((Unknown       . ,(all-the-icons-material "find_in_page"             :face 'all-the-icons-purple))
+              (Text          . ,(all-the-icons-material "text_fields"              :face 'all-the-icons-green))
+              (Method        . ,(all-the-icons-material "functions"                :face 'all-the-icons-red))
+              (Function      . ,(all-the-icons-material "functions"                :face 'all-the-icons-red))
+              (Constructor   . ,(all-the-icons-material "functions"                :face 'all-the-icons-red))
+              (Field         . ,(all-the-icons-material "functions"                :face 'all-the-icons-red))
+              (Variable      . ,(all-the-icons-material "adjust"                   :face 'all-the-icons-blue))
+              (Class         . ,(all-the-icons-material "class"                    :face 'all-the-icons-red))
+              (Interface     . ,(all-the-icons-material "settings_input_component" :face 'all-the-icons-red))
+              (Module        . ,(all-the-icons-material "view_module"              :face 'all-the-icons-red))
+              (Property      . ,(all-the-icons-material "settings"                 :face 'all-the-icons-red))
+              (Unit          . ,(all-the-icons-material "straighten"               :face 'all-the-icons-red))
+              (Value         . ,(all-the-icons-material "filter_1"                 :face 'all-the-icons-red))
+              (Enum          . ,(all-the-icons-material "plus_one"                 :face 'all-the-icons-red))
+              (Keyword       . ,(all-the-icons-material "filter_center_focus"      :face 'all-the-icons-red))
+              (Snippet       . ,(all-the-icons-material "short_text"               :face 'all-the-icons-red))
+              (Color         . ,(all-the-icons-material "color_lens"               :face 'all-the-icons-red))
+              (File          . ,(all-the-icons-material "insert_drive_file"        :face 'all-the-icons-red))
+              (Reference     . ,(all-the-icons-material "collections_bookmark"     :face 'all-the-icons-red))
+              (Folder        . ,(all-the-icons-material "folder"                   :face 'all-the-icons-red))
+              (EnumMember    . ,(all-the-icons-material "people"                   :face 'all-the-icons-red))
+              (Constant      . ,(all-the-icons-material "pause_circle_filled"      :face 'all-the-icons-red))
+              (Struct        . ,(all-the-icons-material "streetview"               :face 'all-the-icons-red))
+              (Event         . ,(all-the-icons-material "event"                    :face 'all-the-icons-red))
+              (Operator      . ,(all-the-icons-material "control_point"            :face 'all-the-icons-red))
+              (TypeParameter . ,(all-the-icons-material "class"                    :face 'all-the-icons-red))
+              (Template      . ,(all-the-icons-material "short_text"               :face 'all-the-icons-green))
+              (ElispFunction . ,(all-the-icons-material "functions"                :face 'all-the-icons-red))
+              (ElispVariable . ,(all-the-icons-material "check_circle"             :face 'all-the-icons-blue))
+              (ElispFeature  . ,(all-the-icons-material "stars"                    :face 'all-the-icons-orange))
+              (ElispFace     . ,(all-the-icons-material "format_paint"             :face 'all-the-icons-pink)))
+            company-box-icons-alist 'company-box-icons-all-the-icons))))
+
+;;;; Dap
+(defun config/post-init-dap ()
+  (add-hook 'dap-stopped-hook (lambda (arg) (call-interactively #'dap-hydra))))  ;; Open a Hydra debug menu whenever hitting a breakpoint
+
+(defun config/init-dap-shell ()
+  (use-package dap-shell))
+
+;;;; Drag-stuff
+(defun config/post-init-drag-stuff ()
+  (drag-stuff-global-mode t)
+  (global-set-key (kbd "<C-up>") 'drag-stuff-up)
+  (global-set-key (kbd "<C-down>") 'drag-stuff-down))
+
+;;;; Dtrt-indent
+(defun config/init-dtrt-indent ()
+  (use-package dtrt-indent))
+
+;;;; Elixir
+(defun config/post-init-elixir-mode ()
+
+;;;;; Error handling
+
+  (with-eval-after-load 'flycheck
+    '(flycheck-credo-setup)
+    '(flycheck-dialyxir-setup))
+  (with-eval-after-load 'lsp-ui
+    '(flycheck-add-next-checker 'lsp-ui 'elixir-credo))
+  (with-eval-after-load 'elixir-mode
+    (add-hook 'elixir-mode-hook #'flycheck-mode))
+
+;;;;; Keybindings
+
+  ;; Set up some custom keybindings that's not automatically configured using elixir-mode
+  (with-eval-after-load 'elixir-mode
+    (spacemacs/declare-prefix-for-mode 'elixir-mode
+      "mt" "test" "testing related functionality")
+    (spacemacs/set-leader-keys-for-major-mode 'elixir-mode
+      "tb" 'exunit-verify-all
+      "ta" 'exunit-verify
+      "tl" 'exunit-rerun
+      "tt" 'exunit-verify-single
+      "tu" 'exunit-verify-all-in-umbrella
+      "hd" 'dash-at-point
+      "hD" 'dash-at-point-with-docset))
+
+;;;;; Debugging
+
+  ;; Register your debug run configurations here
+  ;; (see dap-elixir for defaults injected into the "Elixir" type)
+  (require 'dap-hydra)
+  (require 'dap-elixir)
+  (with-eval-after-load 'dap-mode
+    ;; (dap--put-if-absent :type "shell")
+    ;; Task for running a Phoenix Server
+    (dap-register-debug-template "Elixir Phoenix Server"
+                                 (list :name "Elixir::Phoenix Server"
+                                       :type "Elixir"
+                                       :task "phx.server"
+                                       :request "launch"
+                                       :program nil
+                                       :cwd nil  ;; defaults to lsp-workspace-root
+                                       ))
+
+    ;; Task for running an interactive mix session
+    (dap-register-debug-template "Elixir Interactive Shell"
+                                 (list :name "Elixir::Interactive Shell"
+                                       :type "shell"
+                                       :command "iex"
+                                       :taskArgs (list "-S")
+                                       :task "mix"
+                                       :request "launch"
+                                       :program nil
+                                       :cwd nil)))
+
+;;;;; Mode hooks
+  ;; Auto-highlight symbols
+  (add-hook 'elixir-mode-hook 'auto-highlight-symbol-mode)
+
+  ;; Enable Dash documentation
+  (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir")
+                                                     dash-at-point-docset "elixir")))
+  ;; Format buffer on save
+  (add-hook 'elixir-mode-hook (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
+
+  ;; Try to delete all tabs - NOTE does not quite work as intended
+  (add-hook 'elixir-mode-hook (lambda () (untabify (point-min) (point-max))))
+
+  ;; Set custom settings for elixir-ls language server
+  (add-hook 'lsp-after-initialize-hook (lambda () (lsp-register-custom-settings '(("elixirLS.projectDir" lsp-elixir-project-dir)))))
+
+  ;; Add some ignore patterns for stuff I don't care about
+  (add-hook 'lsp-mode-hook (lambda ()
+                             (dolist (ignore-pattern '("[/\\\\]\\.elixir_ls$" "[/\\\\]\\.log$" "[/\\\\]_build$" "[/\\\\]deps$"))
+                               (add-to-list 'lsp-file-watch-ignored ignore-pattern)))))
+
+;;;; Eshell
+(defun config/pre-init-eshell ()
+  (spacemacs|use-package-add-hook eshell
+    :post-init
+    (evil-define-key '(normal insert) 'global (kbd "C-e") 'eshell-pop-eshell)))
+
+;;;; Evil
+(defun config/post-init-evil ()
+  (setq evil-escape-key-sequence "jk")
+  (setq evil-escape-unordered-key-sequence nil)
+
+  (evil-global-set-key 'normal "Q" 'evil-execute-q-macro)
+  (define-key evil-normal-state-map (kbd "C-S-u") 'evil-scroll-other-window-interactive)
+  (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-other-window-down-interactive)
+  (evil-define-key '(normal visual motion) 'global
+    "H"  'evil-first-non-blank
+    "L"  'evil-end-of-line-interactive
+    "0"  'evil-jump-item)
+
+  (advice-add 'evil-ex-search-next     :after 'evil-scroll-to-center-advice)
+  (advice-add 'evil-ex-search-previous :after 'evil-scroll-to-center-advice))
+
+;;;; Evil-MC
+(defun config/post-init-evil-mc ()
+  (add-hook 'prog-mode-hook 'turn-on-evil-mc-mode)
+  (add-hook 'text-mode-hook 'turn-on-evil-mc-mode))
+
+;;;; Evil-String-Inflection
+(defun config/init-evil-string-inflection ()
+  ;; Toggle between snake case, camel case and pascal case
+  (use-package evil-string-inflection :ensure t)
+  (define-key evil-normal-state-map "gC" 'evil-operator-string-inflection))
+
+;;;; Flyspell
+(defun config/post-init-flyspell ()
+  (let ((langs '("english" "norsk")))
+    (setq lang-ring (make-ring (length langs)))
+    (dolist (elem langs) (ring-insert lang-ring elem)))
+
+  (global-set-key (kbd "<f8>") 'cycle-ispell-languages))
+
+;;;; LSP-mode
+(defun config/post-init-lsp-mode ()
+  (spacemacs|use-package-add-hook lsp-after-open-hook #'lsp-origami-try-enable))
+
+;;;; Ivy
+(defun config/pre-init-ivy ()
+  (setq ivy-format-function 'ivy-format-function-arrow)
+  (setq completion-in-region-function 'ivy-completion-in-region))
+
+(defun config/post-init-ivy ()
+  (setq ivy-height 20)
+
+  (spacemacs/set-leader-keys "ai" 'ivy-resume)
+
+  (bind-keys :map ivy-minibuffer-map
+             ("C-l"        . ivy-avy)
+             ("C-u"        . ivy-scroll-down-command)
+             ("C-d"        . ivy-scroll-up-command)
+             ("C-n"        . ivy-restrict-to-matches)
+             ("C-y"        . ivy-yank-word)
+             ("C-<return>" . ivy-call)
+             ("C-SPC"      . ivy-dispatching-done)
+             ("C-S-SPC"    . ivy-dispatching-call)))
+
+;;;;; Ivy-todo
+(defun config/init-ivy-todo ()
+  (use-package ivy-todo
+    :init (progn (spacemacs/set-leader-keys "pO" 'ivy-todo/task-list))))
+
+;;;; Magit
+(defun config/post-init-magit ()
+  (use-package forge
+    :after magit
+    :defer t
+    :config
+    (add-to-list 'forge-alist '("gitlab.intility.com" "gitlab.intility.com/api/v4" "gitlab.intility.com" forge-gitlab-repository))
+    (setq gitlab.user "user")
+    (when (string= system-type "darwin")
+      (setq ghub-use-workaround-for-emacs-bug 'force))
+
+    (define-key magit-mode-map (kbd "C-c C-c") 'forge-copy-url-at-point-as-kill))
+
+  (bind-keys :map magit-mode-map
+             ("M-1" . winum-select-window-1)
+             ("M-2" . winum-select-window-2)
+             ("M-3" . winum-select-window-3)
+             ("M-4" . winum-select-window-4)))
+
+;;;;; Org-Roam
+;; (defun config/pre-init-org-roam ()
+;;   (use-package org-roam-ui
+;;     :after org-roam
+;;     :config (setq org-roam-ui-sync-theme t
+;;                   org-roam-ui-follow t
+;;                   org-roam-ui-update-on-save t
+;;                   org-roam-ui-open-on-start t))
+;;   )
+
+
+;; (defun config/post-init-org-roam ()
+;;   (with-eval-after-load 'org-roam
+;;     (cl-defmethod org-roam-node-filetitle ((node org-roam-node))
+;;       "Return the file TITLE for the node."
+;;       (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
+
+;;     (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
+;;       "Return the hierarchy for the node."
+;;       (let ((title (org-roam-node-title node))
+;;             (olp (org-roam-node-olp node))
+;;             (level (org-roam-node-level node))
+;;             (filetitle (org-roam-node-filetitle node)))
+;;         (concat
+;;          (if (> level 0) (concat filetitle " -> "))
+;;          (if (> level 1) (concat (string-join olp " -> ") " -> "))
+;;          title))
+;;       )
+
+;;     ;; Display node hierarchy in the org-roam-node-find list
+;;     (setq org-roam-node-display-template "${hierarchy:*} ${tags:20}")
+
+;;     ;; Encrypt org-roam files by default (NOTE does currently not work good with `org-roam-node-find' in v2)
+;;     ;; (setq org-roam-capture-templates '(("d" "default" plain "%?"
+;;     ;;                                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
+;;     ;;                                     :unnarrowed t)))
+
+;;     ;; Allow mouse navigation in backlink buffer
+;;     (define-key org-roam-mode-map [mouse-1] #'org-roam-visit-thing))
+
+;;   ;; Use side window for backlink buffer
+;;   (add-to-list 'display-buffer-alist
+;;                '("\\*org-roam\\*"
+;;                  (display-buffer-in-side-window)
+;;                  (side . right)
+;;                  (slot . 0)
+;;                  (window-width . 0.25)
+;;                  (preserve-size . (t nil))
+;;                  (window-parameters . ((no-other-window . t)
+;;                                        (no-delete-other-windows . t)))))
+;;   )
+
+;;;;; Org-projectile
+;; (defun config/pre-init-org-projectile ()
+;;   (use-package org-projectile
+;;     :after org
+;;     :config
+;;     (progn
+;;       (setq org-projectile-per-project-filepath "TODO.org"
+;;             org-projectile-capture-template "* TODO %? %^G\n%i\n%a"
+;;             org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+;;       (org-projectile-per-project))
+;;     ))
+
+;;;; Python
+(defun config/pre-init-python ()
+  (setenv "WORKON_HOME" "~/.local/share/virtualenvs")
+
+  (spacemacs|use-package-add-hook pyenv
+    :post-config
+    (setq pyvenv-post-activate-hooks
+          (list (lambda ()
+                  (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python")))))
+    (setq pyvenv-post-deactivate-hooks
+          (list (lambda ()
+                  (setq python-shell-interpreter "python3")))))
+
+  (spacemacs|use-package-add-hook lsp-pyright
+    :post-config
+    (setq lsp-pyright-venv-directory (getenv "WORKON_HOME")))
+
+
+;;;;; Debugging
+
+  (require 'dap-hydra)
+  (require 'dap-python)
+  (add-hook 'python-mode-hook #'lsp-deferred)
+  (add-hook 'python-mode-hook (lambda () (setq-local counsel-dash-docsets '("Python"))))
+
+;;;;; Generic after loading python
+
+  (with-eval-after-load 'python
+    (setq python-shell-interpreter "python3")
+
+    ;; TODO Figure out how to run poetry automatically when entering a python project.
+    ;; FIXME This breaks python snippets in org-mode - should only apply for actual python projects
+    ;; Still have to run poetry command manually once
+    ;; (use-package poetry
+    ;;   :ensure t
+    ;;   :hook ((python-mode . poetry-tracking-mode)
+    ;;          (python-mode . (lambda () (when (poetry-venv-exist-p) ;; FIXME This fails if run before poetry is initialized for project
+    ;;                                      (setq-local lsp-pyright-venv-path poetry-project-venv))))))
+    (custom-set-variables
+     '(flycheck-python-flake8-executable "python3")
+     '(flycheck-python-pycompile-executable "python3")
+     '(flycheck-python-pylint-executable "python3"))
+
+    (spacemacs/set-leader-keys-for-major-mode 'python-mode "p" 'poetry)))
+
+;;;; Ranger
+(defun config/pre-init-ranger ()
+  (setq ranger-deer-show-details nil)
+
+  (evil-global-set-key 'normal "_" 'ranger)
+
+  ;; To get around `ranger/post-init-dired' overwriting keybindings
+  (spacemacs|use-package-add-hook ranger
+    :post-config
+    (bind-keys :map ranger-mode-map
+               ("n"   . dired-create-directory)
+               ("E"   . wdired-change-to-wdired-mode)
+               ("C-t" . ranger-travel)
+               ("C-e" . ranger-pop-eshell)
+               ("M-1" . winum-select-window-1)
+               ("M-2" . winum-select-window-2)
+               ("M-3" . winum-select-window-3)
+               ("M-4" . winum-select-window-4)
+               ("M-5" . winum-select-window-5))))
+
+;;;; Web-mode
+(defun config/pre-init-web-mode ()
+  "Various changes to how web-mode (and minors) should work"
+
+  ;; Workaround for emacs lockfiles causing node to crash
+  ;; https://github.com/facebook/create-react-app/issues/9056#issuecomment-633540572
+  (dolist (mode-hook '(web-mode-hook
+                       css-mode-hook
+                       scss-mode-hook
+                       rjsx-mode-hook
+                       typescript-mode-hook
+                       javascript-mode-hook))
+    (add-hook mode-hook (lambda () (setq-local create-lockfiles nil))))
+
+  ;; Disable smartparens strict mode in order to be able to write out
+  ;; arrow functions like ie. `() => {...}'
+  (dolist (mode-hook '(rjsx-mode-hook
+                       typescript-mode-hook
+                       typescript-tsx-mode-hook
+                       javascript-mode-hook))
+    (add-hook mode-hook 'turn-off-smartparens-strict-mode)))
+
+(defun config/post-init-web-mode ()
+
+;;;;; Typescript debugging
+
+  (add-hook 'typescript-mode-hook (lambda ()
+                                    (require 'dap-hydra)
+                                    (require 'dap-node)
+                                    (require 'dap-chrome)
+                                    (dap-node-setup)))
+
+  (with-eval-after-load 'dap-mode
+    ;; (dap-register-debug-template "React Debugging (Chrome)"
+    ;;                              (list :name "Chrome::React Debugging"
+    ;;                                    :type "pwa-chrome"
+    ;;                                    :request "launch"
+    ;;                                    :url "http://localhost:3000"
+    ;;                                    :webRoot "${workspaceFolder}"
+    ;;                                    :program nil
+    ;;                                    :cwd nil))
+    ))
+
+;;;; Vterm
+(defun config/post-init-vterm ())
+
+;;;; Writeroom-mode
+(defun config/post-init-writeroom-mode ()
+  "See configuration options here
+   https://github.com/joostkremers/writeroom-mode"
+
+  (setq writeroom-width 140)
+  (with-eval-after-load 'writeroom-mode
+    (define-key writeroom-mode-map (kbd "C-<") #'writeroom-decrease-width)
+    (define-key writeroom-mode-map (kbd "C->") #'writeroom-increase-width)
+    (define-key writeroom-mode-map (kbd "C-=") #'writeroom-adjust-width))
+
+  ;; Recalculate margins after text size adjustment
+  (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
+
+;;;; Yasnippet
+(defun config/post-init-yasnippet-snippets ()
+  (add-to-list 'yas-snippet-dirs 'yasnippet-snippets-dir t)
+  (define-key prog-mode-map (kbd "C-c C-i") 'yas-insert-snippet))
+
+;;; Owned Packages
+;;;; Auto Dim Other Buffers
+(defun config/init-auto-dim-other-buffers ()
+  (use-package auto-dim-other-buffers
+    :config
+    (auto-dim-other-buffers-mode)))
+
+;;;; Faceup
+(defun config/init-faceup ()
+  (use-package faceup
+    :defer t))
+
+;;;; Outshine
+(defun config/init-outshine ()
+  (use-package outshine
+    :hook ((prog-mode          . outline-minor-mode)
+           (outline-minor-mode . outshine-mode))
+
+    :bind (("<backtab>"           . outshine-cycle-buffer)
+           ([(meta return)]       . outshine-insert-heading)
+           ([(meta shift return)] . outshine-insert-subheading)
+           :map outline-minor-mode-map)
+
+    :init
+    (progn
+      (evil-define-key '(normal visual motion) outline-minor-mode-map
+        "gh" 'outline-up-heading
+        "gj" 'outline-forward-same-level
+        "gk" 'outline-backward-same-level
+        "gl" 'outline-next-visible-heading
+        "gu" 'outline-previous-visible-heading)
+
+      (spacemacs/set-leader-keys
+        "nn" 'outshine-narrow-to-subtree
+        "nw" 'widen
+        "nj" 'outline-move-subtree-down
+        "nk" 'outline-move-subtree-up
+        "nh" 'outline-promote
+        "nl" 'outline-demote)
+
+      (advice-add 'outshine-narrow-to-subtree :before 'outshine-fix-narrow-pos)
+
+      (advice-add 'outshine-insert-heading    :before 'outshine-fix-insert-pos)
+      (advice-add 'outshine-insert-heading    :after 'evil-insert-advice)
+      (advice-add 'outshine-insert-subheading :after 'evil-insert-advice)
+
+      ;; Fix the new bindings in outline-minor-mode overwriting org-mode-map
+      ;; I also add advice here because it mirrors outshine modifications
+      (spacemacs|use-package-add-hook org
+        :post-config
+        (progn
+          (bind-keys :map org-mode-map
+                     ;; ("C-j"                 . counsel-outline)
+                     ("C-j"                 . oi-jump)
+                     ([(meta return)]       . org-meta-return)
+                     ([(meta shift return)] . org-insert-subheading))
+          (advice-add 'org-insert-heading    :before 'org-fix-heading-pos)
+          (advice-add 'org-insert-heading    :after 'evil-insert-advice)
+          (advice-add 'org-insert-subheading :after 'evil-insert-advice)))
+      )))
+
+;;;; Strings
+(defun config/init-s ()
+  (use-package s))
+
+;;; Local Packages
+;;;; Redo-spacemacs
+;; `redo-spacemacs-bindings' is executed in user-config in `init.el'
+;; with the `dotspacemacs/user-config/post-layer-load-config' function
+
+;; If any removed bindings make you scratch your head, check out
+;; the ending `redo-spacemacs-new-bindings-alist' to see what I rebound it
+;; to (for example, `spacemacs/delete-window' from 'SPC w d' to 'M-d')
+;; They are unbound to force muscle-memory development.
+
+;; (defun config/init-redo-spacemacs ()
+;;   (use-package redo-spacemacs
+;;     :if (and (boundp 'redo-bindings?) redo-bindings?)
+;;     :init
+;;     (progn
+;;       (setq redo-spacemacs-prefixes-list
+;;             '(;; Primary prefixes
+;;               "C"    ; capture/colors
+;;               "i"    ; insertion
+;;               "j"    ; jump/join/split
+;;               "N"    ; navigation
+;;               "r"    ; registers/rings/resume
+;;               "t"    ; toggles
+;;               "z"    ; zoom
+
+;;               ;; Sub prefixes
+;;               "a s"  ; shells
+;;               "b N"  ; new buffers
+;;               "f v"  ; file/dir-local-variables
+;;               "f C"  ; files/convert
+;;               "p $"  ; projects/shell
+;;               "s k"  ; search/ack
+;;               "s r"  ; search/ripgrep
+;;               "s t"  ; search/pt
+;;               "w p"  ; windows/popup
+;;               "x d"  ; text/delete
+;;               "x g"  ; text/google-translate
+;;               "x j"  ; text/justification
+;;               "x t"  ; text/transposition
+;;               "x w"  ; text/words
+;;               ))
+
+;;       (setq redo-spacemacs-undo-bindings-alist
+;;             '(;; Top-level
+;;               ("!" shell-command)
+;;               ("'" spacemacs/default-pop-shell)
+;;               ("0" neotree-show)
+;;               ("?" counsel-descbinds)
+;;               ("`" winum-select-window-by-number)
+;;               ("1" winum-select-window-1)
+;;               ("2" winum-select-window-2)
+;;               ("3" winum-select-window-3)
+;;               ("4" winum-select-window-4)
+;;               ("5" winum-select-window-5)
+;;               ("6" winum-select-window-6)
+;;               ("7" winum-select-window-7)
+;;               ("8" winum-select-window-8)
+;;               ("9" winum-select-window-9)
+
+;;               ;; A - applications
+;;               ("ad" deer)
+;;               ("ar" ranger)
+
+;;               ;; B - buffers
+;;               ("b." spacemacs/buffer-transient-state/body)
+;;               ("bB" spacemacs-layouts/non-restricted-buffer-list-ivy)
+;;               ("bD" spacemacs/ace-kill-this-buffer)
+;;               ("bh" spacemacs/home
+;;                spacemacs/switch-to-help-buffer)
+;;               ("bH" spacemacs/switch-to-help-buffer)
+;;               ("be" spacemacs/safe-erase-buffer)
+;;               ("bb" ivy-switch-buffer
+;;                ibuffer)
+;;               ("bI" ibuffer)
+;;               ("bn" next-buffer)
+;;               ("bp" previous-buffer)
+;;               ("bP" spacemacs/copy-clipboard-to-whole-buffer)
+;;               ("bR" spacemacs/safe-revert-buffer)
+;;               ("bw" read-only-mode)
+;;               ("bW" spacemacs/goto-buffer-workspace)
+;;               ("bY" spacemacs/copy-whole-buffer-to-clipboard)
+;;               ("b C-d"   spacemacs/kill-other-buffers)
+;;               ("b C-S-d" spacemacs/kill-matching-buffers-rudely)
+
+;;               ;; c - compile/comments
+;;               ("cl" spacemacs/comment-or-uncomment-lines)
+;;               ("cL" spacemacs/comment-or-uncomment-lines-inverse)
+;;               ("cP" spacemacs/comment-or-uncomment-paragraphs-inverse)
+;;               ("cT" spacemacs/quick-comment-or-uncomment-to-the-line-inverse)
+;;               ("cY" spacemacs/copy-and-comment-lines-inverse)
+
+;;               ;; e - errors
+;;               ;; ... Haven't went through yet ...
+
+;;               ;; F - frames
+;;               ("Fb" spacemacs/switch-to-buffer-other-frame)
+;;               ("FB" spacemacs/display-buffer-other-frame)
+;;               ("FD" delete-other-frames)
+;;               ("Ff" spacemacs/find-file-other-frame)
+;;               ("Fn" make-frame)
+;;               ("FO" spacemacs/dired-other-frame)
+
+;;               ;; f - files
+;;               ("fA" spacemacs/find-file-and-replace-buffer)
+;;               ("fb" counsel-bookmark)
+;;               ("fE" spacemacs/sudo-edit)
+;;               ("fg" rgrep)
+;;               ("fh" hexl-find-file)
+;;               ("fi" spacemacs/insert-file)
+;;               ("fJ" spacemacs/open-junk-file)
+;;               ("fj" dired-jump)
+;;               ("fl" find-file-literally)
+;;               ("fL" counsel-locate)
+
+;;               ;; g - git/version-control
+;;               ;; ... Haven't went through yet ...
+
+;;               ;; h - help
+;;               ;; ... Haven't went through yet ...
+
+;;               ;; i - insertion
+;;               ;; Removed entire leader
+
+;;               ;; j - jump/join/split
+;;               ;; Removed entire leader
+
+;;               ;; k - lisp
+;;               ;; Removed entire leader (I always use transient state for these)
+
+;;               ;; N - navigation
+;;               ;; Removed entire leader
+
+;;               ;; n - narrow/numbers
+;;               ("n+" spacemacs/evil-numbers-transient-state/evil-numbers/inc-at-pt)
+;;               ("np" narrow-to-page)
+;;               ("nr" narrow-to-region)
+
+;;               ;; p - projects
+;;               ("p%" projectile-replace-regexp)
+;;               ("pe" projectile-edit-dir-locals)
+;;               ("pF" projectile-find-file-dwim)
+;;               ("pR" projectile-replace)
+;;               ("pT" projectile-test-project)
+;;               ("pv" projectile-vc)
+
+;;               ;; q - quit
+;;               ("qs" spacemacs/save-buffers-kill-emacs)
+;;               ("qt" spacemacs/restart-emacs-adv-timers)
+
+;;               ;; r - registers/rings/resume
+;;               ;; Removed entire leader
+
+;;               ;; s - search/symbol
+;;               ("sf" spacemacs/search-auto)
+;;               ("sF" spacemacs/search-auto-region-or-symbol)
+;;               ("sj" spacemacs/counsel-jump-in-buffer)
+;;               ("sp" spacemacs/search-project-auto)
+;;               ("sP" spacemacs/search-project-auto-region-or-symbol)
+;;               ("ss" swiper)
+;;               ("sS" spacemacs/swiper-region-or-symbol)
+
+;;               ;; T - UI toggles/themes
+;;               ;; Leaving unchanged
+
+;;               ;; t - toggles
+;;               ;; Removed entire leader
+
+;;               ;; w - windows
+;;               ("w+" spacemacs/window-layout-toggle)
+;;               ("w1" spacemacs/window-split-single-column)
+;;               ("w2" spacemacs/window-split-double-columns)
+;;               ("w3" spacemacs/window-split-triple-columns)
+;;               ("w_" spacemacs/maximize-horizontally)
+;;               ("wC" spacemacs/toggle-distraction-free)
+;;               ("wc" spacemacs/toggle-centered-buffer)
+;;               ("wF" make-frame)
+;;               ("wh" evil-window-left)
+;;               ("wj" evil-window-down)
+;;               ("wk" evil-window-up)
+;;               ("wl" evil-window-right)
+;;               ("ws" split-window-below)
+;;               ("wS" split-window-below-and-focus)
+;;               ("wv" split-window-right)
+;;               ("wV" split-window-right-and-focus)
+;;               ("ww" other-window
+;;                ace-window)
+;;               ("wx" kill-buffer-and-window)
+;;               ("wW" ace-window)
+;;               ("w|" spacemacs/maximize-vertically)
+;;               ("w <down>"    evil-window-down)
+;;               ("w <up>"      evil-window-up)
+;;               ("w <left>"    evil-window-left)
+;;               ("w <right>"   evil-window-right)
+;;               ("w <S-down>"  evil-window-move-very-bottom)
+;;               ("w <S-up>"    evil-window-move-very-top)
+;;               ("w <S-left>"  evil-window-move-far-left)
+;;               ("w <S-right>" evil-window-move-far-right)
+
+;;               ;; x - text
+;;               ("x TAB" indent-rigidly)
+;;               ("xJ" spacemacs/move-text-transient-state/move-text-down)
+;;               ("xK" spacemacs/move-text-transient-state/move-text-up)
+;;               ("xo" link-hint-open-link)
+;;               ("xO" link-hint-open-multiple-links)
+
+;;               ;; z - zoom
+;;               ;; Removed entire leader
+
+;;               ;; Important bindings that I use chords for now.
+;;               ;; They are removed to force muscle-memory.
+;;               ("v" er/expand-region)
+;;               ("wm" spacemacs/toggle-maximize-buffer)
+;;               ("wd" spacemacs/delete-window)
+;;               ("w/" split-window-right)
+;;               ("w-" split-window-below)
+;;               ("ff" counsel-find-file)
+;;               ("fr" counsel-recentf)
+;;               ))
+
+;;       (setq redo-spacemacs-new-bindings-alist
+;;             '(;; Windows, Layouts Management
+;;               ("M-w"   spacemacs/toggle-maximize-buffer)
+;;               ("M-d"   spacemacs/delete-window)
+;;               ("M-c"   spacemacs/toggle-centered-buffer-mode)
+;;               ("M-/"   split-window-right)
+;;               ("C-M-/" split-window-right-and-focus)
+;;               ("M--"   split-window-below)
+;;               ("C-M--" split-window-below-and-focus)
+;;               ("M-1" winum-select-window-1)
+;;               ("M-2" winum-select-window-2)
+;;               ("M-3" winum-select-window-3)
+;;               ("M-4" winum-select-window-4)
+;;               ("M-5" winum-select-window-5)
+
+;;               ;; Editing, Searching, Movement
+;;               ("C-,"   lisp-state-toggle-lisp-state)
+;;               ("C-SPC" er/expand-region)
+;;               ("C-S-s" spacemacs/swiper-region-or-symbol)
+
+;;               ;; Files, Buffers
+;;               ("M-f" counsel-find-file)
+;;               ("M-r" counsel-recentf)
+
+;;               ;; Rebindings to look at
+;;               ;; spacemacs/kill-this-buffer
+;;               ;; M-u, M-i
+;;               )))))
+
+#+end_src
+
+*** Display Layer
+
+Configure the Display layer. Break up in smaller sections.
+
+**** Layers
+
+#+begin_src emacs-lisp :tangle layers/display/layers.el
+;;; -*- lexical-binding: t; -*-
+
+(configuration-layer/declare-layers
+ '(theming  ; Required for theming modifications
+   ))
+#+end_src
+
+**** Packages
+
+#+begin_src emacs-lisp :tangle layers/display/packages.el
+;;; Display Layer -*- lexical-binding: t; -*-
+
+(setq display-packages
+      '(;; Owned packages
+        all-the-icons
+        all-the-icons-ivy
+        ;; pretty-mode
+
+        org-fancy-priorities
+        org-super-agenda
+        org-superstar
+
+        (prettify-utils :location (recipe :fetcher github
+                                          :repo "Ilazki/prettify-utils.el"))
+
+        ;; Elsehwere-owned packages
+        spaceline-all-the-icons
+        which-key
+
+        ;; Personal display-related packages
+        ;; (pretty-code     :location local)
+        ;; (pretty-eshell   :location local)
+        (pretty-fonts    :location local)
+        (pretty-magit    :location local)
+        (pretty-outlines :location local)))
+
+;;; Owned Packages
+;;;; All-the-icons
+
+(defun display/post-init-all-the-icons ()
+  (use-package all-the-icons
+    :config
+    (let ((hy-icon '(all-the-icons-fileicon "hy" :face all-the-icons-orange))
+          (dt-icon '(all-the-icons-fileicon "graphviz" :face all-the-icons-pink)))
+      (add-to-list 'all-the-icons-icon-alist      `("\\.hy$"          ,@hy-icon))
+      (add-to-list 'all-the-icons-icon-alist      `("\\.dot$"         ,@dt-icon))
+      (add-to-list 'all-the-icons-mode-icon-alist `(hy-mode           ,@hy-icon))
+      (add-to-list 'all-the-icons-mode-icon-alist `(graphviz-dot-mode ,@dt-icon)))))
+
+;;;; All-the-icons-ivy
+
+(defun display/init-all-the-icons-ivy ()
+  (use-package all-the-icons-ivy
+    :config
+    (progn
+      ;; Fix icon prompt alignment in ivy prompts
+      (advice-add 'all-the-icons-ivy-file-transformer :override
+                  'all-the-icons-ivy-file-transformer-stdized)
+
+      ;; Add behavior to counsel projectile funcs too
+      (advice-add 'counsel-projectile-find-file-transformer :filter-return
+                  'all-the-icons-ivy-file-transformer-stdized)
+      (advice-add 'counsel-projectile-transformer :filter-return
+                  'all-the-icons-ivy-file-transformer-stdized)
+
+      (all-the-icons-ivy-setup))))
+
+;;;; Org-fancy-priorities
+
+(defun display/init-org-fancy-priorities ()
+  (use-package org-fancy-priorities
+    :ensure t
+    :diminish
+    :defines org-fancy-priorities-list
+    :hook (org-mode . org-fancy-priorities-mode)
+    :config
+    (setq org-priority-faces '((?A . all-the-icons-red)
+                               (?B . all-the-icons-yellow)
+                               (?C . all-the-icons-blue))
+          org-fancy-priorities-list '(
+                                      (?A . "⬆")   ;; High
+                                      (?B . "■")   ;; Medium
+                                      (?C . "⬇"))) ;; Low
+    ))
+
+;;;; Org-super-agenda
+
+(defun display/init-org-super-agenda ()
+  (use-package org-super-agenda
+    :ensure t
+    :commands (org-super-agenda-mode)
+    :hook (org-agenda-mode . org-super-agenda-mode)
+    :init
+    (setq org-agenda-block-separator 9472      ;; Use a straight line as separator between agenda agenda blocks
+          org-agenda-compact-blocks t
+          org-agenda-include-deadlines t       ;; Include deadlines in the agenda
+          org-agenda-skip-deadline-if-done t   ;; Don't include deadlines in the agenda if they're in the `DONE' state
+          org-agenda-skip-scheduled-if-done t  ;; Don't include items in the agenda if they're in the `DONE' state
+          org-super-agenda-header-map nil      ;; Fixes issues with evil-mode
+          )
+    (setq org-agenda-custom-commands
+          '(("o" "Overview"
+             ((agenda "" ((org-agenda-span 'day)
+                          (org-super-agenda-groups
+                           '((:name "Today"
+                                    :time-grid t
+                                    :date today
+                                    :todo "TODAY"
+                                    :scheduled today
+                                    :order 1)))))
+              (alltodo "" ((org-agenda-overriding-header "")
+                           (org-super-agenda-groups
+                            '((:name "Next to do"
+                                     :todo "NEXT"
+                                     :order 1)
+                              (:name "Important"
+                                     :tag "Important"
+                                     :priority "A"
+                                     :order 6)
+                              (:name "Due Today"
+                                     :deadline today
+                                     :order 2)
+                              (:name "Due Soon"
+                                     :deadline future
+                                     :order 8)
+                              (:name "Overdue"
+                                     :deadline past
+                                     :face error
+                                     :order 7)
+                              (:name "Work"
+                                     :tag "Work"
+                                     :order 10)
+                              (:name "Personal"
+                                     :tag "Personal"
+                                     :order 11)
+                              (:name "Issues"
+                                     :tag "Issue"
+                                     :order 12)
+                              (:name "Projects"
+                                     :tag "Project"
+                                     :order 14)
+                              (:name "Emacs"
+                                     :tag "Emacs"
+                                     :order 13)
+                              (:name "Research"
+                                     :tag "Research"
+                                     :order 15)
+                              (:name "To read"
+                                     :tag "Read"
+                                     :order 30)
+                              (:name "Waiting"
+                                     :todo "WAITING"
+                                     :priority "C"
+                                     :order 20)
+                              (:name "Trivial"
+                                     :priority<= "C"
+                                     :tag ("Trivial" "Unimportant")
+                                     :todo ("SOMEDAY" )
+                                     :order 90)
+                              (:discard (:tag ("Chore" "Routine" "Daily")))))))))))))
+
+;;;; Org-superstar
+
+(defun display/pre-init-org-superstar ()
+  (use-package org-superstar
+    :ensure t
+    :hook (org-mode . org-superstar-mode)
+    :config
+    (setq org-superstar-prettify-item-bullets t
+          org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))))
+
+;;;; Pretty-mode
+
+(defun display/init-pretty-mode ()
+  ;; I *only* use greek letter replacements at the moment.
+  ;; However, I go back and forht on whether to use nil-like <-> emptyset.
+  ;; I currently have it *enabled*. Uncomment the deactivation to remove it.
+
+  (use-package pretty-mode
+    :config
+    (progn
+      (global-pretty-mode t)
+
+      (pretty-deactivate-groups
+       '(:equality :ordering :ordering-double :ordering-triple
+                   :arrows :arrows-twoheaded :punctuation
+                   :logic :sets
+                   ;; :nil
+                   ))
+      (pretty-activate-groups
+       '(:greek)))))
+
+;;;; Prettify-utils
+
+(defun display/init-prettify-utils ()
+  (use-package prettify-utils))
+
+;;;; Solarized-theme
+
+;; (defun display/init-solarized-theme ()
+;;   (use-package solarized-theme))
+
+;;; Unowned Packages
+;;;; Which-key
+
+(defun display/post-init-which-key ()
+  (when (configuration-layer/package-used-p 'pretty-fonts)
+    (setq which-key-separator " ")
+    (setq which-key-prefix-prefix " ")))
+
+;;;; Spaceline-all-the-icons
+
+(defun display/post-init-spaceline-all-the-icons ()
+  (spaceline-all-the-icons-theme)
+
+  (setq spaceline-highlight-face-func 'spaceline-highlight-face-default)
+
+  (setq spaceline-all-the-icons-icon-set-modified         'chain)
+  (setq spaceline-all-the-icons-icon-set-window-numbering 'square)
+  (setq spaceline-all-the-icons-separator-type            'none)
+  (setq spaceline-all-the-icons-primary-separator         "·")
+
+  ;; !!!!!!!!!!!!!!!!
+  ;; !! https://github.com/domtronn/spaceline-all-the-icons.el/issues/55
+  ;; !! If you remove this - expect EXTREMELY degraded performance
+  ;; !! on files of more-or-less any size and of any type
+  ;; !!!!!!!!!!!!!!!!
+  (spaceline-toggle-projectile-root-off)
+  (spaceline-toggle-all-the-icons-projectile-off)
+  (spaceline-toggle-all-the-icons-buffer-id-off)
+
+
+  ;; Mode Segments
+  (spaceline-toggle-all-the-icons-minor-modes-off)
+
+  ;; Buffer Segments
+  (spaceline-toggle-all-the-icons-buffer-size-off)
+  (spaceline-toggle-all-the-icons-buffer-position-on)
+  (spaceline-toggle-all-the-icons-buffer-id-on)
+
+  ;; Git Segments
+  (spaceline-toggle-all-the-icons-git-status-on)
+  (spaceline-toggle-all-the-icons-vc-icon-off)
+  (spaceline-toggle-all-the-icons-vc-status-on)
+
+  ;; Misc Segments
+  (spaceline-toggle-all-the-icons-eyebrowse-workspace-off)
+  (spaceline-toggle-all-the-icons-flycheck-status-off)
+  (spaceline-toggle-all-the-icons-time-on))
+
+;;; Pretty Packages
+
+;;;; Pretty-code
+
+(defun display/init-pretty-code ()
+  (use-package pretty-code
+    :config
+    (progn
+      (pre)
+      (pretty-code-add-hook 'emacs-lisp-mode-hook '((:def "defun")))
+      (pretty-code-add-hook 'python-mode-hook     '((:def "def")
+                                                    (:lambda "lambda"))))))
+
+;;;; Pretty-eshell
+
+(defun display/init-pretty-eshell ()
+  (use-package pretty-eshell
+    :init
+    (progn
+      ;; Change default banner message
+      (setq eshell-banner-message (s-concat (s-repeat 20 "---") "\n\n"))
+
+      ;; More prompt styling
+      (setq pretty-eshell-header "\n︳")
+      (setq pretty-eshell-prompt-string " "))
+
+    :config
+    (progn
+      ;; Directory
+      (pretty-eshell-section
+       esh-dir
+       "\xf07c"  ; 
+       (abbreviate-file-name (eshell/pwd))
+       '(:foreground "#268bd2" :weight bold :underline t))
+
+      ;; Git Branch
+      (pretty-eshell-section
+       esh-git
+       "\xe907"  ; 
+       (magit-get-current-branch)
+       '(:foreground "#8D6B94"))
+
+      ;; Python Virtual Environment
+      (pretty-eshell-section
+       esh-python
+       "\xe928"  ; 
+       pyvenv-virtual-env-name)
+
+      ;; Time
+      (pretty-eshell-section
+       esh-clock
+       "\xf017"  ; 
+       (format-time-string "%H:%M" (current-time))
+       '(:foreground "forest green"))
+
+      ;; Prompt Number
+      (pretty-eshell-section
+       esh-num
+       "\xf0c9"  ; 
+       (number-to-string pretty-eshell-prompt-num)
+       '(:foreground "brown"))
+
+      (setq pretty-eshell-funcs
+            (list esh-dir esh-git esh-python esh-clock esh-num)))))
+
+;;;; Pretty-fonts
+
+(defun display/init-pretty-fonts ()
+  (use-package pretty-fonts
+    :config
+    ;; !! This is required to avoid segfault when using emacs as daemon !!
+    (spacemacs|do-after-display-system-init
+     (pretty-fonts-add-hook 'prog-mode-hook pretty-fonts-fira-code-alist)
+     (pretty-fonts-add-hook 'org-mode-hook  pretty-fonts-fira-code-alist)
+
+     (pretty-fonts-set-fontsets-for-fira-code)
+     (pretty-fonts-set-fontsets
+      '(;; All-the-icons fontsets
+        ("fontawesome"
+         ;;                         
+         #xf07c #xf0c9 #xf0c4 #xf0cb #xf017 #xf101)
+
+        ("all-the-icons"
+         ;;    
+         #xe907 #xe928)
+
+        ("github-octicons"
+         ;;                               
+         #xf091 #xf059 #xf076 #xf075 #xe192  #xf016 #xf071)
+
+        ("material icons"
+         ;;              
+         #xe871 #xe918 #xe3e7  #xe5da
+         ;;              
+         #xe3d0 #xe3d1 #xe3d2 #xe3d4))))))
+
+;;;; Pretty-magit
+
+(defun display/init-pretty-magit ()
+  (use-package pretty-magit
+    :config
+    (progn
+      (pretty-magit-add-leaders
+       '(("Feature" ? (:foreground "slate gray" :height 1.2))
+         ("Add"     ? (:foreground "#375E97" :height 1.2))
+         ("Fix"     ? (:foreground "#FB6542" :height 1.2))
+         ("Clean"   ? (:foreground "#FFBB00" :height 1.2))
+         ("Docs"    ? (:foreground "#3F681C" :height 1.2))))
+
+      (pretty-magit-setup))))
+
+;;;; Pretty-outlines
+
+(defun display/init-pretty-outlines ()
+  (use-package pretty-outlines
+    :hook ((outline-mode       . pretty-outlines-set-display-table)
+           (outline-minor-mode . pretty-outlines-set-display-table)
+           (elixir-mode        . pretty-outlines-add-bullets)
+           (emacs-lisp-mode    . pretty-outlines-add-bullets)
+           (hy-mode            . pretty-outlines-add-bullets)
+           (python-mode        . pretty-outlines-add-bullets))))
+
 #+end_src
 
 ** User Init

@@ -7,6 +7,10 @@
 spacemacs.el
 user-init.el
 user-config.el
+layers/config/layers.el
+layers/config/packages.el
+layers/display/layers.el
+layers/display/packages.el
 
 # Transitory
 .#*
