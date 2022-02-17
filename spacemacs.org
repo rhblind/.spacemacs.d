@@ -54,7 +54,6 @@
     - [[#company][Company]]
     - [[#mode-line][Mode-Line]]
     - [[#font-locks][Font-Locks]]
-    - [[#git-gutter][Git-Gutter+]]
   - [[#themes][Themes]]
     - [[#solarized-light][Solarized Light]]
     - [[#zenburn][Zenburn]]
@@ -338,7 +337,7 @@ Configure Config layer. Break up in smaller sections.
    (version-control :variables
                     version-control-diff-side 'left
                     version-control-global-margin t
-                    version-control-diff-tool 'git-gutter+)
+                    version-control-diff-tool 'git-gutter)
 
    ;; Misc
    graphviz
@@ -475,6 +474,7 @@ Configure Config layer. Break up in smaller sections.
         (ivy-todo :location local)
         (outline-ivy :location local)
         ))
+
 
 (defun personal/init-outline-ivy ())
 
@@ -1279,17 +1279,13 @@ Configure Config layer. Break up in smaller sections.
 #+end_src
 
 *** Display Layer
-
-Configure the Display layer. Break up in smaller sections.
-
 **** Layers
 
 #+begin_src emacs-lisp :tangle layers/display/layers.el
 ;;; -*- lexical-binding: t; -*-
 
 (configuration-layer/declare-layers
- '(theming  ; Required for theming modifications
-   ))
+ '(theming)) ;; Required for theming modifications
 #+end_src
 
 **** Packages
@@ -1302,6 +1298,9 @@ Configure the Display layer. Break up in smaller sections.
         all-the-icons
         all-the-icons-ivy
         ;; pretty-mode
+
+        git-gutter
+        git-gutter-fringe
 
         org-fancy-priorities
         org-super-agenda
@@ -1320,141 +1319,11 @@ Configure the Display layer. Break up in smaller sections.
         (pretty-fonts    :location local)
         (pretty-magit    :location local)
         (pretty-outlines :location local)))
+#+end_src
 
-;;; Owned Packages
-;;;; All-the-icons
+***** Break up these
 
-(defun display/post-init-all-the-icons ()
-  (use-package all-the-icons
-    :config
-    (let ((hy-icon '(all-the-icons-fileicon "hy" :face all-the-icons-orange))
-          (dt-icon '(all-the-icons-fileicon "graphviz" :face all-the-icons-pink)))
-      (add-to-list 'all-the-icons-icon-alist      `("\\.hy$"          ,@hy-icon))
-      (add-to-list 'all-the-icons-icon-alist      `("\\.dot$"         ,@dt-icon))
-      (add-to-list 'all-the-icons-mode-icon-alist `(hy-mode           ,@hy-icon))
-      (add-to-list 'all-the-icons-mode-icon-alist `(graphviz-dot-mode ,@dt-icon)))))
-
-;;;; All-the-icons-ivy
-
-(defun display/init-all-the-icons-ivy ()
-  (use-package all-the-icons-ivy
-    :config
-    (progn
-      ;; Fix icon prompt alignment in ivy prompts
-      (advice-add 'all-the-icons-ivy-file-transformer :override
-                  'all-the-icons-ivy-file-transformer-stdized)
-
-      ;; Add behavior to counsel projectile funcs too
-      (advice-add 'counsel-projectile-find-file-transformer :filter-return
-                  'all-the-icons-ivy-file-transformer-stdized)
-      (advice-add 'counsel-projectile-transformer :filter-return
-                  'all-the-icons-ivy-file-transformer-stdized)
-
-      (all-the-icons-ivy-setup))))
-
-;;;; Org-fancy-priorities
-
-(defun display/init-org-fancy-priorities ()
-  (use-package org-fancy-priorities
-    :ensure t
-    :diminish
-    :defines org-fancy-priorities-list
-    :hook (org-mode . org-fancy-priorities-mode)
-    :config
-    (setq org-priority-faces '((?A . all-the-icons-red)
-                               (?B . all-the-icons-yellow)
-                               (?C . all-the-icons-blue))
-          org-fancy-priorities-list '(
-                                      (?A . "⬆")   ;; High
-                                      (?B . "■")   ;; Medium
-                                      (?C . "⬇"))) ;; Low
-    ))
-
-;;;; Org-super-agenda
-
-(defun display/init-org-super-agenda ()
-  (use-package org-super-agenda
-    :ensure t
-    :commands (org-super-agenda-mode)
-    :hook (org-agenda-mode . org-super-agenda-mode)
-    :init
-    (setq org-agenda-block-separator 9472      ;; Use a straight line as separator between agenda agenda blocks
-          org-agenda-compact-blocks t
-          org-agenda-include-deadlines t       ;; Include deadlines in the agenda
-          org-agenda-skip-deadline-if-done t   ;; Don't include deadlines in the agenda if they're in the `DONE' state
-          org-agenda-skip-scheduled-if-done t  ;; Don't include items in the agenda if they're in the `DONE' state
-          org-super-agenda-header-map nil      ;; Fixes issues with evil-mode
-          )
-    (setq org-agenda-custom-commands
-          '(("o" "Overview"
-             ((agenda "" ((org-agenda-span 'day)
-                          (org-super-agenda-groups
-                           '((:name "Today"
-                                    :time-grid t
-                                    :date today
-                                    :todo "TODAY"
-                                    :scheduled today
-                                    :order 1)))))
-              (alltodo "" ((org-agenda-overriding-header "")
-                           (org-super-agenda-groups
-                            '((:name "Next to do"
-                                     :todo "NEXT"
-                                     :order 1)
-                              (:name "Important"
-                                     :tag "Important"
-                                     :priority "A"
-                                     :order 6)
-                              (:name "Due Today"
-                                     :deadline today
-                                     :order 2)
-                              (:name "Due Soon"
-                                     :deadline future
-                                     :order 8)
-                              (:name "Overdue"
-                                     :deadline past
-                                     :face error
-                                     :order 7)
-                              (:name "Work"
-                                     :tag "Work"
-                                     :order 10)
-                              (:name "Personal"
-                                     :tag "Personal"
-                                     :order 11)
-                              (:name "Issues"
-                                     :tag "Issue"
-                                     :order 12)
-                              (:name "Projects"
-                                     :tag "Project"
-                                     :order 14)
-                              (:name "Emacs"
-                                     :tag "Emacs"
-                                     :order 13)
-                              (:name "Research"
-                                     :tag "Research"
-                                     :order 15)
-                              (:name "To read"
-                                     :tag "Read"
-                                     :order 30)
-                              (:name "Waiting"
-                                     :todo "WAITING"
-                                     :priority "C"
-                                     :order 20)
-                              (:name "Trivial"
-                                     :priority<= "C"
-                                     :tag ("Trivial" "Unimportant")
-                                     :todo ("SOMEDAY" )
-                                     :order 90)
-                              (:discard (:tag ("Chore" "Routine" "Daily")))))))))))))
-
-;;;; Org-superstar
-
-(defun display/pre-init-org-superstar ()
-  (use-package org-superstar
-    :ensure t
-    :hook (org-mode . org-superstar-mode)
-    :config
-    (setq org-superstar-prettify-item-bullets t
-          org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))))
+#+begin_src emacs-lisp :tangle layers/display/packages.el
 
 ;;;; Pretty-mode
 
@@ -1658,6 +1527,184 @@ Configure the Display layer. Break up in smaller sections.
            (python-mode        . pretty-outlines-add-bullets))))
 
 #+end_src
+***** Org-super-agenda
+
+Pretty super agenda!
+
+#+begin_src emacs-lisp :tangle layers/display/packages.el
+(defun display/init-org-super-agenda ()
+  (use-package org-super-agenda
+    :ensure t
+    :commands (org-super-agenda-mode)
+    :hook (org-agenda-mode . org-super-agenda-mode)
+    :init
+    (setq org-agenda-block-separator 9472      ;; Use a straight line as separator between agenda agenda blocks
+          org-agenda-compact-blocks t
+          org-agenda-include-deadlines t       ;; Include deadlines in the agenda
+          org-agenda-skip-deadline-if-done t   ;; Don't include deadlines in the agenda if they're in the `DONE' state
+          org-agenda-skip-scheduled-if-done t  ;; Don't include items in the agenda if they're in the `DONE' state
+          org-super-agenda-header-map nil      ;; Fixes issues with evil-mode
+          )
+    (setq org-agenda-custom-commands
+          '(("o" "Overview"
+             ((agenda "" ((org-agenda-span 'day)
+                          (org-super-agenda-groups
+                           '((:name "Today"
+                                    :time-grid t
+                                    :date today
+                                    :todo "TODAY"
+                                    :scheduled today
+                                    :order 1)))))
+              (alltodo "" ((org-agenda-overriding-header "")
+                           (org-super-agenda-groups
+                            '((:name "Next to do"
+                                     :todo "NEXT"
+                                     :order 1)
+                              (:name "Important"
+                                     :tag "Important"
+                                     :priority "A"
+                                     :order 6)
+                              (:name "Due Today"
+                                     :deadline today
+                                     :order 2)
+                              (:name "Due Soon"
+                                     :deadline future
+                                     :order 8)
+                              (:name "Overdue"
+                                     :deadline past
+                                     :face error
+                                     :order 7)
+                              (:name "Work"
+                                     :tag "Work"
+                                     :order 10)
+                              (:name "Personal"
+                                     :tag "Personal"
+                                     :order 11)
+                              (:name "Issues"
+                                     :tag "Issue"
+                                     :order 12)
+                              (:name "Projects"
+                                     :tag "Project"
+                                     :order 14)
+                              (:name "Emacs"
+                                     :tag "Emacs"
+                                     :order 13)
+                              (:name "Research"
+                                     :tag "Research"
+                                     :order 15)
+                              (:name "To read"
+                                     :tag "Read"
+                                     :order 30)
+                              (:name "Waiting"
+                                     :todo "WAITING"
+                                     :priority "C"
+                                     :order 20)
+                              (:name "Trivial"
+                                     :priority<= "C"
+                                     :tag ("Trivial" "Unimportant")
+                                     :todo ("SOMEDAY" )
+                                     :order 90)
+                              (:discard (:tag ("Chore" "Routine" "Daily")))))))))))))
+#+end_src
+***** Org-superstar
+
+This package makes the Org headline bullet points look pretty.
+
+#+begin_src emacs-lisp :tangle layers/display/packages.el
+(defun display/pre-init-org-superstar ()
+  (use-package org-superstar
+    :ensure t
+    :hook (org-mode . org-superstar-mode)
+    :config
+    (setq org-superstar-prettify-item-bullets t
+          org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))))
+#+end_src
+***** Org-fancy-priorities
+
+Nice priorities for Org agenda
+
+#+begin_src emacs-lisp :tangle layers/display/packages.el
+(defun display/init-org-fancy-priorities ()
+  (use-package org-fancy-priorities
+    :ensure t
+    :diminish
+    :defines org-fancy-priorities-list
+    :hook (org-mode . org-fancy-priorities-mode)
+    :config
+    (setq org-priority-faces '((?A . all-the-icons-red)
+                               (?B . all-the-icons-yellow)
+                               (?C . all-the-icons-blue))
+          org-fancy-priorities-list '(
+                                      (?A . "⬆")   ;; High
+                                      (?B . "■")   ;; Medium
+                                      (?C . "⬇"))) ;; Low
+    ))
+#+end_src
+***** All-the-icons
+
+All-The-Icons is a utility package that contains lots of pretty icons for all
+sorts of things. Make sure to run ~M-x all-the-icons-install-fonts~ to install the
+resource fonts included in the package.
+
+#+begin_src emacs-lisp :tangle layers/display/packages.el
+(defun display/post-init-all-the-icons ()
+  (use-package all-the-icons
+    :config
+    (let ((hy-icon '(all-the-icons-fileicon "hy" :face all-the-icons-orange))
+          (dt-icon '(all-the-icons-fileicon "graphviz" :face all-the-icons-pink)))
+      (add-to-list 'all-the-icons-icon-alist      `("\\.hy$"          ,@hy-icon))
+      (add-to-list 'all-the-icons-icon-alist      `("\\.dot$"         ,@dt-icon))
+      (add-to-list 'all-the-icons-mode-icon-alist `(hy-mode           ,@hy-icon))
+      (add-to-list 'all-the-icons-mode-icon-alist `(graphviz-dot-mode ,@dt-icon)))))
+#+end_src
+
+***** All-the-icons-ivy
+
+Ivy/Counsel integration for all-the-icons.
+
+#+begin_src emacs-lisp :tangle layers/display/packages.el
+(defun display/init-all-the-icons-ivy ()
+  (use-package all-the-icons-ivy
+    :config
+    (progn
+      ;; Fix icon prompt alignment in ivy prompts
+      (advice-add 'all-the-icons-ivy-file-transformer :override
+                  'all-the-icons-ivy-file-transformer-stdized)
+
+      ;; Add behavior to counsel projectile funcs too
+      (advice-add 'counsel-projectile-find-file-transformer :filter-return
+                  'all-the-icons-ivy-file-transformer-stdized)
+      (advice-add 'counsel-projectile-transformer :filter-return
+                  'all-the-icons-ivy-file-transformer-stdized)
+
+      (all-the-icons-ivy-setup))))
+#+end_src
+
+***** Git-gutter
+
+Optimally, Emacs could detect if the current buffer is version controlled, but I
+don't know if that's possible. For now, we just enable the Git gutter for ~prog-mode~.
+
+#+begin_src emacs-lisp :tangle layers/display/packages.el
+(defun display/post-init-git-gutter ()
+  (use-package git-gutter
+    :hook (prog-mode . git-gutter-mode)
+    :config (setq git-gutter:update-interval 0.02)))
+#+end_src
+
+***** Git-gutter-fringe
+
+Doom Emacs has some nice bitmap values for the Git gutter fringe to make the
+gutter symbols resemble VSCode (looks pretty good).
+
+#+begin_src emacs-lisp :tangle layers/display/packages.el
+(defun  display/post-init-git-gutter-fringe ()
+  (use-package git-gutter-fringe
+    :config
+    (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
+    (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
+    (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom)))
+#+end_src
 
 ** User Init
 
@@ -1743,7 +1790,7 @@ Random stuff that doesn't fit into any particular category
 Random stuff I want enabled no matter what!
 
 #+begin_src emacs-lisp :tangle user-config.el
-(fringe-mode 0)                                           ;; I don't like fringes
+;; (fringe-mode 1)                                           ;; I don't like fringes
 (global-company-mode)                                     ;; Enable company-mode(autocomplete) globally
 (global-unset-key [down-mouse-1])                         ;; No dragging nonsense
 (global-set-key [down-mouse-1] 'mouse-select-window)      ;; Select window with mouse click
@@ -2271,7 +2318,7 @@ Also, use a side window for back-link buffer
 
 * Theming
 
-I usually like the Solarized light theme
+I usually like the Solarized light theme.
 
 #+begin_src emacs-lisp :tangle user-config.el
 (use-package solarized-theme)
@@ -2407,19 +2454,6 @@ header, which other can inherit and modify.
          :weight normal)))
 #+end_src
 
-*** Git-Gutter+
-
-I really don't like the fringe/gutter, but occasionally I once tried to make it
-look nice. I guess I failed and lost interest. Any way, here's an attempt.
-
-#+begin_src emacs-lisp
-(setq display/git-gutter+
-      `((set-face-attribute 'git-gutter+-added :background nil :foreground "green")
-        (set-face-attribute 'git-gutter+-deleted :background nil :foreground "red")
-        (set-face-attribute 'git-gutter+-modified :background nil :foreground "blue")
-        (setq git-gutter+-modified-sign "!")))
-#+end_src
-
 ** Themes
 
 Apply custom theme faces.
@@ -2433,7 +2467,6 @@ Apply custom theme faces.
 (setq display/common-theming
       `(,@display/company
         ,@display/mode-line
-        ,@display/git-gutter+
         ,@display/org-blocks
         ,@display/org-code
         ,@display/org-document-info
