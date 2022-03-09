@@ -15,6 +15,9 @@
 #+author: Rolf Håvard Blindheim
 #+email: rhblind@gmail.com
 
+This file is a work in progress, converting my old Emacs configuration to using
+literate config.
+
 * Table of Contents                                          :TOC_3:noexport:
 - [[#references][References]]
 - [[#prerequisites][Prerequisites]]
@@ -63,9 +66,9 @@
 
 * References
 
-Emacs configuration is mostly (for my part) stealing other peoples
+Emacs configuration is mostly (for my part) stealing from other peoples
 configurations, mashing them together, crossing fingers and hoping that it
-works. Here are some resources I have learnt a lot from.
+works. Here are some resources I have learned a lot from.
 
 - [[https://github.com/ralesi/spacemacs.org][GitHub - ralesi/spacemacs.org: Template for spacemacs config utilizing a stru...]]
 - [[https://github.com/ekaschalk/.spacemacs.d][GitHub - ekaschalk/.spacemacs.d: My spacemacs configuration.]]
@@ -434,48 +437,49 @@ Configure Config layer. Break up in smaller sections.
 
 #+begin_src emacs-lisp :tangle layers/config/packages.el
 ;;; Config Layer -*- lexical-binding: t; -*-
-(setq config-packages
-      '(;; Unowned Packages
-        aggressive-indent
-        auto-highlight-symbol
-        avy
-        csharp-mode
-        company
-        dap
-        drag-stuff
-        dtrt-indent
-        elixir-mode
-        eshell
-        evil
-        evil-mc
-        evil-string-inflection
-        flyspell
-        lsp-mode
-        ivy
-        magit
-        ;; org-roam
-        ;; org-projectile
-        python
-        ranger
-        vterm
-        writeroom-mode
-        web-mode
-        yasnippet-snippets
+(setq config-packages '(;; Unowned Packages
+                        aggressive-indent
+                        auto-highlight-symbol
+                        avy
+                        csharp-mode
+                        company
+                        dap
+                        drag-stuff
+                        dtrt-indent
+                        elixir-mode
+                        eshell
+                        evil
+                        evil-mc
+                        evil-string-inflection
+                        flyspell
+                        lsp-mode
+                        ivy
+                        magit
+                        ;; org-roam
+                        ;; org-projectile
+                        python
+                        ranger
+                        vterm
+                        writeroom-mode
+                        web-mode
+                        yasnippet-snippets
 
-        ;; Owned Packages
-        auto-dim-other-buffers
-        faceup
-        outshine  ; also configures `outline-mode'
-        s
+                        ;; Owned Packages
+                        auto-dim-other-buffers
+                        faceup
+                        outshine  ; also configures `outline-mode'
+                        s
 
-        ;; Local Packages
-        (dap-shell :location local) ; provides shell tasks for dap mode
-        ;; (redo-spacemacs :location local)
-        (ivy-todo :location local)
-        (outline-ivy :location local)
-        ))
+                        ;; Local Packages
+                        (dap-shell :location local) ; provides shell tasks for dap mode
+                        ;; (redo-spacemacs :location local)
+                        (ivy-todo :location local)
+                        (outline-ivy :location local)))
+#+end_src
 
+***** Break up these
 
+#+begin_src emacs-lisp :tangle layers/config/packages.el
 (defun personal/init-outline-ivy ())
 
 ;;;; Aggressive indent
@@ -601,84 +605,6 @@ Configure Config layer. Break up in smaller sections.
 ;;;; Dtrt-indent
 (defun config/init-dtrt-indent ()
   (use-package dtrt-indent))
-
-;;;; Elixir
-(defun config/post-init-elixir-mode ()
-
-;;;;; Error handling
-
-  (with-eval-after-load 'flycheck
-    '(flycheck-credo-setup)
-    '(flycheck-dialyxir-setup))
-  (with-eval-after-load 'lsp-ui
-    '(flycheck-add-next-checker 'lsp-ui 'elixir-credo))
-  (with-eval-after-load 'elixir-mode
-    (add-hook 'elixir-mode-hook #'flycheck-mode))
-
-;;;;; Keybindings
-
-  ;; Set up some custom keybindings that's not automatically configured using elixir-mode
-  (with-eval-after-load 'elixir-mode
-    (spacemacs/declare-prefix-for-mode 'elixir-mode
-      "mt" "test" "testing related functionality")
-    (spacemacs/set-leader-keys-for-major-mode 'elixir-mode
-      "tb" 'exunit-verify-all
-      "ta" 'exunit-verify
-      "tl" 'exunit-rerun
-      "tt" 'exunit-verify-single
-      "tu" 'exunit-verify-all-in-umbrella
-      "hd" 'dash-at-point
-      "hD" 'dash-at-point-with-docset))
-
-;;;;; Debugging
-
-  ;; Register your debug run configurations here
-  ;; (see dap-elixir for defaults injected into the "Elixir" type)
-  (require 'dap-hydra)
-  (require 'dap-elixir)
-  (with-eval-after-load 'dap-mode
-    ;; (dap--put-if-absent :type "shell")
-    ;; Task for running a Phoenix Server
-    (dap-register-debug-template "Elixir Phoenix Server"
-                                 (list :name "Elixir::Phoenix Server"
-                                       :type "Elixir"
-                                       :task "phx.server"
-                                       :request "launch"
-                                       :program nil
-                                       :cwd nil  ;; defaults to lsp-workspace-root
-                                       ))
-
-    ;; Task for running an interactive mix session
-    (dap-register-debug-template "Elixir Interactive Shell"
-                                 (list :name "Elixir::Interactive Shell"
-                                       :type "shell"
-                                       :command "iex"
-                                       :taskArgs (list "-S")
-                                       :task "mix"
-                                       :request "launch"
-                                       :program nil
-                                       :cwd nil)))
-
-;;;;; Mode hooks
-  ;; Auto-highlight symbols
-  (add-hook 'elixir-mode-hook 'auto-highlight-symbol-mode)
-
-  ;; Enable Dash documentation
-  (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir")
-                                                     dash-at-point-docset "elixir")))
-  ;; Format buffer on save
-  (add-hook 'elixir-mode-hook (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
-
-  ;; Try to delete all tabs - NOTE does not quite work as intended
-  (add-hook 'elixir-mode-hook (lambda () (untabify (point-min) (point-max))))
-
-  ;; Set custom settings for elixir-ls language server
-  (add-hook 'lsp-after-initialize-hook (lambda () (lsp-register-custom-settings '(("elixirLS.projectDir" lsp-elixir-project-dir)))))
-
-  ;; Add some ignore patterns for stuff I don't care about
-  (add-hook 'lsp-mode-hook (lambda ()
-                             (dolist (ignore-pattern '("[/\\\\]\\.elixir_ls$" "[/\\\\]\\.log$" "[/\\\\]_build$" "[/\\\\]deps$"))
-                               (add-to-list 'lsp-file-watch-ignored ignore-pattern)))))
 
 ;;;; Eshell
 (defun config/pre-init-eshell ()
@@ -897,49 +823,6 @@ Configure Config layer. Break up in smaller sections.
                ("M-3" . winum-select-window-3)
                ("M-4" . winum-select-window-4)
                ("M-5" . winum-select-window-5))))
-
-;;;; Web-mode
-(defun config/pre-init-web-mode ()
-  "Various changes to how web-mode (and minors) should work"
-
-  ;; Workaround for emacs lockfiles causing node to crash
-  ;; https://github.com/facebook/create-react-app/issues/9056#issuecomment-633540572
-  (dolist (mode-hook '(web-mode-hook
-                       css-mode-hook
-                       scss-mode-hook
-                       rjsx-mode-hook
-                       typescript-mode-hook
-                       javascript-mode-hook))
-    (add-hook mode-hook (lambda () (setq-local create-lockfiles nil))))
-
-  ;; Disable smartparens strict mode in order to be able to write out
-  ;; arrow functions like ie. `() => {...}'
-  (dolist (mode-hook '(rjsx-mode-hook
-                       typescript-mode-hook
-                       typescript-tsx-mode-hook
-                       javascript-mode-hook))
-    (add-hook mode-hook 'turn-off-smartparens-strict-mode)))
-
-(defun config/post-init-web-mode ()
-
-;;;;; Typescript debugging
-
-  (add-hook 'typescript-mode-hook (lambda ()
-                                    (require 'dap-hydra)
-                                    (require 'dap-node)
-                                    (require 'dap-chrome)
-                                    (dap-node-setup)))
-
-  (with-eval-after-load 'dap-mode
-    ;; (dap-register-debug-template "React Debugging (Chrome)"
-    ;;                              (list :name "Chrome::React Debugging"
-    ;;                                    :type "pwa-chrome"
-    ;;                                    :request "launch"
-    ;;                                    :url "http://localhost:3000"
-    ;;                                    :webRoot "${workspaceFolder}"
-    ;;                                    :program nil
-    ;;                                    :cwd nil))
-    ))
 
 ;;;; Vterm
 (defun config/post-init-vterm ())
@@ -1276,6 +1159,155 @@ Configure Config layer. Break up in smaller sections.
 ;;               ;; M-u, M-i
 ;;               )))))
 
+#+end_src
+
+***** Elixir-mode
+
+#+begin_src emacs-lisp :tangle layers/config/packages.el
+(defun config/post-init-elixir-mode ()
+
+;;;; Error handling
+
+  (with-eval-after-load 'flycheck
+    '(flycheck-credo-setup)
+    '(flycheck-dialyxir-setup))
+  (with-eval-after-load 'lsp-ui
+    '(flycheck-add-next-checker 'lsp-ui 'elixir-credo))
+  (with-eval-after-load 'elixir-mode
+    (add-hook 'elixir-mode-hook #'flycheck-mode))
+
+;;;; Keybindings
+
+  ;; Set up some custom keybindings that's not automatically configured using elixir-mode
+  (with-eval-after-load 'elixir-mode
+    (spacemacs/declare-prefix-for-mode 'elixir-mode
+      "mt" "test" "testing related functionality")
+    (spacemacs/set-leader-keys-for-major-mode 'elixir-mode
+      "tb" 'exunit-verify-all
+      "ta" 'exunit-verify
+      "tl" 'exunit-rerun
+      "tt" 'exunit-verify-single
+      "tu" 'exunit-verify-all-in-umbrella
+      "hd" 'dash-at-point
+      "hD" 'dash-at-point-with-docset))
+
+;;;; Debugging
+
+  ;; Register your debug run configurations here
+  ;; (see dap-elixir for defaults injected into the "Elixir" type)
+  (require 'dap-hydra)
+  (require 'dap-elixir)
+  (with-eval-after-load 'dap-mode
+    ;; (dap--put-if-absent :type "shell")
+    ;; Task for running a Phoenix Server
+    (dap-register-debug-template "Elixir Phoenix Server"
+                                 (list :name "Elixir::Phoenix Server"
+                                       :type "Elixir"
+                                       :task "phx.server"
+                                       :request "launch"
+                                       :program nil
+                                       :cwd nil  ;; defaults to lsp-workspace-root
+                                       ))
+
+    ;; Task for running an interactive mix session
+    (dap-register-debug-template "Elixir Interactive Shell"
+                                 (list :name "Elixir::Interactive Shell"
+                                       :type "shell"
+                                       :command "iex"
+                                       :taskArgs (list "-S")
+                                       :task "mix"
+                                       :request "launch"
+                                       :program nil
+                                       :cwd nil)))
+
+;;;; Mode hooks
+
+  ;; Use polymode to enable syntax highlighting for inline HTML templates
+  (use-package polymode
+    :mode ("\.ex" . poly-elixir-web-mode)
+    :hook (elixir-mode . poly-elixir-web-mode)
+    :config
+    (define-hostmode poly-elixir-hostmode :mode 'elixir-mode)
+    (define-innermode poly-liveview-expr-elixir-innermode
+      :mode 'web-mode
+      :head-matcher (rx line-start (* space) "~H" (= 3 (char "\"'")) line-end)
+      :tail-matcher (rx line-start (* space) (= 3 (char "\"'")) line-end)
+      :head-mode 'host
+      :tail-mode 'host
+      :allow-nested nil
+      :keep-in-mode 'host
+      :fallback-mode 'host)
+    (define-polymode poly-elixir-web-mode
+      :hostmode 'poly-elixir-hostmode
+      :innermodes '(poly-liveview-expr-elixir-innermode)))
+
+  ;; Auto-highlight symbols
+  (add-hook 'elixir-mode-hook 'auto-highlight-symbol-mode)
+
+  ;; Enable Dash documentation
+  (add-hook 'elixir-mode-hook (lambda () (setq-local counsel-dash-docsets '("Elixir")
+                                                     dash-at-point-docset "elixir")))
+  ;; Format buffer on save
+  (add-hook 'elixir-mode-hook (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
+
+  ;; Try to delete all tabs - NOTE does not quite work as intended
+  (add-hook 'elixir-mode-hook (lambda () (untabify (point-min) (point-max))))
+
+  ;; Set custom settings for elixir-ls language server
+  (add-hook 'lsp-after-initialize-hook (lambda () (lsp-register-custom-settings '(("elixirLS.projectDir" lsp-elixir-project-dir)))))
+
+  ;; Add some ignore patterns for stuff I don't care about
+  (add-hook 'lsp-mode-hook (lambda ()
+                             (dolist (ignore-pattern '("[/\\\\]\\.elixir_ls$" "[/\\\\]\\.log$" "[/\\\\]_build$" "[/\\\\]deps$"))
+                               (add-to-list 'lsp-file-watch-ignored ignore-pattern)))))
+#+end_src
+
+***** Web-mode
+
+#+begin_src emacs-lisp :tangle layers/config/packages.el
+(defun config/pre-init-web-mode ()
+  "Various changes to how web-mode (and minors) should work"
+
+  ;; Workaround for emacs lockfiles causing node to crash
+  ;; https://github.com/facebook/create-react-app/issues/9056#issuecomment-633540572
+  (dolist (mode-hook '(web-mode-hook
+                       css-mode-hook
+                       scss-mode-hook
+                       rjsx-mode-hook
+                       typescript-mode-hook
+                       javascript-mode-hook))
+    (add-hook mode-hook (lambda () (setq-local create-lockfiles nil))))
+
+  ;; Disable smartparens strict mode in order to be able to write out
+  ;; arrow functions like ie. `() => {...}'
+  (dolist (mode-hook '(rjsx-mode-hook
+                       typescript-mode-hook
+                       typescript-tsx-mode-hook
+                       javascript-mode-hook))
+    (add-hook mode-hook 'turn-off-smartparens-strict-mode)))
+#+end_src
+
+After web-mode is initialized, set up some debugging tools.
+
+#+begin_src emacs-lisp :tangle layers/config/packages.el
+(defun config/post-init-web-mode ()
+  (add-hook 'typescript-mode-hook (lambda ()
+                                    (require 'dap-hydra)
+                                    (require 'dap-node)
+                                    (require 'dap-chrome)
+                                    (dap-node-setup)))
+
+  ;; TODO This need some more work
+  ;; (with-eval-after-load 'dap-mode
+  ;;   (dap-register-debug-template "React Debugging (Chrome)"
+  ;;                                (list :name "Chrome::React Debugging"
+  ;;                                      :type "pwa-chrome"
+  ;;                                      :request "launch"
+  ;;                                      :url "http://localhost:3000"
+  ;;                                      :webRoot "${workspaceFolder}"
+  ;;                                      :program nil
+  ;;                                      :cwd nil)))
+  )
 #+end_src
 
 *** Display Layer
