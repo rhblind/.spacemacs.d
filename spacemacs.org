@@ -179,7 +179,6 @@ This will raise the newly created Emacs frame (if running on macOS)
       (ns-raise-emacs))))
 #+end_src
 
-
 ** Emacs Daemon
 
 Set ~true~ if you want to run the emacs daemon after starting up.
@@ -585,6 +584,7 @@ Configure Config layer. Break up in smaller sections.
 
 ;;;;; Company-box
   (use-package company-box
+    :defer t
     :diminish
     :if (display-graphic-p)
     :defines company-box-icons-all-the-icons
@@ -649,7 +649,7 @@ Configure Config layer. Break up in smaller sections.
   (add-hook 'dap-stopped-hook (lambda (arg) (call-interactively #'dap-hydra))))  ;; Open a Hydra debug menu whenever hitting a breakpoint
 
 (defun config/init-dap-shell ()
-  (use-package dap-shell))
+  (use-package dap-shell :defer t))
 
 ;;;; Drag-stuff
 (defun config/post-init-drag-stuff ()
@@ -659,7 +659,7 @@ Configure Config layer. Break up in smaller sections.
 
 ;;;; Dtrt-indent
 (defun config/init-dtrt-indent ()
-  (use-package dtrt-indent))
+  (use-package dtrt-indent :defer t))
 
 ;;;; Eshell
 (defun config/pre-init-eshell ()
@@ -691,7 +691,7 @@ Configure Config layer. Break up in smaller sections.
 ;;;; Evil-String-Inflection
 (defun config/init-evil-string-inflection ()
   ;; Toggle between snake case, camel case and pascal case
-  (use-package evil-string-inflection :ensure t)
+  (use-package evil-string-inflection :defer t :ensure t)
   (define-key evil-normal-state-map "gC" 'evil-operator-string-inflection))
 
 ;;;; Flyspell
@@ -729,6 +729,7 @@ Configure Config layer. Break up in smaller sections.
 ;;;;; Ivy-todo
 (defun config/init-ivy-todo ()
   (use-package ivy-todo
+    :defer t
     :init (progn (spacemacs/set-leader-keys "pO" 'ivy-todo/task-list))))
 
 ;;;; Magit
@@ -905,6 +906,7 @@ Configure Config layer. Break up in smaller sections.
 ;;;; Auto Dim Other Buffers
 (defun config/init-auto-dim-other-buffers ()
   (use-package auto-dim-other-buffers
+    :defer t
     :config
     (auto-dim-other-buffers-mode)))
 
@@ -916,6 +918,7 @@ Configure Config layer. Break up in smaller sections.
 ;;;; Outshine
 (defun config/init-outshine ()
   (use-package outshine
+    :defer t
     :hook ((prog-mode          . outline-minor-mode)
            (outline-minor-mode . outshine-mode))
 
@@ -964,7 +967,7 @@ Configure Config layer. Break up in smaller sections.
 
 ;;;; Strings
 (defun config/init-s ()
-  (use-package s))
+  (use-package s :defer t))
 
 ;;; Local Packages
 ;;;; Redo-spacemacs
@@ -1420,6 +1423,7 @@ After web-mode is initialized, set up some debugging tools.
   ;; I currently have it *enabled*. Uncomment the deactivation to remove it.
 
   (use-package pretty-mode
+    :defer t
     :config
     (progn
       (global-pretty-mode t)
@@ -1436,7 +1440,7 @@ After web-mode is initialized, set up some debugging tools.
 ;;;; Prettify-utils
 
 (defun display/init-prettify-utils ()
-  (use-package prettify-utils))
+  (use-package prettify-utils :defer t))
 
 ;;;; Solarized-theme
 
@@ -1497,6 +1501,7 @@ After web-mode is initialized, set up some debugging tools.
 
 (defun display/init-pretty-code ()
   (use-package pretty-code
+    :defer t
     :config
     (progn
       (pre)
@@ -1508,6 +1513,7 @@ After web-mode is initialized, set up some debugging tools.
 
 (defun display/init-pretty-eshell ()
   (use-package pretty-eshell
+    :defer t
     :init
     (progn
       ;; Change default banner message
@@ -1560,6 +1566,7 @@ After web-mode is initialized, set up some debugging tools.
 
 (defun display/init-pretty-fonts ()
   (use-package pretty-fonts
+    :defer t
     :config
     ;; !! This is required to avoid segfault when using emacs as daemon !!
     (spacemacs|do-after-display-system-init
@@ -1591,6 +1598,7 @@ After web-mode is initialized, set up some debugging tools.
 
 (defun display/init-pretty-magit ()
   (use-package pretty-magit
+    :defer t
     :config
     (progn
       (pretty-magit-add-leaders
@@ -1606,6 +1614,7 @@ After web-mode is initialized, set up some debugging tools.
 
 (defun display/init-pretty-outlines ()
   (use-package pretty-outlines
+    :defer t
     :hook ((outline-mode       . pretty-outlines-set-display-table)
            (outline-minor-mode . pretty-outlines-set-display-table)
            (elixir-mode        . pretty-outlines-add-bullets)
@@ -1621,6 +1630,7 @@ Pretty super agenda!
 #+begin_src emacs-lisp :tangle layers/display/packages.el
 (defun display/init-org-super-agenda ()
   (use-package org-super-agenda
+    :defer t
     :ensure t
     :commands (org-super-agenda-mode)
     :hook (org-agenda-mode . org-super-agenda-mode)
@@ -1700,6 +1710,7 @@ This package makes the Org headline bullet points look pretty.
 #+begin_src emacs-lisp :tangle layers/display/packages.el
 (defun display/pre-init-org-superstar ()
   (use-package org-superstar
+    :defer t
     :ensure t
     :hook (org-mode . org-superstar-mode)
     :config
@@ -1713,6 +1724,7 @@ Nice priorities for Org agenda
 #+begin_src emacs-lisp :tangle layers/display/packages.el
 (defun display/init-org-fancy-priorities ()
   (use-package org-fancy-priorities
+    :defer t
     :ensure t
     :diminish
     :defines org-fancy-priorities-list
@@ -1736,6 +1748,7 @@ resource fonts included in the package.
 #+begin_src emacs-lisp :tangle layers/display/packages.el
 (defun display/post-init-all-the-icons ()
   (use-package all-the-icons
+    :defer t
     :config
     (let ((hy-icon '(all-the-icons-fileicon "hy" :face all-the-icons-orange))
           (dt-icon '(all-the-icons-fileicon "graphviz" :face all-the-icons-pink)))
@@ -1752,6 +1765,7 @@ Ivy/Counsel integration for all-the-icons.
 #+begin_src emacs-lisp :tangle layers/display/packages.el
 (defun display/init-all-the-icons-ivy ()
   (use-package all-the-icons-ivy
+    :defer t
     :config
     (progn
       ;; Fix icon prompt alignment in ivy prompts
@@ -1775,6 +1789,7 @@ don't know if that's possible. For now, we just enable the Git gutter for ~prog-
 #+begin_src emacs-lisp :tangle layers/display/packages.el
 (defun display/post-init-git-gutter ()
   (use-package git-gutter
+    :defer t
     :hook (prog-mode . git-gutter-mode)
     :config (setq git-gutter:update-interval 0.02)))
 #+end_src
@@ -1787,6 +1802,7 @@ gutter symbols resemble VSCode (looks pretty good).
 #+begin_src emacs-lisp :tangle layers/display/packages.el
 (defun  display/post-init-git-gutter-fringe ()
   (use-package git-gutter-fringe
+    :defer t
     :config
     (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
     (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
@@ -2224,6 +2240,7 @@ Pretty graphs and lots of fun!
 
 #+begin_src emacs-lisp :tangle user-config.el
 (use-package org-roam-ui
+  :defer t
   :after org-roam
   :config (setq org-roam-ui-sync-theme t
                   org-roam-ui-follow t
@@ -2278,6 +2295,7 @@ Also, use a side window for back-link buffer
 
 #+begin_src emacs-lisp :tangle user-config.el
 (use-package doct
+    :defer t
     :ensure t
     :commands (doct)
     :after (org-capture)
