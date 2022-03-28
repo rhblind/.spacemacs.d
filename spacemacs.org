@@ -1598,7 +1598,6 @@ After web-mode is initialized, set up some debugging tools.
 
 (defun display/init-pretty-magit ()
   (use-package pretty-magit
-    :defer t
     :config
     (progn
       (pretty-magit-add-leaders
