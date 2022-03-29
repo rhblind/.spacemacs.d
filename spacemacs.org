@@ -49,7 +49,6 @@ literate config.
     - [[#org-projectile][Org Projectile]]
     - [[#org-roam][Org Roam]]
     - [[#declarative-org-capture-templates][Declarative Org Capture Templates]]
-  - [[#outline-ivy][Outline-Ivy]]
   - [[#projectile][Projectile]]
 - [[#theming][Theming]]
   - [[#fonts][Fonts]]
@@ -520,7 +519,6 @@ Configure Config layer. Break up in smaller sections.
 
                         ;; Owned Packages
                         auto-dim-other-buffers
-                        faceup
                         outshine  ; also configures `outline-mode'
                         s
 
@@ -532,10 +530,7 @@ Configure Config layer. Break up in smaller sections.
 #+end_src
 
 ***** Break up these
-
 #+begin_src emacs-lisp :tangle layers/config/packages.el
-(defun personal/init-outline-ivy ())
-
 ;;;; Aggressive indent
 (defun config/pre-init-aggressive-indent ()
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
@@ -728,9 +723,8 @@ Configure Config layer. Break up in smaller sections.
 
 ;;;;; Ivy-todo
 (defun config/init-ivy-todo ()
-  (use-package ivy-todo
-    :defer t
-    :init (progn (spacemacs/set-leader-keys "pO" 'ivy-todo/task-list))))
+(use-package ivy-todo
+  :init (progn (spacemacs/set-leader-keys "pO" 'ivy-todo/task-list))))
 
 ;;;; Magit
 (defun config/post-init-magit ()
@@ -906,14 +900,8 @@ Configure Config layer. Break up in smaller sections.
 ;;;; Auto Dim Other Buffers
 (defun config/init-auto-dim-other-buffers ()
   (use-package auto-dim-other-buffers
-    :defer t
     :config
     (auto-dim-other-buffers-mode)))
-
-;;;; Faceup
-(defun config/init-faceup ()
-  (use-package faceup
-    :defer t))
 
 ;;;; Outshine
 (defun config/init-outshine ()
@@ -1219,6 +1207,15 @@ Configure Config layer. Break up in smaller sections.
 
 #+end_src
 
+***** Outline-Ivy
+
+#+begin_src emacs-lisp :tangle layers/config/packages.el
+(defun personal/init-outline-ivy ()
+  (use-package outline-ivy
+    :defer t
+    :bind (:map outline-minor-mode-map ("C-j" . oi-jump))))
+#+end_src
+
 ***** Elixir-mode
 
 #+begin_src emacs-lisp :tangle layers/config/packages.el
@@ -1423,7 +1420,6 @@ After web-mode is initialized, set up some debugging tools.
   ;; I currently have it *enabled*. Uncomment the deactivation to remove it.
 
   (use-package pretty-mode
-    :defer t
     :config
     (progn
       (global-pretty-mode t)
@@ -1440,7 +1436,7 @@ After web-mode is initialized, set up some debugging tools.
 ;;;; Prettify-utils
 
 (defun display/init-prettify-utils ()
-  (use-package prettify-utils :defer t))
+  (use-package prettify-utils))
 
 ;;;; Solarized-theme
 
@@ -1566,7 +1562,6 @@ After web-mode is initialized, set up some debugging tools.
 
 (defun display/init-pretty-fonts ()
   (use-package pretty-fonts
-    :defer t
     :config
     ;; !! This is required to avoid segfault when using emacs as daemon !!
     (spacemacs|do-after-display-system-init
@@ -1764,7 +1759,6 @@ Ivy/Counsel integration for all-the-icons.
 #+begin_src emacs-lisp :tangle layers/display/packages.el
 (defun display/init-all-the-icons-ivy ()
   (use-package all-the-icons-ivy
-    :defer t
     :config
     (progn
       ;; Fix icon prompt alignment in ivy prompts
@@ -2393,14 +2387,6 @@ Also, use a side window for back-link buffer
       ))
 #+end_src
 
-** Outline-Ivy
-
-#+begin_src emacs-lisp :tangle user-config.el
-(use-package outline-ivy
-  :defer t
-  :bind (:map outline-minor-mode-map ("C-j" . oi-jump)))
-#+end_src
-
 ** Projectile
 
 #+begin_src emacs-lisp
@@ -2425,7 +2411,6 @@ I usually like the Solarized light theme.
 
 #+begin_src emacs-lisp :tangle user-config.el
 (use-package solarized-theme)
-(setq solarized-use-variable-pitch nil)  ;; I will set up variable pitch myself
 #+end_src
 
 And of course we want them funny emojis 🥴
